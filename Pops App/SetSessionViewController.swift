@@ -44,9 +44,11 @@ class SetSessionViewController: UIViewController {
         productiveTimeVC.totalTime.text = totalTimeEntryLabel.text
         present(productiveTimeVC, animated: true, completion: nil)
     }
-  
-    
-//Setup Views
+}
+
+
+//View Setups
+extension SetSessionViewController {
     func setupStartButton() {
         startButton.backgroundColor = Palette.aqua.color
         startButton.layer.cornerRadius = 2.0
@@ -152,6 +154,7 @@ class SetSessionViewController: UIViewController {
 }
 
 
+//Picker View Delegate & DataSource Functionality
 extension SetSessionViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     
     func displayPickerView() {
