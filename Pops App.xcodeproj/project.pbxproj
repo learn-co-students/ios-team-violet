@@ -25,6 +25,8 @@
 		1F7C44A01E940B7E0067ECCF /* BabaBreakManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7C449F1E940B7E0067ECCF /* BabaBreakManager.swift */; };
 		1F7C44A31E940BC60067ECCF /* ChadBreakManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7C44A21E940BC60067ECCF /* ChadBreakManager.swift */; };
 		1F7C44A51E940BD80067ECCF /* DifficultySetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7C44A41E940BD80067ECCF /* DifficultySetting.swift */; };
+		1F7C44A71E9439250067ECCF /* SessionEndedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7C44A61E9439250067ECCF /* SessionEndedViewController.swift */; };
+		1F7C44A91E9439420067ECCF /* SessionEndedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7C44A81E9439420067ECCF /* SessionEndedViewModel.swift */; };
 		98E682781E931E4F00BAEFE8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E682771E931E4F00BAEFE8 /* AppDelegate.swift */; };
 		98E6827F1E931E4F00BAEFE8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 98E6827E1E931E4F00BAEFE8 /* Assets.xcassets */; };
 		98E682821E931E4F00BAEFE8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 98E682801E931E4F00BAEFE8 /* LaunchScreen.storyboard */; };
@@ -53,6 +55,8 @@
 		1F7C449F1E940B7E0067ECCF /* BabaBreakManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BabaBreakManager.swift; sourceTree = "<group>"; };
 		1F7C44A21E940BC60067ECCF /* ChadBreakManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChadBreakManager.swift; sourceTree = "<group>"; };
 		1F7C44A41E940BD80067ECCF /* DifficultySetting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DifficultySetting.swift; sourceTree = "<group>"; };
+		1F7C44A61E9439250067ECCF /* SessionEndedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionEndedViewController.swift; sourceTree = "<group>"; };
+		1F7C44A81E9439420067ECCF /* SessionEndedViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionEndedViewModel.swift; sourceTree = "<group>"; };
 		98E682741E931E4F00BAEFE8 /* Pops App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pops App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		98E682771E931E4F00BAEFE8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		98E6827E1E931E4F00BAEFE8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -82,6 +86,7 @@
 				1F7C448D1E940A9B0067ECCF /* SettingsViewModel.swift */,
 				1F7C448F1E940AA70067ECCF /* ScoreboardViewModel.swift */,
 				1F7C44911E940AB90067ECCF /* ProductiveTimeViewModel.swift */,
+				1F7C44A81E9439420067ECCF /* SessionEndedViewModel.swift */,
 				1F7C44951E940AE20067ECCF /* Break View Models */,
 			);
 			name = ViewModel;
@@ -164,8 +169,9 @@
 				98E682891E931E9500BAEFE8 /* SetSessionViewController.swift */,
 				1F7C447E1E9408E80067ECCF /* SettingsViewController.swift */,
 				1F7C44801E9409050067ECCF /* ScoreboardViewController.swift */,
-				1F7C44821E9409700067ECCF /* BreakTimeViewController.swift */,
 				98E6828D1E931EAF00BAEFE8 /* ProductiveTimeViewController.swift */,
+				1F7C44821E9409700067ECCF /* BreakTimeViewController.swift */,
+				1F7C44A61E9439250067ECCF /* SessionEndedViewController.swift */,
 				1F7C44841E9409760067ECCF /* Break Views */,
 			);
 			name = View;
@@ -257,8 +263,10 @@
 				1F7C44881E9409A90067ECCF /* BabaBreakView.swift in Sources */,
 				1F7C44811E9409050067ECCF /* ScoreboardViewController.swift in Sources */,
 				98E682921E9322A300BAEFE8 /* Extensions.swift in Sources */,
+				1F7C44A71E9439250067ECCF /* SessionEndedViewController.swift in Sources */,
 				98E6828E1E931EAF00BAEFE8 /* ProductiveTimeViewController.swift in Sources */,
 				1F7C44901E940AA70067ECCF /* ScoreboardViewModel.swift in Sources */,
+				1F7C44A91E9439420067ECCF /* SessionEndedViewModel.swift in Sources */,
 				1F7C44A51E940BD80067ECCF /* DifficultySetting.swift in Sources */,
 				1F7C44941E940AD10067ECCF /* PopsBreakViewModel.swift in Sources */,
 				1F7C448A1E9409BE0067ECCF /* ChadBreakView.swift in Sources */,
