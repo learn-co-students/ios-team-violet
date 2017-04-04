@@ -1,10 +1,3 @@
-//
-//  Extensions.swift
-//  Pops App
-//
-//  Created by Robert Rozenvasser on 4/3/17.
-//  Copyright © 2017 Robert Rozenvasser. All rights reserved.
-//
 
 import Foundation
 import UIKit

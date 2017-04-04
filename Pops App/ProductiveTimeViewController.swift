@@ -1,15 +1,10 @@
-//
-//  ProductiveTimeViewController.swift
-//  PopsSetSession
-//
-//  Created by Robert Rozenvasser on 4/3/17.
-//  Copyright © 2017 Robert Rozenvasser. All rights reserved.
-//
 
 import UIKit
 
 class ProductiveTimeViewController: UIViewController {
 
+    let viewModel = ProductiveTimeViewModel.singleton
+    
     let totalTime = UILabel()
     
     override func viewDidLoad() {
