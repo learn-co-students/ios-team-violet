@@ -10,19 +10,36 @@ import UIKit
 
 class SetSessionViewController: UIViewController {
     
-    var startButtonBottomConstraint: NSLayoutConstraint!
+    //Data sources for picker view
+    let totalTimesForPicker = ["next hour", "next 2 hours", "next 3 hours"]
     let productiveTimesForPicker = ["every 30 min", "every 40 min", "every 50 min"]
-    let totalTimesForPicker = ["next 1 hour", "next 2 hours", "next 3 hours"]
     
+    //Used to determine which picker data source to display
     var totalTimeButtonSelected = false
     var productiveButtonSelected = false
     
+    //Used to adjust height of views when picker view appears
     var buttonPressedCounter = 1
+    var startButtonBottomConstraint: NSLayoutConstraint!
+    var headerViewTopConstraint: NSLayoutConstraint!
     
     let headerView: UIView = {
         let headerView = UIView()
         headerView.backgroundColor = Palette.darkHeader.color
         return headerView
+    }()
+    
+    let popsIconImageView: UIImageView = {
+        let popsImageView = UIImageView()
+        popsImageView.image = UIImage(named: "IC_POPS")
+        popsImageView.contentMode = .scaleAspectFit
+        return popsImageView
+    }()
+    
+    let settingsButton: UIButton = {
+        let settingsButton = UIButton()
+        settingsButton.setBackgroundImage(#imageLiteral(resourceName: "IC_Settings"), for: .normal)
+        return settingsButton
     }()
     
     let popsProudLabel: UILabel = {
@@ -47,18 +64,13 @@ class SetSessionViewController: UIViewController {
         return takeBreakLabel
     }()
     
-    lazy var totalTimeEntryButton: UIButton = {
-        let totalTimeEntryButton = UIButton()
+    lazy var totalTimeEntryButton: UIView = {
+        let totalTimeEntryButton = UIView()
         totalTimeEntryButton.backgroundColor = Palette.lightGrey.color
         totalTimeEntryButton.layer.cornerRadius = 2.0
         totalTimeEntryButton.layer.masksToBounds = true
-        totalTimeEntryButton.addTarget(self, action: #selector(didPressEntryButton), for: .touchUpInside)
-        totalTimeEntryButton.tag = 1
-        totalTimeEntryButton.setTitle("next 2 hours", for: .normal)
-        totalTimeEntryButton.contentHorizontalAlignment = UIControlContentHorizontalAlignment.left
-        totalTimeEntryButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
-        totalTimeEntryButton.titleLabel?.font = UIFont(name: "Avenir-Medium", size: 14.0)
-        totalTimeEntryButton.setTitleColor(Palette.grey.color, for: .normal)
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(self.didPressTotalTimeEntry))
+        totalTimeEntryButton.addGestureRecognizer(gesture)
         return totalTimeEntryButton
     }()
     
@@ -66,25 +78,20 @@ class SetSessionViewController: UIViewController {
         let label = UILabel()
         label.font = UIFont(name: "Avenir-Medium", size: 14.0)
         label.textColor = Palette.grey.color
-        label.text = "hey"
         return label
     }()
     
-    let productiveTimeEntryButton: UIButton = {
-        let productiveTimeEntryButton = UIButton()
+    lazy var productiveTimeEntryButton: UIView = {
+        let productiveTimeEntryButton = UIView()
         productiveTimeEntryButton.backgroundColor = Palette.lightGrey.color
         productiveTimeEntryButton.layer.cornerRadius = 2.0
         productiveTimeEntryButton.layer.masksToBounds = true
-        productiveTimeEntryButton.setTitle("every 30 minutes", for: .normal)
-        productiveTimeEntryButton.contentHorizontalAlignment = UIControlContentHorizontalAlignment.left
-        productiveTimeEntryButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
-        productiveTimeEntryButton.titleLabel?.font = UIFont(name: "Avenir-Medium", size: 14.0)
-        productiveTimeEntryButton.setTitleColor(Palette.grey.color, for: .normal)
-        productiveTimeEntryButton.addTarget(self, action: #selector(didPressBreakButton), for: .touchUpInside)
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(self.didPressProductiveTimeEntry))
+        productiveTimeEntryButton.addGestureRecognizer(gesture)
         return productiveTimeEntryButton
     }()
     
-    let prodcutiveTimeEntryLabel: UILabel = {
+    let productiveTimeEntryLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Avenir-Medium", size: 14.0)
         label.textColor = Palette.grey.color
@@ -113,22 +120,35 @@ class SetSessionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.white
+        
         setupStartButton()
         
         setupProductiveTimeEntryButton()
+        setupProductiveTimeEntryLabel()
         setupTakeBreakLabel()
         
         setupTotalTimeEntryButton()
-//        setupTotalTimeEntryLabel()
+        setupTotalTimeEntryLabel()
         setupPopsProudLabel()
         
         setupHeaderView()
+        setupPopsImage()
+        setupSettingsButton()
         
         setupPickerView()
         pickerView.isHidden = true
         
+        totalTimeEntryLabel.text = totalTimesForPicker[0]
+        productiveTimeEntryLabel.text = productiveTimesForPicker[0]
+        
         NotificationCenter.default.addObserver(self, selector: #selector(displayPickerView), name: Notification.Name("pickerViewWillAppear"), object: nil)
     }
+    
+    //figure this out
+//    override func viewDidDisappear(_ animated: Bool) {
+//        super.viewDidDisappear(animated)
+//        NotificationCenter.default.removeObserver(self, name: Notification.Name("pickerViewWillAppear"), object: nil)
+//    }
     
     override var prefersStatusBarHidden: Bool {
         return true
@@ -136,17 +156,38 @@ class SetSessionViewController: UIViewController {
     
     func presentProductiveTimeVC() {
         let procutiveTimeVC = ProductiveTimeViewController()
-        procutiveTimeVC.totalTime.text = totalTimeEntryButton.titleLabel?.text
+        procutiveTimeVC.totalTime.text = totalTimeEntryLabel.text
         present(procutiveTimeVC, animated: true, completion: nil)
     }
-
+    
+//Setup pops proud entry
+    
     func setupHeaderView() {
         view.addSubview(headerView)
         headerView.translatesAutoresizingMaskIntoConstraints = false
         headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        headerView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         headerView.heightAnchor.constraint(equalToConstant: 185.0).isActive = true
+        headerViewTopConstraint = headerView.topAnchor.constraint(equalTo: view.topAnchor)
+        headerViewTopConstraint.isActive = true
+    }
+    
+    func setupPopsImage() {
+        headerView.addSubview(popsIconImageView)
+        popsIconImageView.translatesAutoresizingMaskIntoConstraints = false
+        popsIconImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        popsIconImageView.bottomAnchor.constraint(equalTo: headerView.bottomAnchor).isActive = true
+        popsIconImageView.heightAnchor.constraint(equalToConstant: 80.0).isActive = true
+        popsIconImageView.widthAnchor.constraint(equalToConstant: 52.0).isActive = true
+    }
+    
+    func setupSettingsButton() {
+        headerView.addSubview(settingsButton)
+        settingsButton.translatesAutoresizingMaskIntoConstraints = false
+        settingsButton.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 20.0).isActive = true
+        settingsButton.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 20.0).isActive = true
+        settingsButton.heightAnchor.constraint(equalToConstant: 21.0).isActive = true
+        settingsButton.widthAnchor.constraint(equalToConstant: 21.0).isActive = true
     }
     
     func setupPopsProudLabel() {
@@ -166,16 +207,26 @@ class SetSessionViewController: UIViewController {
     }
     
     func setupTotalTimeEntryLabel() {
-        view.insertSubview(totalTimeEntryLabel, aboveSubview: totalTimeEntryButton)
+        totalTimeEntryButton.addSubview(totalTimeEntryLabel)
+        totalTimeEntryLabel.translatesAutoresizingMaskIntoConstraints = false
         totalTimeEntryLabel.leadingAnchor.constraint(equalTo: totalTimeEntryButton.leadingAnchor, constant: 15.0).isActive = true
         totalTimeEntryLabel.centerYAnchor.constraint(equalTo: totalTimeEntryButton.centerYAnchor).isActive = true
     }
+    
+//Setup break Label 
     
     func setupTakeBreakLabel() {
         view.addSubview(takeBreakLabel)
         takeBreakLabel.translatesAutoresizingMaskIntoConstraints = false
         takeBreakLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30.0).isActive = true
         takeBreakLabel.bottomAnchor.constraint(equalTo: productiveTimeEntryButton.topAnchor, constant: -15.0).isActive = true
+    }
+    
+    func setupProductiveTimeEntryLabel() {
+        productiveTimeEntryButton.addSubview(productiveTimeEntryLabel)
+        productiveTimeEntryLabel.translatesAutoresizingMaskIntoConstraints = false
+        productiveTimeEntryLabel.leadingAnchor.constraint(equalTo: productiveTimeEntryButton.leadingAnchor, constant: 15.0).isActive = true
+        productiveTimeEntryLabel.centerYAnchor.constraint(equalTo: productiveTimeEntryButton.centerYAnchor).isActive = true
     }
     
     func setupProductiveTimeEntryButton() {
@@ -201,13 +252,13 @@ class SetSessionViewController: UIViewController {
 
 extension SetSessionViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     
-    func didPressEntryButton() {
+    func didPressTotalTimeEntry() {
         totalTimeButtonSelected = true
         productiveButtonSelected = false
         NotificationCenter.default.post(name: Notification.Name("pickerViewWillAppear"), object: nil)
     }
     
-    func didPressBreakButton() {
+    func didPressProductiveTimeEntry() {
         productiveButtonSelected = true
         totalTimeButtonSelected = false
         NotificationCenter.default.post(name: Notification.Name("pickerViewWillAppear"), object: nil)
@@ -219,6 +270,7 @@ extension SetSessionViewController: UIPickerViewDelegate, UIPickerViewDataSource
 
         if buttonPressedCounter <= 1 {
             self.startButtonBottomConstraint.constant -= 200.0
+            self.headerViewTopConstraint.constant -= 185.0
             buttonPressedCounter += 1
         }
         
@@ -235,6 +287,7 @@ extension SetSessionViewController: UIPickerViewDelegate, UIPickerViewDataSource
         
         if buttonPressedCounter != 1 {
             self.startButtonBottomConstraint.constant += 200.0
+            self.headerViewTopConstraint.constant += 185.0
             buttonPressedCounter = 1
         }
     }
@@ -253,11 +306,8 @@ extension SetSessionViewController: UIPickerViewDelegate, UIPickerViewDataSource
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        if totalTimeButtonSelected {
-            return totalTimesForPicker.count
-        } else {
-            return productiveTimesForPicker.count
-        }
+        if totalTimeButtonSelected { return totalTimesForPicker.count }
+        else { return productiveTimesForPicker.count }
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
@@ -270,28 +320,13 @@ extension SetSessionViewController: UIPickerViewDelegate, UIPickerViewDataSource
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         if totalTimeButtonSelected {
-            totalTimeEntryButton.titleLabel?.text = totalTimesForPicker[row]
+            totalTimeEntryLabel.text = totalTimesForPicker[row]
         } else {
-            productiveTimeEntryButton.titleLabel?.text = productiveTimesForPicker[row]
+            productiveTimeEntryLabel.text = productiveTimesForPicker[row]
         }
     }
     
 }
 
-extension String {
-    
-    func addBoldText(fullString: NSString, boldPartsOfString: Array<NSString>, font: UIFont!, boldFont: UIFont!) -> NSAttributedString {
-        
-        let nonBoldFontAttribute = [NSFontAttributeName: font!]
-        let boldFontAttribute = [NSFontAttributeName: boldFont!]
-        let boldString = NSMutableAttributedString(string: fullString as String, attributes:nonBoldFontAttribute)
-        
-        for i in 0 ..< boldPartsOfString.count {
-            boldString.addAttributes(boldFontAttribute, range: fullString.range(of: boldPartsOfString[i] as String))
-        }
-        
-        return boldString
-    }
-    
-}
+
 
