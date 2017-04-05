@@ -7,11 +7,14 @@ final class ProductiveTimeViewModel {
     let dataStore = CoachesDataStore.singleton
 
     init(vc: ProductiveTimeViewController){
-    self.viewController = vc
+        self.viewController = vc
+        sessionCoach = dataStore.getCurrentCoach()
     }
     
     var timer = Timer()
     var backgroundTimer = Timer()
+    let sessionCoach: Coach!
+    
     
     //counters: timerCounter, BackgroundCounter, progressBarCounter, props
     var timerCounter = (DifficultySetting.standard.baseProductivityLength * 60) { //this keeps track of the time. think of these counters as seconds left.
@@ -77,10 +80,6 @@ final class ProductiveTimeViewModel {
             let seconds = time % 60
             return String(format:"%02i", seconds)
         }
-    }
-    
-    private init(){
-        self.sessionCoach = dataStore.getCurrentCoach()
     }
 }
 
