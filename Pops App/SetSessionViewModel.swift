@@ -4,9 +4,12 @@ import Foundation
 final class SetSessionViewModel {
     
     static let singleton = SetSessionViewModel()
-    private init(){}
+    let dataStore = CoachesDataStore.singleton
+    let totalTimesForPicker = ["one hour", "two hours", "three hours", "four hours", "five hours", "six hours", "seven hours", "eight hours"]
+    let sessionCoach: Coach!
     
-    let totalTimesForPicker = ["next hour", "next 2 hours", "next 3 hours"]
-    
-    
+    private init(){
+        self.sessionCoach = dataStore.getCurrentCoach()
+    }
+ 
 }

@@ -35,6 +35,10 @@ class SetSessionViewController: UIViewController {
         totalTimeEntryLabel.text = viewModel.totalTimesForPicker[0]
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+    }
+    
     override var prefersStatusBarHidden: Bool {
         return true
     }

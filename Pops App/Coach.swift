@@ -1,6 +1,11 @@
 
 import Foundation
+import UIKit
 
-class Coach {
-    
+struct Coach {
+    let name: String
+    let icon: UIImage?
+    let difficulty: DifficultySetting
+    let tapStatement: String
+    let setSessionStatements: [String]
 }
