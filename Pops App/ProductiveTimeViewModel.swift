@@ -3,7 +3,6 @@ import Foundation
 
 final class ProductiveTimeViewModel {
     
-    
     let viewController: ProductiveTimeViewController
     let dataStore = CoachesDataStore.singleton
 
@@ -79,7 +78,9 @@ final class ProductiveTimeViewModel {
             return String(format:"%02i", seconds)
         }
     }
-
     
+    private init(){
+        self.sessionCoach = dataStore.getCurrentCoach()
+    }
 }
 
