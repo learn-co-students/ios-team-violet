@@ -45,7 +45,8 @@ class SetSessionViewController: UIViewController {
     
     func presentProductiveTimeVC() {
         let productiveTimeVC = ProductiveTimeViewController()
-        productiveTimeVC.totalTime.text = totalTimeEntryLabel.text
+        print("touched!")
+        //productiveTimeVC.totalTime.text = totalTimeEntryLabel.text this passes the data.
         present(productiveTimeVC, animated: true, completion: nil)
     }
 }
