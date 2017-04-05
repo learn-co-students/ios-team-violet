@@ -26,18 +26,24 @@ final class CoachesDataStore {
         let name = "Pops"
         let icon = UIImage(named: "IC_POPS")
         let difficulty = DifficultySetting.standard
-        let tapStatement = "Hands off, pal!"
-        let setSessionStatements = [
-            "Only an hour?",
-            "Two hours is respectable.",
-            "Three hours, good for you!",
-            "Impressive!",
-            "You're really going for it today, huh?",
-            "As long as you take your breaks, this should be doable.",
-            "Seven hours, what an odd choice.",
-            "Don't hurt yourself, sonny.",
+        let tapStatements = [
+            ("Hey!", "Hands off, buddy!"),
+            ("Hey!", "Get off of me!")
         ]
-        let pops = Coach(name: name, icon: icon, difficulty: difficulty, tapStatement: tapStatement, setSessionStatements: setSessionStatements)
+        let introStatements = [
+            ("Hey there, I'm Pops!", "Make me proud by putting in a hard day's work!")
+        ]
+        let setSessionStatements = [
+            [("Only an hour?", "Seems like you could do better.")],
+            [("Two hours.", "That's respectable.")],
+            [("Three hours!", "Good for you!")],
+            [("Four hours, huh?", "I'm Impressive!")],
+            [("Five hours?", "You're really going for it today!")],
+            [("Hmmmmm...", "As long as you take your breaks, this should be okay.")],
+            [("Seven hours!", "What an odd choice!")],
+            [("Dear lord!", "Don't hurt yourself, sonny!")],
+        ]
+        let pops = Coach(name: name, icon: icon, difficulty: difficulty, tapStatements: tapStatements, introStatements: introStatements, setSessionStatements: setSessionStatements)
         return pops
     }
     
