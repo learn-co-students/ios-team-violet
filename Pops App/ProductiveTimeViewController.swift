@@ -48,7 +48,7 @@ class ProductiveTimeViewController: UIViewController {
         setupPepTalkLabel()
         setupCancelSessionButton()
         setupTotalTimeLabel()
-        
+        viewModel.startTimers()
         
         
         
