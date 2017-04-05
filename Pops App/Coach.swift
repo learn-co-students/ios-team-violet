@@ -6,6 +6,7 @@ struct Coach {
     let name: String
     let icon: UIImage?
     let difficulty: DifficultySetting
-    let tapStatement: String
-    let setSessionStatements: [String]
+    let tapStatements: [(header: String, body:String)]
+    let introStatements: [(header: String, body: String)]
+    let setSessionStatements: [[(header: String, body: String)]]
 }
