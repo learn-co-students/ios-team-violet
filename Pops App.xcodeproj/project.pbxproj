@@ -28,6 +28,7 @@
 		1F7C44A71E9439250067ECCF /* SessionEndedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7C44A61E9439250067ECCF /* SessionEndedViewController.swift */; };
 		1F7C44A91E9439420067ECCF /* SessionEndedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7C44A81E9439420067ECCF /* SessionEndedViewModel.swift */; };
 		1F7C44AB1E9440370067ECCF /* CoachesDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7C44AA1E9440370067ECCF /* CoachesDataStore.swift */; };
+		1FBEEC6A1E952F760099F413 /* BreakTimeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FBEEC691E952F760099F413 /* BreakTimeViewModel.swift */; };
 		98E682781E931E4F00BAEFE8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E682771E931E4F00BAEFE8 /* AppDelegate.swift */; };
 		98E6827F1E931E4F00BAEFE8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 98E6827E1E931E4F00BAEFE8 /* Assets.xcassets */; };
 		98E682821E931E4F00BAEFE8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 98E682801E931E4F00BAEFE8 /* LaunchScreen.storyboard */; };
@@ -59,6 +60,7 @@
 		1F7C44A61E9439250067ECCF /* SessionEndedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionEndedViewController.swift; sourceTree = "<group>"; };
 		1F7C44A81E9439420067ECCF /* SessionEndedViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionEndedViewModel.swift; sourceTree = "<group>"; };
 		1F7C44AA1E9440370067ECCF /* CoachesDataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoachesDataStore.swift; sourceTree = "<group>"; };
+		1FBEEC691E952F760099F413 /* BreakTimeViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BreakTimeViewModel.swift; sourceTree = "<group>"; };
 		98E682741E931E4F00BAEFE8 /* Pops App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pops App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		98E682771E931E4F00BAEFE8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		98E6827E1E931E4F00BAEFE8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -88,6 +90,7 @@
 				1F7C448D1E940A9B0067ECCF /* SettingsViewModel.swift */,
 				1F7C448F1E940AA70067ECCF /* ScoreboardViewModel.swift */,
 				1F7C44911E940AB90067ECCF /* ProductiveTimeViewModel.swift */,
+				1FBEEC691E952F760099F413 /* BreakTimeViewModel.swift */,
 				1F7C44A81E9439420067ECCF /* SessionEndedViewModel.swift */,
 				1F7C44951E940AE20067ECCF /* Break View Models */,
 			);
@@ -271,6 +274,7 @@
 				1F7C44901E940AA70067ECCF /* ScoreboardViewModel.swift in Sources */,
 				1F7C44A91E9439420067ECCF /* SessionEndedViewModel.swift in Sources */,
 				1F7C44A51E940BD80067ECCF /* DifficultySetting.swift in Sources */,
+				1FBEEC6A1E952F760099F413 /* BreakTimeViewModel.swift in Sources */,
 				1F7C44941E940AD10067ECCF /* PopsBreakViewModel.swift in Sources */,
 				1F7C448A1E9409BE0067ECCF /* ChadBreakView.swift in Sources */,
 				1F7C44831E9409700067ECCF /* BreakTimeViewController.swift in Sources */,
