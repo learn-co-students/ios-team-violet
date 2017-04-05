@@ -11,22 +11,16 @@ final class ProductiveTimeViewModel {
     self.viewController = vc
     }
     
-    
-    
     var timer = Timer()
     var backgroundTimer = Timer()
     
-    //coach specific properties
-    
-    
-    
     //counters: timerCounter, BackgroundCounter, progressBarCounter, props
-    var timerCounter = 1500 { //this keeps track of the time. think of these counters as seconds left.
+    var timerCounter = (DifficultySetting.standard.baseProductivityLength * 60) { //this keeps track of the time. think of these counters as seconds left.
         didSet {
-            viewController.totalTime = timerCounter
+            viewController.totalTime = Int(timerCounter)
         }
     }
-    var backgroundCounter = 7200
+    var backgroundCounter = 7200 //we probably need a user model to store how long the session will last.
     
     var props = 0 {
         didSet {
@@ -59,7 +53,7 @@ final class ProductiveTimeViewModel {
         print("timer action: \(timerCounter)")
         timerCounter -= 1
         props += 1
-        viewController.progress += 1
+        progressBarCounter += 1
     }
     
     func backgroundTimerAction() {
@@ -67,6 +61,25 @@ final class ProductiveTimeViewModel {
         backgroundCounter -= 1
     }
     
+    func formatTime(time: Int) -> String {
+        if time >= 3600 {
+            let hours = time / 3600
+            let minutes = time / 60 % 60
+            let seconds = time % 60
+            return String(format:"%02i:%02i:%02i", hours, minutes, seconds)
+            
+        } else if time >= 60 {
+            
+            let minutes = time / 60 % 60
+            let seconds = time % 60
+            return String(format:"%02i:%02i", minutes, seconds)
+            
+        } else {
+            let seconds = time % 60
+            return String(format:"%02i", seconds)
+        }
+    }
+
     
 }
 

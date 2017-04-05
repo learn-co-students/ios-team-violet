@@ -13,46 +13,37 @@ class ProductiveTimeViewController: UIViewController {
     let cancelSessionButton = UIButton()
     let progressBar = UIView()
     let propsLabel = UILabel()
-    
+    //Timers
+    let timer = Timer()
+    let backgroundTimer = Timer()
     //changing constraints
     var progressBarWidthAnchorConstraint: NSLayoutConstraint!
-    //
+    var popsBottomAnchorConstraint: NSLayoutConstraint!
+    
     
     //properties that handle displaying data
-    var totalTime = 0 { //everytime the property gets changed, totaltimeLabel gets changed.
+    var totalTime = 0 {
         didSet {
-            totalTimeLabel.text = formatTime(time: totalTime) //format time changes 4800 (seconds) to 01:20:00
+            totalTimeLabel.text = viewModel.formatTime(time: totalTime)
         }
     }
-    
     var props = 0 {
         didSet {
             propsLabel.text = "\(props) props"
         }
     }
-    
     var progress = 0.0 {
         didSet {
-            self.view.layoutIfNeeded()
-            UIView.animate(withDuration: 1) { 
-                self.progressBarWidthAnchor.constant = CGFloat(self.view.frame.width * CGFloat(self.progress) / 1500.0 )
+                self.progressBarWidthAnchor.constant = CGFloat(self.view.frame.width * CGFloat(self.progress) )
                 self.view.layoutIfNeeded()
-            }
         }
     }
-    
-    //Timers
-    let timer = Timer()
-    let backgroundTimer = Timer()
-    
-    
     
     
     override func viewDidLoad() { //remember to call the setup function here!
         super.viewDidLoad()
         viewModel = ProductiveTimeViewModel(vc: self)
         view.backgroundColor = Palette.darkHeader.color
-        
         setupProgressBar()
         setupPropsLabel()
         setupPopsWindow()
@@ -61,8 +52,6 @@ class ProductiveTimeViewController: UIViewController {
         setupCancelSessionButton()
         setupTotalTimeLabel()
         viewModel.startTimers()
-        
-        
         
         
         //this is the back button.
@@ -74,9 +63,20 @@ class ProductiveTimeViewController: UIViewController {
         //delete ifyou don't need it.
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        animatePopsPopup()
+    }
+    
     func dismissView() {
         self.dismiss(animated: true, completion: nil)
     }
+
+    
+
+}
+
+extension ProductiveTimeViewController {
     
     func setupProgressBar() {
         view.addSubview(progressBar)
@@ -88,7 +88,6 @@ class ProductiveTimeViewController: UIViewController {
         progressBar.heightAnchor.constraint(equalToConstant: 5).isActive = true
         progressBarWidthAnchor = progressBar.widthAnchor.constraint(equalToConstant: 0.0)
         progressBarWidthAnchor.isActive = true
-    
     }
     
     func setupPropsLabel() {
@@ -96,7 +95,6 @@ class ProductiveTimeViewController: UIViewController {
         propsLabel.text = "\(props) props"
         propsLabel.font = UIFont(name: "AvenirNext", size: 10)
         propsLabel.textColor = UIColor.white
-        
         
         propsLabel.translatesAutoresizingMaskIntoConstraints = false
         propsLabel.topAnchor.constraint(equalTo: progressBar.bottomAnchor, constant: 25).isActive = true
@@ -117,7 +115,6 @@ class ProductiveTimeViewController: UIViewController {
         popsWindowView.widthAnchor.constraint(equalToConstant: 100).isActive = true
         popsWindowView.layer.cornerRadius = 50.0
         popsWindowView.layer.masksToBounds = true
-        
     }
     
     func setupPopsIcon() {
@@ -127,12 +124,13 @@ class ProductiveTimeViewController: UIViewController {
         popsWindowView.addSubview(popsIcon)
         popsIcon.translatesAutoresizingMaskIntoConstraints = false
         popsIcon.backgroundColor = UIColor.clear
-        popsIcon.bottomAnchor.constraint(equalTo: popsWindowView.bottomAnchor, constant: 10).isActive = true
+        
+        popsBottomAnchorConstraint = popsIcon.bottomAnchor.constraint(equalTo: popsWindowView.bottomAnchor, constant: 100)
+        popsBottomAnchorConstraint.isActive = true
         popsIcon.centerXAnchor.constraint(equalTo: popsWindowView.centerXAnchor, constant: 0).isActive = true
         popsIcon.heightAnchor.constraint(equalToConstant: 80).isActive = true
         popsIcon.widthAnchor.constraint(equalToConstant: 52).isActive = true
         popsIcon.layer.masksToBounds = true
-        
     }
     
     func setupPepTalkLabel() {
@@ -150,13 +148,11 @@ class ProductiveTimeViewController: UIViewController {
         pepTalkLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0).isActive = true
         pepTalkLabel.widthAnchor.constraint(equalToConstant: 200).isActive = true
         pepTalkLabel.heightAnchor.constraint(equalToConstant: 100).isActive = true
-
-        
     }
     
     func setupTotalTimeLabel() {
         view.addSubview(totalTimeLabel)
-        totalTimeLabel.text = "29:35"
+        totalTimeLabel.text = "\(viewModel.formatTime(time: totalTime))"
         totalTimeLabel.textAlignment = .center
         totalTimeLabel.font = UIFont(name: "Avenir-Medium", size: 25)
         totalTimeLabel.textColor = UIColor.white
@@ -182,24 +178,12 @@ class ProductiveTimeViewController: UIViewController {
         cancelSessionButton.heightAnchor.constraint(equalToConstant: 20).isActive = true
     }
     
-    func formatTime(time: Int) -> String {
-        if time >= 3600 {
-            let hours = time / 3600
-            let minutes = time / 60 % 60
-            let seconds = time % 60
-            return String(format:"%02i:%02i:%02i", hours, minutes, seconds)
-            
-        } else if time >= 60 {
-            
-            let minutes = time / 60 % 60
-            let seconds = time % 60
-            return String(format:"%02i:%02i", minutes, seconds)
-            
-        } else {
-            let seconds = time % 60
-            return String(format:"%02i", seconds)
+    func animatePopsPopup() {
+        
+        self.view.layoutIfNeeded()
+        UIView.animate(withDuration: 1) {
+            self.popsBottomAnchorConstraint.constant = 10
+            self.view.layoutIfNeeded()
         }
     }
-
-
 }
