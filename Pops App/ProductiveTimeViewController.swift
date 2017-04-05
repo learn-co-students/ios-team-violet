@@ -3,7 +3,7 @@ import UIKit
 
 class ProductiveTimeViewController: UIViewController {
 
-    let viewModel = ProductiveTimeViewModel.singleton
+    var viewModel: ProductiveTimeViewModel!
     
     let totalTimeLabel = UILabel()
     let popsWindowView = UIView()
@@ -20,13 +20,13 @@ class ProductiveTimeViewController: UIViewController {
     //properties that handle displaying data
     var totalTime = 0 { //everytime the property gets changed, totaltimeLabel gets changed.
         didSet {
-            totalTimeLabel.text = String(totalTime)
+            totalTimeLabel.text = formatTime(time: totalTime) //format time changes 4800 (seconds) to 01:20:00
         }
     }
     
     var props = 0 {
         didSet {
-            propsLabel.text = String(props)
+            propsLabel.text = "\(props) props"
         }
     }
     
@@ -39,6 +39,7 @@ class ProductiveTimeViewController: UIViewController {
     
     override func viewDidLoad() { //remember to call the setup function here!
         super.viewDidLoad()
+        viewModel = ProductiveTimeViewModel(vc: self)
         view.backgroundColor = Palette.darkHeader.color
         
         setupProgressBar()
@@ -83,7 +84,6 @@ class ProductiveTimeViewController: UIViewController {
     
     func setupPropsLabel() {
         view.addSubview(propsLabel)
-        //propsLabel.backgroundColor = Palette.red.color
         propsLabel.text = "\(props) props"
         propsLabel.font = UIFont(name: "AvenirNext", size: 10)
         propsLabel.textColor = UIColor.white
@@ -131,7 +131,6 @@ class ProductiveTimeViewController: UIViewController {
         pepTalkLabel.textColor = UIColor.white
         let labelString = "Stay focused. The useless stuff on the internet can wait."
         let normalFont = UIFont(name: "AvenirNext-MediumItalic", size: 15.0)
-        //let boldFont = UIFont(name: "Avenir-Black", size: 19.0)
         
         pepTalkLabel.text = labelString
         pepTalkLabel.font = normalFont
@@ -173,5 +172,25 @@ class ProductiveTimeViewController: UIViewController {
         cancelSessionButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
         cancelSessionButton.heightAnchor.constraint(equalToConstant: 20).isActive = true
     }
+    
+    func formatTime(time: Int) -> String {
+        if time >= 3600 {
+            let hours = time / 3600
+            let minutes = time / 60 % 60
+            let seconds = time % 60
+            return String(format:"%02i:%02i:%02i", hours, minutes, seconds)
+            
+        } else if time >= 60 {
+            
+            let minutes = time / 60 % 60
+            let seconds = time % 60
+            return String(format:"%02i:%02i", minutes, seconds)
+            
+        } else {
+            let seconds = time % 60
+            return String(format:"%02i", seconds)
+        }
+    }
+
 
 }

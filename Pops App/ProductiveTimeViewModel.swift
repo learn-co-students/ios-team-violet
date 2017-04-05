@@ -3,27 +3,58 @@ import Foundation
 
 final class ProductiveTimeViewModel {
     
-    static let singleton = ProductiveTimeViewModel()
-    private init(){}
     
-    let viewController = ProductiveTimeViewController()
+    let viewController: ProductiveTimeViewController
+
+    init(vc: ProductiveTimeViewController){
+    self.viewController = vc
+    }
+    
     
     var timer = Timer()
     var backgroundTimer = Timer()
     
+    var timerCounter = 1800 { //this keeps track of the time. think of these counters as seconds left.
+        didSet {
+            viewController.totalTime = timerCounter
+        }
+    }
+    var backgroundCounter = 7200 //this is the total time.
+    
+    var props = 0 {
+        didSet {
+            viewController.props = props
+        }
+    }//this is the number of props
+    
+    var progressBarCounter = 0 
+    
     func startTimers() {
-        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.timerAction), userInfo: nil, repeats: true)
-        backgroundTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.backgroundTimerAction), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { (timer) in
+           self.timerAction()
+        })
+        backgroundTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { (timer) in
+            self.backgroundTimerAction()
+        })
         
     }
     
-    @objc func timerAction() {
-        print("timer action 1 count")
+    func stopTimers() {
+        timer.invalidate()
+        backgroundTimer.invalidate()
     }
     
-    @objc func backgroundTimerAction() {
-        print("background timer action 1 count")
+    func timerAction() {
+        print("timer action: \(timerCounter)")
+        timerCounter -= 1
+        props += 1
+    }
+    
+    func backgroundTimerAction() {
+        print("background timer action: \(backgroundCounter)")
+        backgroundCounter -= 1
     }
     
     
 }
+
