@@ -48,6 +48,7 @@ final class ProductiveTimeViewModel {
         print("timer action: \(timerCounter)")
         timerCounter -= 1
         props += 1
+        viewController.progress += 1
     }
     
     func backgroundTimerAction() {

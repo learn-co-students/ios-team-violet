@@ -14,7 +14,7 @@ class ProductiveTimeViewController: UIViewController {
     let propsLabel = UILabel()
     
     //changing constraints
-    var progressBarRightAnchorConstraint: NSLayoutConstraint!
+    var progressBarWidthAnchorConstraint: NSLayoutConstraint!
     //
     
     //properties that handle displaying data
@@ -27,6 +27,14 @@ class ProductiveTimeViewController: UIViewController {
     var props = 0 {
         didSet {
             propsLabel.text = "\(props) props"
+        }
+    }
+    
+    var progress = 10 {
+        didSet {
+           progressBarWidthAnchorConstraint = progressBar.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: CGFloat(progress / 100) , constant: 0)
+            
+            print("changed Constraint")
         }
     }
     
@@ -75,8 +83,8 @@ class ProductiveTimeViewController: UIViewController {
         progressBar.topAnchor.constraint(equalTo: view.topAnchor, constant: 0).isActive = true
         progressBar.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0).isActive = true
         progressBar.heightAnchor.constraint(equalToConstant: 5).isActive = true
-        self.progressBarRightAnchorConstraint = progressBar.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -350)
-        progressBarRightAnchorConstraint.isActive = true
+        self.progressBarWidthAnchorConstraint = progressBar.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.01, constant: 0)
+        progressBarWidthAnchorConstraint.isActive = true
         
         
         
