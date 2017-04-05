@@ -30,6 +30,9 @@
 		1F7C44AB1E9440370067ECCF /* CoachesDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7C44AA1E9440370067ECCF /* CoachesDataStore.swift */; };
 		1FBEEC6A1E952F760099F413 /* BreakTimeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FBEEC691E952F760099F413 /* BreakTimeViewModel.swift */; };
 		1FBEEC7B1E9564330099F413 /* YouTubeiOSPlayerHelper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FBEEC7A1E9564330099F413 /* YouTubeiOSPlayerHelper.framework */; };
+		1FBEEC7D1E9588130099F413 /* BreakEntertainmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FBEEC7C1E9588130099F413 /* BreakEntertainmentViewController.swift */; };
+		1FBEEC7F1E9588B00099F413 /* BreakEntertainmentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FBEEC7E1E9588B00099F413 /* BreakEntertainmentViewModel.swift */; };
+		1FBEEC811E9591250099F413 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FBEEC801E9591250099F413 /* User.swift */; };
 		98E682781E931E4F00BAEFE8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E682771E931E4F00BAEFE8 /* AppDelegate.swift */; };
 		98E6827F1E931E4F00BAEFE8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 98E6827E1E931E4F00BAEFE8 /* Assets.xcassets */; };
 		98E682821E931E4F00BAEFE8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 98E682801E931E4F00BAEFE8 /* LaunchScreen.storyboard */; };
@@ -63,6 +66,9 @@
 		1F7C44AA1E9440370067ECCF /* CoachesDataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoachesDataStore.swift; sourceTree = "<group>"; };
 		1FBEEC691E952F760099F413 /* BreakTimeViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BreakTimeViewModel.swift; sourceTree = "<group>"; };
 		1FBEEC7A1E9564330099F413 /* YouTubeiOSPlayerHelper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = YouTubeiOSPlayerHelper.framework; path = Carthage/Build/iOS/YouTubeiOSPlayerHelper.framework; sourceTree = "<group>"; };
+		1FBEEC7C1E9588130099F413 /* BreakEntertainmentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BreakEntertainmentViewController.swift; sourceTree = "<group>"; };
+		1FBEEC7E1E9588B00099F413 /* BreakEntertainmentViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BreakEntertainmentViewModel.swift; sourceTree = "<group>"; };
+		1FBEEC801E9591250099F413 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		98E682741E931E4F00BAEFE8 /* Pops App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pops App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		98E682771E931E4F00BAEFE8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		98E6827E1E931E4F00BAEFE8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -94,6 +100,7 @@
 				1F7C448F1E940AA70067ECCF /* ScoreboardViewModel.swift */,
 				1F7C44911E940AB90067ECCF /* ProductiveTimeViewModel.swift */,
 				1FBEEC691E952F760099F413 /* BreakTimeViewModel.swift */,
+				1FBEEC7E1E9588B00099F413 /* BreakEntertainmentViewModel.swift */,
 				1F7C44A81E9439420067ECCF /* SessionEndedViewModel.swift */,
 				1F7C44951E940AE20067ECCF /* Break View Models */,
 			);
@@ -104,6 +111,7 @@
 			isa = PBXGroup;
 			children = (
 				1F7C449A1E940B500067ECCF /* Coach.swift */,
+				1FBEEC801E9591250099F413 /* User.swift */,
 				1F7C44AA1E9440370067ECCF /* CoachesDataStore.swift */,
 				1F7C44A41E940BD80067ECCF /* DifficultySetting.swift */,
 				1F7C449C1E940B580067ECCF /* Break Managers */,
@@ -111,14 +119,14 @@
 			name = Model;
 			sourceTree = "<group>";
 		};
-		1F7C44841E9409760067ECCF /* Break Views */ = {
+		1F7C44841E9409760067ECCF /* Break View Controllers */ = {
 			isa = PBXGroup;
 			children = (
 				1F7C44851E9409900067ECCF /* PopsBreakView.swift */,
 				1F7C44871E9409A90067ECCF /* BabaBreakView.swift */,
 				1F7C44891E9409BE0067ECCF /* ChadBreakView.swift */,
 			);
-			name = "Break Views";
+			name = "Break View Controllers";
 			sourceTree = "<group>";
 		};
 		1F7C44951E940AE20067ECCF /* Break View Models */ = {
@@ -189,8 +197,9 @@
 				1F7C44801E9409050067ECCF /* ScoreboardViewController.swift */,
 				98E6828D1E931EAF00BAEFE8 /* ProductiveTimeViewController.swift */,
 				1F7C44821E9409700067ECCF /* BreakTimeViewController.swift */,
+				1FBEEC7C1E9588130099F413 /* BreakEntertainmentViewController.swift */,
 				1F7C44A61E9439250067ECCF /* SessionEndedViewController.swift */,
-				1F7C44841E9409760067ECCF /* Break Views */,
+				1F7C44841E9409760067ECCF /* Break View Controllers */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -295,6 +304,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1FBEEC7F1E9588B00099F413 /* BreakEntertainmentViewModel.swift in Sources */,
 				1F7C44921E940AB90067ECCF /* ProductiveTimeViewModel.swift in Sources */,
 				1F7C44881E9409A90067ECCF /* BabaBreakView.swift in Sources */,
 				1F7C44811E9409050067ECCF /* ScoreboardViewController.swift in Sources */,
@@ -302,6 +312,7 @@
 				1F7C44A71E9439250067ECCF /* SessionEndedViewController.swift in Sources */,
 				98E6828E1E931EAF00BAEFE8 /* ProductiveTimeViewController.swift in Sources */,
 				1F7C44901E940AA70067ECCF /* ScoreboardViewModel.swift in Sources */,
+				1FBEEC811E9591250099F413 /* User.swift in Sources */,
 				1F7C44A91E9439420067ECCF /* SessionEndedViewModel.swift in Sources */,
 				1F7C44A51E940BD80067ECCF /* DifficultySetting.swift in Sources */,
 				1FBEEC6A1E952F760099F413 /* BreakTimeViewModel.swift in Sources */,
@@ -310,6 +321,7 @@
 				1F7C44831E9409700067ECCF /* BreakTimeViewController.swift in Sources */,
 				1F7C44861E9409900067ECCF /* PopsBreakView.swift in Sources */,
 				1F7C449E1E940B670067ECCF /* PopsBreakManager.swift in Sources */,
+				1FBEEC7D1E9588130099F413 /* BreakEntertainmentViewController.swift in Sources */,
 				98E682781E931E4F00BAEFE8 /* AppDelegate.swift in Sources */,
 				1F7C44A01E940B7E0067ECCF /* BabaBreakManager.swift in Sources */,
 				1F7C448E1E940A9B0067ECCF /* SettingsViewModel.swift in Sources */,

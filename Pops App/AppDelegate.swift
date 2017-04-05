@@ -1,10 +1,3 @@
-//
-//  AppDelegate.swift
-//  Pops App
-//
-//  Created by Robert Rozenvasser on 4/3/17.
-//  Copyright © 2017 Robert Rozenvasser. All rights reserved.
-//
 
 import UIKit
 
@@ -12,12 +5,14 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    let defaults = UserDefaults.standard
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
         window?.rootViewController = SetSessionViewController()
+        
         return true
     }
 
@@ -42,7 +37,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
-
-
+    
+    func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
+        if window == self.window {
+            return .portrait
+        } else {
+            return .allButUpsideDown
+        }
+    }
 }
 
