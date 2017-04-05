@@ -5,29 +5,40 @@ final class ProductiveTimeViewModel {
     
     
     let viewController: ProductiveTimeViewController
+    let dataStore = CoachesDataStore.singleton
 
     init(vc: ProductiveTimeViewController){
     self.viewController = vc
     }
     
     
+    
     var timer = Timer()
     var backgroundTimer = Timer()
     
-    var timerCounter = 1800 { //this keeps track of the time. think of these counters as seconds left.
+    //coach specific properties
+    
+    
+    
+    //counters: timerCounter, BackgroundCounter, progressBarCounter, props
+    var timerCounter = 1500 { //this keeps track of the time. think of these counters as seconds left.
         didSet {
             viewController.totalTime = timerCounter
         }
     }
-    var backgroundCounter = 7200 //this is the total time.
+    var backgroundCounter = 7200
     
     var props = 0 {
         didSet {
             viewController.props = props
         }
-    }//this is the number of props
+    }
     
-    var progressBarCounter = 0 
+    var progressBarCounter = 0.0 {
+        didSet {
+            viewController.progress = progressBarCounter / 1500.00 //this is only for pops,
+        }
+    }
     
     func startTimers() {
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { (timer) in

@@ -4,6 +4,7 @@ import UIKit
 class ProductiveTimeViewController: UIViewController {
 
     var viewModel: ProductiveTimeViewModel!
+    var progressBarWidthAnchor: NSLayoutConstraint!
     
     let totalTimeLabel = UILabel()
     let popsWindowView = UIView()
@@ -30,11 +31,13 @@ class ProductiveTimeViewController: UIViewController {
         }
     }
     
-    var progress = 10 {
+    var progress = 0.0 {
         didSet {
-           progressBarWidthAnchorConstraint = progressBar.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: CGFloat(progress / 100) , constant: 0)
-            
-            print("changed Constraint")
+            self.view.layoutIfNeeded()
+            UIView.animate(withDuration: 1) { 
+                self.progressBarWidthAnchor.constant = CGFloat(self.view.frame.width * CGFloat(self.progress) / 1500.0 )
+                self.view.layoutIfNeeded()
+            }
         }
     }
     
@@ -83,11 +86,9 @@ class ProductiveTimeViewController: UIViewController {
         progressBar.topAnchor.constraint(equalTo: view.topAnchor, constant: 0).isActive = true
         progressBar.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0).isActive = true
         progressBar.heightAnchor.constraint(equalToConstant: 5).isActive = true
-        self.progressBarWidthAnchorConstraint = progressBar.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.01, constant: 0)
-        progressBarWidthAnchorConstraint.isActive = true
-        
-        
-        
+        progressBarWidthAnchor = progressBar.widthAnchor.constraint(equalToConstant: 0.0)
+        progressBarWidthAnchor.isActive = true
+    
     }
     
     func setupPropsLabel() {
