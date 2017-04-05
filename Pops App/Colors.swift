@@ -1,10 +1,3 @@
-//
-//  Colors.swift
-//  NewsList
-//
-//  Created by Robert Rozenvasser on 3/21/17.
-//  Copyright © 2017 Robert Rozenvasser. All rights reserved.
-//
 
 import Foundation
 import UIKit
