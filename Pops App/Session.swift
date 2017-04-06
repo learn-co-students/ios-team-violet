@@ -17,5 +17,4 @@ struct Session {
     var cycleLength: Double {
         return sessionDifficulty.baseProductivityLength + sessionDifficulty.baseBreakLength
     }
-    
 }

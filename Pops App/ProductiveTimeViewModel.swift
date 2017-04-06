@@ -8,12 +8,10 @@ final class ProductiveTimeViewModel {
 
     init(vc: ProductiveTimeViewController){
         self.viewController = vc
-        self.user = dataStore.user
     }
     
     var timer = Timer()
     var backgroundTimer = Timer()
-    let user: User!
     
     
     //counters: timerCounter, BackgroundCounter, progressBarCounter, props

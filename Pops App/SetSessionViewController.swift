@@ -56,8 +56,11 @@ class SetSessionViewController: UIViewController, UICollectionViewDelegateFlowLa
     }
     
     func presentProductiveTimeVC() {
-        let productiveTimeVC = ProductiveTimeViewController()
-        present(productiveTimeVC, animated: true, completion: nil)
+//        let productiveTimeVC = ProductiveTimeViewController()
+//        present(productiveTimeVC, animated: true, completion: nil)
+        
+        let VC = BreakEntertainmentViewController()
+        present(VC, animated: true, completion: nil)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {

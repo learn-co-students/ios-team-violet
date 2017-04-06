@@ -112,10 +112,10 @@
 		1F7C447D1E93FC200067ECCF /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				1F7C44AA1E9440370067ECCF /* DataStore.swift */,
+				1FBEEC801E9591250099F413 /* User.swift */,
 				1F7C449A1E940B500067ECCF /* Coach.swift */,
 				1FBEEC821E9692370099F413 /* Session.swift */,
-				1FBEEC801E9591250099F413 /* User.swift */,
-				1F7C44AA1E9440370067ECCF /* DataStore.swift */,
 				1F7C44A41E940BD80067ECCF /* DifficultySetting.swift */,
 				1F7C449C1E940B580067ECCF /* Break Managers */,
 			);

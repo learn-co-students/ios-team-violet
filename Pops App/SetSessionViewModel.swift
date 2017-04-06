@@ -11,23 +11,12 @@ final class SetSessionViewModel {
     let timesForCollectionView = [Time("1 hour"), Time("2 hours"), Time("3 hours"), Time("4 hours"), Time("5 hours"), Time("6 hours"), Time("7 hours"), Time("8 hours")]
 
     let defaults = UserDefaults.standard
-    var user: User! {
-        didSet {
-            dataStore.user = user
-        }
-    }
 
-    private init(){
-        let userName = defaults.value(forKey: "userName") as? String ?? nil
-        let totalProps = defaults.value(forKey: "totalProps") as? Int ?? 0
-        let unlockedCoaches = defaults.value(forKey: "unlockedCoaches") as? [String] ?? ["Pops", "Baba"]
-        let currentCoach = dataStore.getCurrentCoach()
-        self.user = User(userName: userName, totalProps: totalProps, unlockedCoachNames: unlockedCoaches, currentCoach: currentCoach, currentSession: nil)
-    }
+    private init(){}
     
     func startSessionOfLength(_ hours: Int) {
-        let currentSession = Session(sessionHours: hours, sessionDifficulty: user.currentCoach.difficulty)
-        user.currentSession = currentSession
+        let currentSession = Session(sessionHours: hours, sessionDifficulty: dataStore.user.currentCoach.difficulty)
+        dataStore.user.currentSession = currentSession
     }
  
 }

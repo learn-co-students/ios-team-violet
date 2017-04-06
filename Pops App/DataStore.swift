@@ -6,9 +6,15 @@ final class DataStore {
     static let singleton = DataStore()
     
     let defaults = UserDefaults.standard
-    var user: User?
+    var user: User!
     
-    private init(){}
+    private init(){
+        let userName = defaults.value(forKey: "userName") as? String ?? nil
+        let totalProps = defaults.value(forKey: "totalProps") as? Int ?? 0
+        let unlockedCoaches = defaults.value(forKey: "unlockedCoaches") as? [String] ?? ["Pops", "Baba"]
+        let appNames = defaults.value(forKey: "appNames") as? [String] ?? ["Messages", "Email", "Facebook"]
+        self.user = User(userName: userName, totalProps: totalProps, unlockedCoachNames: unlockedCoaches, appNames: appNames, currentCoach: getCurrentCoach(), currentSession: nil)
+    }
     
     func getCurrentCoach() -> Coach {
         let coachName = defaults.value(forKey: "coachName") as? String ?? "Pops"
