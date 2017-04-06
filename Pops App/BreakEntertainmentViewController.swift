@@ -8,7 +8,7 @@ class BreakEntertainmentViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        breakView = viewModel.sessionCoach.breakView
+        breakView = viewModel.user.currentCoach.breakView
         
         self.view.addSubview(breakView)
         breakView.center = self.view.center

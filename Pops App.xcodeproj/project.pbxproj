@@ -27,7 +27,7 @@
 		1F7C44A51E940BD80067ECCF /* DifficultySetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7C44A41E940BD80067ECCF /* DifficultySetting.swift */; };
 		1F7C44A71E9439250067ECCF /* SessionEndedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7C44A61E9439250067ECCF /* SessionEndedViewController.swift */; };
 		1F7C44A91E9439420067ECCF /* SessionEndedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7C44A81E9439420067ECCF /* SessionEndedViewModel.swift */; };
-		1F7C44AB1E9440370067ECCF /* CoachesDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7C44AA1E9440370067ECCF /* CoachesDataStore.swift */; };
+		1F7C44AB1E9440370067ECCF /* DataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7C44AA1E9440370067ECCF /* DataStore.swift */; };
 		1FBEEC6A1E952F760099F413 /* BreakTimeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FBEEC691E952F760099F413 /* BreakTimeViewModel.swift */; };
 		1FBEEC7B1E9564330099F413 /* YouTubeiOSPlayerHelper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FBEEC7A1E9564330099F413 /* YouTubeiOSPlayerHelper.framework */; };
 		1FBEEC7D1E9588130099F413 /* BreakEntertainmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FBEEC7C1E9588130099F413 /* BreakEntertainmentViewController.swift */; };
@@ -64,7 +64,7 @@
 		1F7C44A41E940BD80067ECCF /* DifficultySetting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DifficultySetting.swift; sourceTree = "<group>"; };
 		1F7C44A61E9439250067ECCF /* SessionEndedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionEndedViewController.swift; sourceTree = "<group>"; };
 		1F7C44A81E9439420067ECCF /* SessionEndedViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionEndedViewModel.swift; sourceTree = "<group>"; };
-		1F7C44AA1E9440370067ECCF /* CoachesDataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoachesDataStore.swift; sourceTree = "<group>"; };
+		1F7C44AA1E9440370067ECCF /* DataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStore.swift; sourceTree = "<group>"; };
 		1FBEEC691E952F760099F413 /* BreakTimeViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BreakTimeViewModel.swift; sourceTree = "<group>"; };
 		1FBEEC7A1E9564330099F413 /* YouTubeiOSPlayerHelper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = YouTubeiOSPlayerHelper.framework; path = Carthage/Build/iOS/YouTubeiOSPlayerHelper.framework; sourceTree = "<group>"; };
 		1FBEEC7C1E9588130099F413 /* BreakEntertainmentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BreakEntertainmentViewController.swift; sourceTree = "<group>"; };
@@ -115,7 +115,7 @@
 				1F7C449A1E940B500067ECCF /* Coach.swift */,
 				1FBEEC821E9692370099F413 /* Session.swift */,
 				1FBEEC801E9591250099F413 /* User.swift */,
-				1F7C44AA1E9440370067ECCF /* CoachesDataStore.swift */,
+				1F7C44AA1E9440370067ECCF /* DataStore.swift */,
 				1F7C44A41E940BD80067ECCF /* DifficultySetting.swift */,
 				1F7C449C1E940B580067ECCF /* Break Managers */,
 			);
@@ -332,7 +332,7 @@
 				1F7C44991E940B400067ECCF /* ChadBreakViewModel.swift in Sources */,
 				1F7C448C1E940A900067ECCF /* SetSessionViewModel.swift in Sources */,
 				1F7C44971E940B360067ECCF /* BabaBreakViewModel.swift in Sources */,
-				1F7C44AB1E9440370067ECCF /* CoachesDataStore.swift in Sources */,
+				1F7C44AB1E9440370067ECCF /* DataStore.swift in Sources */,
 				98E6828C1E931EA900BAEFE8 /* Colors.swift in Sources */,
 				1F7C449B1E940B500067ECCF /* Coach.swift in Sources */,
 				1F7C44A31E940BC60067ECCF /* ChadBreakManager.swift in Sources */,

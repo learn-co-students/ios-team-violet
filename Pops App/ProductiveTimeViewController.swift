@@ -5,7 +5,7 @@ class ProductiveTimeViewController: UIViewController {
 
     var viewModel: ProductiveTimeViewModel!
     var progressBarWidthAnchor: NSLayoutConstraint!
-    
+
     let totalTimeLabel = UILabel()
     let popsWindowView = UIView()
     let pepTalkLabel = UILabel()

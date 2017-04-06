@@ -1,10 +1,13 @@
 import Foundation
 import UIKit
 
-final class CoachesDataStore {
+final class DataStore {
     
-    static let singleton = CoachesDataStore()
+    static let singleton = DataStore()
+    
     let defaults = UserDefaults.standard
+    var user: User?
+    
     private init(){}
     
     func getCurrentCoach() -> Coach {
@@ -27,7 +30,7 @@ final class CoachesDataStore {
     }
 }
 
-private extension CoachesDataStore {
+private extension DataStore {
     func generatePops() -> Coach {
         let name = "Pops"
         let icon = UIImage(named: "IC_POPS")

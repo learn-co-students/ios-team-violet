@@ -4,16 +4,16 @@ import Foundation
 final class ProductiveTimeViewModel {
     
     let viewController: ProductiveTimeViewController
-    let dataStore = CoachesDataStore.singleton
+    let dataStore = DataStore.singleton
 
     init(vc: ProductiveTimeViewController){
         self.viewController = vc
-        sessionCoach = dataStore.getCurrentCoach()
+        self.user = dataStore.user
     }
     
     var timer = Timer()
     var backgroundTimer = Timer()
-    let sessionCoach: Coach!
+    let user: User!
     
     
     //counters: timerCounter, BackgroundCounter, progressBarCounter, props

@@ -4,10 +4,10 @@ import Foundation
 final class ScoreboardViewModel {
     
     static let singleton = ScoreboardViewModel()
-    let dataStore = CoachesDataStore.singleton
-    let sessionCoach: Coach!
+    let dataStore = DataStore.singleton
+    let user: User!
     
     private init(){
-        self.sessionCoach = dataStore.getCurrentCoach()
+        self.user = dataStore.user
     }
 }
