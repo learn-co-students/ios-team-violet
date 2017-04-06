@@ -2,11 +2,8 @@
 import UIKit
 
 class ProductiveTimeViewController: UIViewController {
-<<<<<<< HEAD
-=======
 
     let viewModel = ProductiveTimeViewModel.singleton
->>>>>>> 5531a4a2096c8cb66906976c40743f618f632f82
     
     let totalTime = UILabel()
     

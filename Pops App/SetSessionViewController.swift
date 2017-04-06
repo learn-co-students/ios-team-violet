@@ -1,42 +1,54 @@
 
 import UIKit
 
-class SetSessionViewController: UIViewController {
+class SetSessionViewController: UIViewController, UICollectionViewDelegateFlowLayout {
     
     let viewModel = SetSessionViewModel.singleton
     
-    var startButtonBottomConstraint: NSLayoutConstraint!
-    var headerViewTopConstraint: NSLayoutConstraint!
- 
-    let headerView = UIView()
+    var selectedTime: Time!
+    
+    lazy var viewWidth: CGFloat = self.view.frame.width
+    lazy var viewHeight: CGFloat = self.view.frame.height
+    lazy var itemWidth: CGFloat = self.view.frame.width * (269/self.view.frame.width)
+    lazy var itemHeight: CGFloat = self.view.frame.height * (45/self.view.frame.height)
+    lazy var collectionViewYAnchor: CGFloat = self.view.frame.height * (403/self.view.frame.height)
+    
     let coachImageView = UIImageView()
+    
+    let startButton = UIButton()
+    let selectHourCollectionViewLayout = UICollectionViewFlowLayout()
+    lazy var selectHourCollectionView: UICollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: self.selectHourCollectionViewLayout)
+    let lineDividerView = UIView()
+    let characterMessageHeader = UILabel()
+    let characterMessageBody = UILabel()
+    let circleBackgroundForCharacterImageView = UIImageView()
+    let headerView = UIView()
     let settingsButton = UIButton()
-    let setSessionLabel = UILabel()
-    lazy var totalTimeEntryButton = UIView()
-    var totalTimeEntryLabel = UILabel()
-    lazy var startButton = UIButton()
-    lazy var timePicker = UIPickerView()
+    let leaderBoardButton = UIButton()
+    
+    var popsBottomAnchorConstraint: NSLayoutConstraint!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.white
         
         setupStartButton()
-        setupTotalTimeEntryButton()
-        setupTotalTimeEntryLabel()
-        setupSetSessionLabel()
+        setupCollectionViewLayout()
+        setupCollectionView()
+        setupLineDividerView()
+        setupCharacterMessageBody()
+        setupCharacterMessageHeader()
+        setupCircleBackgroundForCharacterImageView()
+        //setupCoachImageView()
         setupHeaderView()
-        setupCoachImageView()
         setupSettingsButton()
+        setupLeaderBoardButton()
         
-        setupPickerView()
-        timePicker.isHidden = true
-        
-        totalTimeEntryLabel.text = viewModel.totalTimesForPicker[0]
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        //animatePopsPopup()
     }
     
     override var prefersStatusBarHidden: Bool {
@@ -45,149 +57,214 @@ class SetSessionViewController: UIViewController {
     
     func presentProductiveTimeVC() {
         let productiveTimeVC = ProductiveTimeViewController()
-        productiveTimeVC.totalTime.text = totalTimeEntryLabel.text
         present(productiveTimeVC, animated: true, completion: nil)
     }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return viewWidth * (10/viewWidth)
+    }
+    
 }
 
+extension SetSessionViewController: UICollectionViewDataSource {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return viewModel.timesForCollectionView.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HourTimeCell", for: indexPath) as! HourCollectionViewCell
+        
+        if cell.layer.cornerRadius != 2.0 {
+            cell.layer.cornerRadius = 2.0
+            cell.layer.masksToBounds = true
+        }
+        
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let cell = collectionView.cellForItem(at: indexPath) as! HourCollectionViewCell
+        guard !cell.timeIsSelected else { return }
+        
+        selectedTime?.isSelected = false
+        let visibleCells = collectionView.visibleCells as! [HourCollectionViewCell]
+        visibleCells.forEach { $0.resetBackground() }
+
+        selectedTime = cell.time
+        
+        cell.timeIsSelected = !cell.timeIsSelected
+        UIView.animate(withDuration: 0.8, animations: {
+            self.startButton.alpha = cell.timeIsSelected ? 1.0 : 0.3
+            self.startButton.isEnabled = cell.timeIsSelected ? true : false
+        })
+        
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        let currentCell = cell as! HourCollectionViewCell
+        currentCell.time = viewModel.timesForCollectionView[indexPath.row]
+    }
+    
+}
 
 //View Setups
 extension SetSessionViewController {
+    
     func setupStartButton() {
         startButton.backgroundColor = Palette.aqua.color
+        startButton.alpha = 0.3
+        startButton.isEnabled = false
         startButton.layer.cornerRadius = 2.0
         startButton.layer.masksToBounds = true
-        startButton.setTitle("Start", for: .normal)
+        startButton.setTitle("start", for: .normal)
         startButton.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 14.0)
         startButton.addTarget(self, action: #selector(presentProductiveTimeVC), for: .touchUpInside)
         
         view.addSubview(startButton)
         startButton.translatesAutoresizingMaskIntoConstraints = false
-        startButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30.0).isActive = true
-        startButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30.0).isActive = true
-        startButton.heightAnchor.constraint(equalToConstant: 45.0).isActive = true
-        self.startButtonBottomConstraint = startButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -65.0)
-        startButtonBottomConstraint.isActive = true
+        startButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        startButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 269/viewWidth).isActive = true
+        startButton.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 45/viewHeight).isActive = true
+        startButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -viewHeight * (149.0/667.0)).isActive = true
     }
     
-    func setupTotalTimeEntryButton() {
-        totalTimeEntryButton.backgroundColor = Palette.lightGrey.color
-        totalTimeEntryButton.layer.cornerRadius = 2.0
-        totalTimeEntryButton.layer.masksToBounds = true
-        let gesture = UITapGestureRecognizer(target: self, action: #selector(self.displayPickerView))
-        totalTimeEntryButton.addGestureRecognizer(gesture)
-        
-        view.addSubview(totalTimeEntryButton)
-        totalTimeEntryButton.translatesAutoresizingMaskIntoConstraints = false
-        totalTimeEntryButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30.0).isActive = true
-        totalTimeEntryButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30.0).isActive = true
-        totalTimeEntryButton.heightAnchor.constraint(equalToConstant: 45.0).isActive = true
-        totalTimeEntryButton.bottomAnchor.constraint(equalTo: startButton.topAnchor, constant: -100.00).isActive = true
+    func setupCollectionViewLayout() {
+        let leftInset = viewWidth * (53/viewWidth)
+        let itemWidth = viewWidth * (83/viewWidth)
+        let itemHeight = viewHeight * (45/viewHeight)
+        selectHourCollectionViewLayout.sectionInset = UIEdgeInsets(top: 0, left: leftInset, bottom: 0, right: leftInset)
+        selectHourCollectionViewLayout.itemSize = CGSize(width: itemWidth, height: itemHeight)
+        selectHourCollectionViewLayout.scrollDirection = .horizontal
     }
     
-    func setupTotalTimeEntryLabel() {
-        totalTimeEntryLabel.font = UIFont(name: "Avenir-Medium", size: 14.0)
-        totalTimeEntryLabel.textColor = Palette.grey.color
+    func setupCollectionView() {
         
-        totalTimeEntryButton.addSubview(totalTimeEntryLabel)
-        totalTimeEntryLabel.translatesAutoresizingMaskIntoConstraints = false
-        totalTimeEntryLabel.leadingAnchor.constraint(equalTo: totalTimeEntryButton.leadingAnchor, constant: 15.0).isActive = true
-        totalTimeEntryLabel.centerYAnchor.constraint(equalTo: totalTimeEntryButton.centerYAnchor).isActive = true
+        selectHourCollectionView.backgroundColor = UIColor.white
+        selectHourCollectionView.allowsMultipleSelection = false
+        selectHourCollectionView.showsHorizontalScrollIndicator = false
+        selectHourCollectionView.delegate = self
+        selectHourCollectionView.dataSource = self
+        selectHourCollectionView.register(HourCollectionViewCell.self, forCellWithReuseIdentifier: "HourTimeCell")
+        
+        view.addSubview(selectHourCollectionView)
+        selectHourCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        selectHourCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        selectHourCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        selectHourCollectionView.bottomAnchor.constraint(equalTo: startButton.topAnchor, constant: -viewHeight * (25/viewHeight)).isActive = true
+        selectHourCollectionView.heightAnchor.constraint(equalToConstant: itemHeight).isActive = true
     }
     
-    func setupSetSessionLabel() {
-        setSessionLabel.numberOfLines = 2
-        setSessionLabel.textColor = UIColor.black
-        let labelString = "I want to make\nPOPS PROUD for the"
-        let normalFont = UIFont(name: "Avenir-Medium", size: 19.0)
-        let boldFont = UIFont(name: "Avenir-Black", size: 19.0)
-        setSessionLabel.attributedText = labelString.addBoldText(fullString: "I want to make\nPOPS PROUD for the", boldPartsOfString: ["POPS PROUD"], font: normalFont, boldFont: boldFont)
+    func setupLineDividerView() {
+        lineDividerView.backgroundColor = Palette.lightGrey.color
+        lineDividerView.layer.cornerRadius = 2.0
+        lineDividerView.layer.masksToBounds = true
         
-        view.addSubview(setSessionLabel)
-        setSessionLabel.translatesAutoresizingMaskIntoConstraints = false
-        setSessionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30.0).isActive = true
-        setSessionLabel.bottomAnchor.constraint(equalTo: totalTimeEntryButton.topAnchor, constant: -15.0).isActive = true
+        view.addSubview(lineDividerView)
+        lineDividerView.translatesAutoresizingMaskIntoConstraints = false
+        lineDividerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        lineDividerView.bottomAnchor.constraint(equalTo: selectHourCollectionView.topAnchor, constant: -viewHeight * (25/viewHeight)).isActive = true
+        lineDividerView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 269/viewWidth).isActive = true
+        lineDividerView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 3/viewHeight).isActive = true
+    }
+    
+    func setupCharacterMessageBody() {
+        characterMessageBody.numberOfLines = 0
+        characterMessageBody.textColor = Palette.grey.color
+        characterMessageBody.textAlignment = .left
+        characterMessageBody.font = UIFont(name: "Avenir-Heavy", size: 14.0)
+        characterMessageBody.text = "I’ll make sure you’re super productive today. How long do you want to productive for?"
+        
+        view.addSubview(characterMessageBody)
+        characterMessageBody.translatesAutoresizingMaskIntoConstraints = false
+        characterMessageBody.bottomAnchor.constraint(equalTo: lineDividerView.topAnchor, constant: -viewHeight * (20/viewHeight)).isActive = true
+        characterMessageBody.leadingAnchor.constraint(equalTo: lineDividerView.leadingAnchor).isActive = true
+        characterMessageBody.trailingAnchor.constraint(equalTo: lineDividerView.trailingAnchor).isActive = true
+    }
+    
+    func setupCharacterMessageHeader() {
+        characterMessageHeader.numberOfLines = 0
+        characterMessageHeader.textColor = UIColor.black
+        characterMessageHeader.textAlignment = .left
+        characterMessageHeader.font = UIFont(name: "Avenir-Black", size: 14.0)
+        characterMessageHeader.text = "Hey there, I'm Pops!"
+        
+        view.addSubview(characterMessageHeader)
+        characterMessageHeader.translatesAutoresizingMaskIntoConstraints = false
+        characterMessageHeader.bottomAnchor.constraint(equalTo: characterMessageBody.topAnchor, constant: -viewHeight * (5/viewHeight)).isActive = true
+        characterMessageHeader.leadingAnchor.constraint(equalTo: characterMessageBody.leadingAnchor).isActive = true
+        characterMessageHeader.trailingAnchor.constraint(equalTo: characterMessageBody.trailingAnchor).isActive = true
+    }
+    
+    func setupCircleBackgroundForCharacterImageView() {
+        circleBackgroundForCharacterImageView.image = UIImage(named: "IC_PopsCircleBackground")
+        circleBackgroundForCharacterImageView.contentMode = .scaleAspectFit
+        
+        view.addSubview(circleBackgroundForCharacterImageView)
+        circleBackgroundForCharacterImageView.translatesAutoresizingMaskIntoConstraints = false
+        circleBackgroundForCharacterImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        circleBackgroundForCharacterImageView.bottomAnchor.constraint(equalTo: characterMessageHeader.topAnchor, constant: -viewHeight * (40/viewHeight)).isActive = true
+        circleBackgroundForCharacterImageView.heightAnchor.constraint(equalToConstant: viewHeight * (100/viewHeight)).isActive = true
+        circleBackgroundForCharacterImageView.widthAnchor.constraint(equalToConstant: viewWidth * (105/viewWidth)).isActive = true
     }
     
     func setupHeaderView() {
-        headerView.backgroundColor = Palette.darkHeader.color
-
+        headerView.backgroundColor = Palette.salmon.color
+        
         view.addSubview(headerView)
         headerView.translatesAutoresizingMaskIntoConstraints = false
         headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        headerView.heightAnchor.constraint(equalToConstant: 185.0).isActive = true
-        headerViewTopConstraint = headerView.topAnchor.constraint(equalTo: view.topAnchor)
-        headerViewTopConstraint.isActive = true
+        headerView.heightAnchor.constraint(equalToConstant: viewHeight * (5/viewHeight)).isActive = true
+        headerView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
     }
     
     func setupCoachImageView() {
         coachImageView.image = UIImage(named: "IC_POPS")
         coachImageView.contentMode = .scaleAspectFit
         
-        headerView.addSubview(coachImageView)
+        circleBackgroundForCharacterImageView.addSubview(coachImageView)
         coachImageView.translatesAutoresizingMaskIntoConstraints = false
-        coachImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        coachImageView.bottomAnchor.constraint(equalTo: headerView.bottomAnchor).isActive = true
-        coachImageView.heightAnchor.constraint(equalToConstant: 80.0).isActive = true
-        coachImageView.widthAnchor.constraint(equalToConstant: 52.0).isActive = true
+        
+        popsBottomAnchorConstraint = coachImageView.bottomAnchor.constraint(equalTo: circleBackgroundForCharacterImageView.bottomAnchor, constant: 100)
+        popsBottomAnchorConstraint.isActive = true
+        coachImageView.centerXAnchor.constraint(equalTo: circleBackgroundForCharacterImageView.centerXAnchor).isActive = true
+        coachImageView.heightAnchor.constraint(equalToConstant: 80).isActive = true
+        coachImageView.widthAnchor.constraint(equalToConstant: 52).isActive = true
+        coachImageView.layer.masksToBounds = true
     }
     
     func setupSettingsButton() {
-        settingsButton.setBackgroundImage(#imageLiteral(resourceName: "IC_Settings"), for: .normal)
+        settingsButton.setBackgroundImage(#imageLiteral(resourceName: "IC_Settings-1"), for: .normal)
         
         headerView.addSubview(settingsButton)
         settingsButton.translatesAutoresizingMaskIntoConstraints = false
-        settingsButton.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 20.0).isActive = true
-        settingsButton.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 20.0).isActive = true
+        settingsButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 25.0).isActive = true
+        settingsButton.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 21.0).isActive = true
         settingsButton.heightAnchor.constraint(equalToConstant: 21.0).isActive = true
         settingsButton.widthAnchor.constraint(equalToConstant: 21.0).isActive = true
     }
     
-    func setupPickerView() {
-        timePicker.delegate = self
-        timePicker.dataSource = self
+    func setupLeaderBoardButton() {
+        leaderBoardButton.setBackgroundImage(#imageLiteral(resourceName: "IC_Leaderboard"), for: .normal)
         
-        view.addSubview(timePicker)
-        timePicker.translatesAutoresizingMaskIntoConstraints = false
-        timePicker.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        timePicker.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        timePicker.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        timePicker.heightAnchor.constraint(equalToConstant: 220.0).isActive = true
-    }
-}
-
-
-//Picker View Delegate & DataSource Functionality
-extension SetSessionViewController: UIPickerViewDelegate, UIPickerViewDataSource {
-    
-    func displayPickerView() {
-        timePicker.isHidden = false
-   
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(
-            target: self,
-            action: #selector(self.hidePickerView))
-        self.view.addGestureRecognizer(tap)
+        headerView.addSubview(leaderBoardButton)
+        leaderBoardButton.translatesAutoresizingMaskIntoConstraints = false
+        leaderBoardButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -25.0).isActive = true
+        leaderBoardButton.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 21.0).isActive = true
+        leaderBoardButton.heightAnchor.constraint(equalToConstant: 21.0).isActive = true
+        leaderBoardButton.widthAnchor.constraint(equalToConstant: 23.0).isActive = true
     }
     
-    func hidePickerView() {
-        timePicker.isHidden = true
-    }
-
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return viewModel.totalTimesForPicker.count
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return viewModel.totalTimesForPicker[row]
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        totalTimeEntryLabel.text = viewModel.totalTimesForPicker[row]
+    func animatePopsPopup() {
+        self.view.layoutIfNeeded()
+        UIView.animate(withDuration: 1) {
+            self.popsBottomAnchorConstraint.constant = 10
+            self.view.layoutIfNeeded()
+        }
     }
     
 }
+
+
