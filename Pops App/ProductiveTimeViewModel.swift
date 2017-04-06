@@ -3,7 +3,7 @@ import Foundation
 
 final class ProductiveTimeViewModel {
     
-    let viewController: ProductiveTimeViewController
+    unowned let viewController: ProductiveTimeViewController
     let dataStore = CoachesDataStore.singleton
 
     init(vc: ProductiveTimeViewController){
@@ -22,6 +22,7 @@ final class ProductiveTimeViewModel {
             viewController.totalTime = Int(timerCounter)
         }
     }
+    
     var backgroundCounter = 7200 //we probably need a user model to store how long the session will last.
     
     var props = 0 {

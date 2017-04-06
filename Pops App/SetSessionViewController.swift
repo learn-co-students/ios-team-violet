@@ -57,6 +57,7 @@ class SetSessionViewController: UIViewController, UICollectionViewDelegateFlowLa
     
     func presentProductiveTimeVC() {
         let productiveTimeVC = ProductiveTimeViewController()
+        productiveTimeVC.delegate = self
         present(productiveTimeVC, animated: true, completion: nil)
     }
     
@@ -84,8 +85,14 @@ extension SetSessionViewController: UICollectionViewDataSource {
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        let currentCell = cell as! HourCollectionViewCell
+        currentCell.time = viewModel.timesForCollectionView[indexPath.row]
+    }
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let cell = collectionView.cellForItem(at: indexPath) as! HourCollectionViewCell
+        
         guard !cell.timeIsSelected else { return }
         
         selectedTime?.isSelected = false
@@ -100,11 +107,6 @@ extension SetSessionViewController: UICollectionViewDataSource {
             self.startButton.isEnabled = cell.timeIsSelected ? true : false
         })
         
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        let currentCell = cell as! HourCollectionViewCell
-        currentCell.time = viewModel.timesForCollectionView[indexPath.row]
     }
     
 }
@@ -140,7 +142,6 @@ extension SetSessionViewController {
     }
     
     func setupCollectionView() {
-        
         selectHourCollectionView.backgroundColor = UIColor.white
         selectHourCollectionView.allowsMultipleSelection = false
         selectHourCollectionView.showsHorizontalScrollIndicator = false
@@ -263,6 +264,15 @@ extension SetSessionViewController {
             self.popsBottomAnchorConstraint.constant = 10
             self.view.layoutIfNeeded()
         }
+    }
+    
+}
+
+extension SetSessionViewController: InstantiateViewControllerDelegate {
+    
+    func instantiateBreakTimeVC() {
+        let breakTimeVC = BreakTimeViewController()
+        present(breakTimeVC, animated: true, completion: nil)
     }
     
 }

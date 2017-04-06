@@ -1,6 +1,10 @@
 
 import UIKit
 
+protocol InstantiateViewControllerDelegate {
+    func instantiateBreakTimeVC()
+}
+
 class ProductiveTimeViewController: UIViewController {
 
     var viewModel: ProductiveTimeViewModel!
@@ -13,13 +17,10 @@ class ProductiveTimeViewController: UIViewController {
     let cancelSessionButton = UIButton()
     let progressBar = UIView()
     let propsLabel = UILabel()
-    //Timers
-    let timer = Timer()
-    let backgroundTimer = Timer()
-    //changing constraints
     var progressBarWidthAnchorConstraint: NSLayoutConstraint!
     var popsBottomAnchorConstraint: NSLayoutConstraint!
     
+    var delegate: InstantiateViewControllerDelegate?
     
     //properties that handle displaying data
     var totalTime = 0 {
@@ -34,11 +35,10 @@ class ProductiveTimeViewController: UIViewController {
     }
     var progress = 0.0 {
         didSet {
-                self.progressBarWidthAnchor.constant = CGFloat(self.view.frame.width * CGFloat(self.progress) )
-                self.view.layoutIfNeeded()
+            self.progressBarWidthAnchor.constant = CGFloat(self.view.frame.width * CGFloat(self.progress) )
+            self.view.layoutIfNeeded()
         }
     }
-    
     
     override func viewDidLoad() { //remember to call the setup function here!
         super.viewDidLoad()
@@ -53,7 +53,6 @@ class ProductiveTimeViewController: UIViewController {
         setupTotalTimeLabel()
         viewModel.startTimers()
         
-        
         //this is the back button.
         let frame = CGRect(x: 100, y: 100, width: 30, height: 30)
         let backButton = UIButton(frame: frame)
@@ -67,12 +66,10 @@ class ProductiveTimeViewController: UIViewController {
         super.viewDidAppear(animated)
         animatePopsPopup()
     }
-    
+
     func dismissView() {
         self.dismiss(animated: true, completion: nil)
     }
-
-    
 
 }
 
@@ -101,10 +98,8 @@ extension ProductiveTimeViewController {
         propsLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 30).isActive = true
         propsLabel.widthAnchor.constraint(equalToConstant: 200).isActive = true
         propsLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        
     }
-    
-    
+
     func setupPopsWindow() {
         view.addSubview(popsWindowView)
         popsWindowView.translatesAutoresizingMaskIntoConstraints = false
@@ -170,6 +165,7 @@ extension ProductiveTimeViewController {
         cancelSessionButton.titleLabel?.text = "im weak"
         cancelSessionButton.titleLabel?.textColor = UIColor.white
         cancelSessionButton.titleLabel?.font = UIFont(name: "AvenirNext-MediumItalic", size: 12.0)
+        cancelSessionButton.addTarget(self, action: #selector(skipBreak), for: .touchUpInside)
         
         cancelSessionButton.translatesAutoresizingMaskIntoConstraints = false
         cancelSessionButton.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0).isActive = true
@@ -178,8 +174,14 @@ extension ProductiveTimeViewController {
         cancelSessionButton.heightAnchor.constraint(equalToConstant: 20).isActive = true
     }
     
+    func skipBreak() {
+        viewModel.timer.invalidate()
+        viewModel.backgroundTimer.invalidate()
+        self.dismiss(animated: false, completion: nil)
+        delegate?.instantiateBreakTimeVC()
+    }
+    
     func animatePopsPopup() {
-        
         self.view.layoutIfNeeded()
         UIView.animate(withDuration: 1) {
             self.popsBottomAnchorConstraint.constant = 10
