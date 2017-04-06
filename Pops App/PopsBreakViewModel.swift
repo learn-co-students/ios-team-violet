@@ -7,5 +7,4 @@ final class PopsBreakViewModel {
     private init(){}
     
     let manager = PopsBreakManager()
-    
 }

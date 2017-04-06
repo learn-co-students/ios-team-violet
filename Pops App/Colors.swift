@@ -3,18 +3,19 @@ import Foundation
 import UIKit
 
 enum Palette {
-    case pink, lightBlue, salmon, aqua, grey, lightGrey, white, darkHeader
+    
+    case pink, lightBlue, aqua, grey, lightGrey, white, darkHeader, salmon
     
     var color: UIColor {
         switch self {
         case .pink: return UIColor(hex: 0xFFDCE5)
         case .lightBlue: return UIColor(hex: 0x92C6D0)
-        case .salmon: return UIColor(hex: 0xFF8484)
         case .aqua: return UIColor(hex: 0x4FD8D1)
         case .grey: return UIColor(hex: 0xA5A5A5)
         case .white: return UIColor(hex: 0xffffff)
         case .lightGrey: return UIColor(hex: 0xF4F4F4)
         case .darkHeader: return UIColor(hex: 0x0A0A0A)
+        case .salmon: return UIColor(hex: 0xFF8484)
         }
     }
 }
