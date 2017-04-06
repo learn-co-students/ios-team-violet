@@ -4,6 +4,11 @@ import Foundation
 final class SessionEndedViewModel {
     
     static let singleton = SessionEndedViewModel()
-    private init(){}
+    let dataStore = CoachesDataStore.singleton
+    let sessionCoach: Coach!
+    
+    private init(){
+        self.sessionCoach = dataStore.getCurrentCoach()
+    }
     
 }
