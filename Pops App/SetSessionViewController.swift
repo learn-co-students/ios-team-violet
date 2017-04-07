@@ -69,6 +69,7 @@ class SetSessionViewController: UIViewController, UICollectionViewDelegateFlowLa
     }
     
     func presentProductiveTimeVC() {
+        animatePopsDown()
         let productiveTimeVC = ProductiveTimeViewController()
         present(productiveTimeVC, animated: true, completion: nil)
     }
@@ -114,7 +115,7 @@ extension SetSessionViewController: UICollectionViewDataSource {
         selectedTime = cell.time
         
         cell.timeIsSelected = !cell.timeIsSelected
-        UIView.animate(withDuration: 0.8, animations: {
+        UIView.animate(withDuration: 0.3, animations: {
             self.startButton.alpha = cell.timeIsSelected ? 1.0 : 0.3
             self.startButton.isEnabled = cell.timeIsSelected ? true : false
         })
@@ -279,7 +280,7 @@ extension SetSessionViewController {
         }
     }
     
-    func animatePopsdown() {
+    func animatePopsDown() {
         self.view.layoutIfNeeded()
         
         UIView.animate(withDuration: 0.7, animations: {
