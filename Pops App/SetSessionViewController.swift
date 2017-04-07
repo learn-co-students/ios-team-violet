@@ -37,7 +37,7 @@ class SetSessionViewController: UIViewController, UICollectionViewDelegateFlowLa
     var sessionStarted: Bool = false
     
     //
-    var newUser = true
+    var newUser = false
     var collectionViewLeadingAnchor: NSLayoutConstraint!
     var startButtonCenterXAnchor: NSLayoutConstraint!
     var stackViewTopAnchor: NSLayoutConstraint!

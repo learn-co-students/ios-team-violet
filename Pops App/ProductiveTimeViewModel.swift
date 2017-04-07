@@ -6,8 +6,21 @@ final class ProductiveTimeViewModel {
     let viewController: ProductiveTimeViewController
     let dataStore = DataStore.singleton
 
+    //timers and counters
     var productivityTimer: Timer
     var totalTimer: Timer
+    
+    var productivityTimerCounter: Int {
+        didSet {
+            viewController.totalTimeLabel.text = formatTime(time: Int(productivityTimerCounter))
+        }
+    }
+    
+    var props = 0 {
+        didSet {
+            viewController.propsLabel.text = "Props: \(props)"
+        }
+    }
     
     init(vc: ProductiveTimeViewController){
         self.viewController = vc
@@ -17,20 +30,7 @@ final class ProductiveTimeViewModel {
         self.totalTimerCounter = (dataStore.user.currentSession?.cycles ?? 0) * (dataStore.user.currentSession?.cycleLength ?? 0)
     }
     
-    //counters: timerCounter, BackgroundCounter, progressBarCounter, props
-    var productivityTimerCounter = (DifficultySetting.standard.baseProductivityLength * 60) { //this keeps track of the time. think of these counters as seconds left.
-        didSet {
-            viewController.totalTimeLabel.text = formatTime(time: Int(productivityTimerCounter))
-        }
-    }
-    
-    var totalTimerCounter = 7200 //we probably need a user model to store how long the session will last.
-    
-    var props = 0 {
-        didSet {
-            viewController.props = props
-        }
-    }
+    var totalTimerCounter: Int
     
     var progressBarCounter = 0.0 {
         didSet {

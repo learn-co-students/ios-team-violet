@@ -30,12 +30,6 @@ class ProductiveTimeViewController: UIViewController {
     
     var delegate: InstantiateViewControllerDelegate?
     
-    var props = 0 {
-        didSet {
-            propsLabel.text = "Props: \(props)"
-        }
-    }
-    
     var progress = 0.0 {
         didSet {
             self.progressBarWidthAnchor.constant = CGFloat(self.view.frame.width * CGFloat(self.progress) )
@@ -90,7 +84,7 @@ extension ProductiveTimeViewController {
     func setupPropsLabel() {
         view.addSubview(propsLabel)
         self.propsLabel.isHidden = true
-        propsLabel.text = "\(props) \nprops"
+        propsLabel.text = viewModel.props.description
         propsLabel.font = UIFont(name: "Avenir-Heavy", size: 14)
         propsLabel.textColor = UIColor.white
         
