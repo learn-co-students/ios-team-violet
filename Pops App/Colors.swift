@@ -4,7 +4,7 @@ import UIKit
 
 enum Palette {
     
-    case pink, lightBlue, aqua, grey, lightGrey, white, darkHeader, salmon
+    case pink, lightBlue, aqua, grey, lightGrey, white, darkHeader, salmon, green, navy
     
     var color: UIColor {
         switch self {
@@ -16,6 +16,8 @@ enum Palette {
         case .lightGrey: return UIColor(hex: 0xF4F4F4)
         case .darkHeader: return UIColor(hex: 0x0A0A0A)
         case .salmon: return UIColor(hex: 0xFF8484)
+        case .green: return UIColor(hex: 0x35CE8D)
+        case .navy: return UIColor(hex: 0x385C75)
         }
     }
 }

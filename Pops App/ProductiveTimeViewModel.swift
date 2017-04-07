@@ -20,6 +20,7 @@ final class ProductiveTimeViewModel {
             viewController.totalTime = Int(timerCounter)
         }
     }
+    
     var backgroundCounter = 7200 //we probably need a user model to store how long the session will last.
     
     var props = 0 {
