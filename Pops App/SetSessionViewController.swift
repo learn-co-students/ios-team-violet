@@ -5,28 +5,36 @@ class SetSessionViewController: UIViewController, UICollectionViewDelegateFlowLa
     
     let viewModel = SetSessionViewModel.singleton
     
+    //Selected time for collection view
     var selectedTime: Time!
     
+    //Helper properties
     lazy var viewWidth: CGFloat = self.view.frame.width
     lazy var viewHeight: CGFloat = self.view.frame.height
     lazy var itemWidth: CGFloat = self.view.frame.width * (269/self.view.frame.width)
     lazy var itemHeight: CGFloat = self.view.frame.height * (45/self.view.frame.height)
     lazy var collectionViewYAnchor: CGFloat = self.view.frame.height * (403/self.view.frame.height)
     
-    let coachImageView = UIImageView()
-    
+    //General view properties
     let startButton = UIButton()
     let selectHourCollectionViewLayout = UICollectionViewFlowLayout()
     lazy var selectHourCollectionView: UICollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: self.selectHourCollectionViewLayout)
     let lineDividerView = UIView()
-    let characterMessageHeader = UILabel()
     let characterMessageBody = UILabel()
-    let circleBackgroundForCharacterImageView = UIImageView()
+    let characterMessageHeader = UILabel()
+    let popsWindowView = UIView()
+    let popsIcon = UIImageView()
     let headerView = UIView()
     let settingsButton = UIButton()
     let leaderBoardButton = UIButton()
     
+    //Needed to animate pops
     var popsBottomAnchorConstraint: NSLayoutConstraint!
+    
+    //Transition View Properties
+    let coachImageView = UIImageView()
+    let coachTransitionView = CoachTransitionView()
+    var sessionStarted: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,17 +46,23 @@ class SetSessionViewController: UIViewController, UICollectionViewDelegateFlowLa
         setupLineDividerView()
         setupCharacterMessageBody()
         setupCharacterMessageHeader()
-        setupCircleBackgroundForCharacterImageView()
-        //setupCoachImageView()
+        setupPopsWindow()
+        setupPopsIcon()
         setupHeaderView()
         setupSettingsButton()
         setupLeaderBoardButton()
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        //animatePopsPopup()
+        animatePopsPopup()
+        view.insertSubview(coachTransitionView, aboveSubview: self.view)
+        coachTransitionView.isHidden = !sessionStarted
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+       
     }
     
     override var prefersStatusBarHidden: Bool {
@@ -56,9 +70,7 @@ class SetSessionViewController: UIViewController, UICollectionViewDelegateFlowLa
     }
     
     func presentProductiveTimeVC() {
-        let productiveTimeVC = ProductiveTimeViewController()
-        productiveTimeVC.delegate = self
-        present(productiveTimeVC, animated: true, completion: nil)
+        animatePopsdown()
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
@@ -198,18 +210,34 @@ extension SetSessionViewController {
         characterMessageHeader.trailingAnchor.constraint(equalTo: characterMessageBody.trailingAnchor).isActive = true
     }
     
-    func setupCircleBackgroundForCharacterImageView() {
-        circleBackgroundForCharacterImageView.image = UIImage(named: "IC_PopsCircleBackground")
-        circleBackgroundForCharacterImageView.contentMode = .scaleAspectFit
-        
-        view.addSubview(circleBackgroundForCharacterImageView)
-        circleBackgroundForCharacterImageView.translatesAutoresizingMaskIntoConstraints = false
-        circleBackgroundForCharacterImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        circleBackgroundForCharacterImageView.bottomAnchor.constraint(equalTo: characterMessageHeader.topAnchor, constant: -viewHeight * (40/viewHeight)).isActive = true
-        circleBackgroundForCharacterImageView.heightAnchor.constraint(equalToConstant: viewHeight * (100/viewHeight)).isActive = true
-        circleBackgroundForCharacterImageView.widthAnchor.constraint(equalToConstant: viewWidth * (105/viewWidth)).isActive = true
+    func setupPopsWindow() {
+        view.addSubview(popsWindowView)
+        popsWindowView.translatesAutoresizingMaskIntoConstraints = false
+        popsWindowView.backgroundColor = Palette.salmon.color
+        popsWindowView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        popsWindowView.bottomAnchor.constraint(equalTo: characterMessageHeader.topAnchor, constant: -viewHeight * (40/667)).isActive = true
+        popsWindowView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        popsWindowView.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        popsWindowView.layer.cornerRadius = 50.0
+        popsWindowView.layer.masksToBounds = true
     }
     
+    func setupPopsIcon() {
+        popsIcon.image = UIImage(named: "IC_POPS")
+        popsIcon.contentMode = .scaleAspectFit
+        
+        popsWindowView.addSubview(popsIcon)
+        popsIcon.translatesAutoresizingMaskIntoConstraints = false
+        popsIcon.backgroundColor = UIColor.clear
+        
+        popsBottomAnchorConstraint = popsIcon.bottomAnchor.constraint(equalTo: popsWindowView.bottomAnchor, constant: 100)
+        popsBottomAnchorConstraint.isActive = true
+        popsIcon.centerXAnchor.constraint(equalTo: popsWindowView.centerXAnchor, constant: 0).isActive = true
+        popsIcon.heightAnchor.constraint(equalToConstant: 80).isActive = true
+        popsIcon.widthAnchor.constraint(equalToConstant: 52).isActive = true
+        popsIcon.layer.masksToBounds = true
+    }
+
     func setupHeaderView() {
         headerView.backgroundColor = Palette.salmon.color
         
@@ -219,21 +247,6 @@ extension SetSessionViewController {
         headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         headerView.heightAnchor.constraint(equalToConstant: viewHeight * (5/viewHeight)).isActive = true
         headerView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-    }
-    
-    func setupCoachImageView() {
-        coachImageView.image = UIImage(named: "IC_POPS")
-        coachImageView.contentMode = .scaleAspectFit
-        
-        circleBackgroundForCharacterImageView.addSubview(coachImageView)
-        coachImageView.translatesAutoresizingMaskIntoConstraints = false
-        
-        popsBottomAnchorConstraint = coachImageView.bottomAnchor.constraint(equalTo: circleBackgroundForCharacterImageView.bottomAnchor, constant: 100)
-        popsBottomAnchorConstraint.isActive = true
-        coachImageView.centerXAnchor.constraint(equalTo: circleBackgroundForCharacterImageView.centerXAnchor).isActive = true
-        coachImageView.heightAnchor.constraint(equalToConstant: 80).isActive = true
-        coachImageView.widthAnchor.constraint(equalToConstant: 52).isActive = true
-        coachImageView.layer.masksToBounds = true
     }
     
     func setupSettingsButton() {
@@ -264,6 +277,24 @@ extension SetSessionViewController {
             self.popsBottomAnchorConstraint.constant = 10
             self.view.layoutIfNeeded()
         }
+    }
+    
+    func animatePopsdown() {
+        self.view.layoutIfNeeded()
+        
+        UIView.animate(withDuration: 0.7, animations: {
+            self.popsBottomAnchorConstraint.constant = 100
+            self.view.layoutIfNeeded()
+
+        }) { _ in
+            let productiveTimeVC = ProductiveTimeViewController()
+            productiveTimeVC.delegate = self
+            self.present(productiveTimeVC, animated: true, completion: {
+                self.sessionStarted = true
+            })
+            
+        }
+
     }
     
 }
