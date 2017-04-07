@@ -3,7 +3,7 @@ import UIKit
 
 class ScoreboardViewController: UIViewController {
 
-    let viewModel = ScoreboardViewModel.singleton
+    let viewModel = ScoreboardViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -3,7 +3,7 @@ import UIKit
 
 class SetSessionViewController: UIViewController, UICollectionViewDelegateFlowLayout {
     
-    let viewModel = SetSessionViewModel.singleton
+    let viewModel = SetSessionViewModel()
     
     //Selected time for collection view
     var selectedTime: Time!
@@ -49,7 +49,6 @@ class SetSessionViewController: UIViewController, UICollectionViewDelegateFlowLa
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.white
-        
         setupStartButton()
         setupCollectionViewLayout()
         setupCollectionView()
@@ -82,7 +81,10 @@ class SetSessionViewController: UIViewController, UICollectionViewDelegateFlowLa
     }
     
     func presentProductiveTimeVC() {
-        animatePopsdown()
+        animatePopsDown()
+        if let indexPath = selectHourCollectionView.indexPathsForSelectedItems?[0] {
+        viewModel.startSessionOfLength((indexPath.row) + 1)
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
@@ -126,7 +128,7 @@ extension SetSessionViewController: UICollectionViewDataSource {
         selectedTime = cell.time
         
         cell.timeIsSelected = !cell.timeIsSelected
-        UIView.animate(withDuration: 0.8, animations: {
+        UIView.animate(withDuration: 0.3, animations: {
             self.startButton.alpha = cell.timeIsSelected ? 1.0 : 0.3
             self.startButton.isEnabled = cell.timeIsSelected ? true : false
         })
@@ -325,7 +327,7 @@ extension SetSessionViewController {
         }
     }
     
-    func animatePopsdown() {
+    func animatePopsDown() {
         self.view.layoutIfNeeded()
         
         UIView.animate(withDuration: 0.7, animations: {

@@ -3,7 +3,7 @@ import UIKit
 
 class SessionEndedViewController: UIViewController {
 
-    let viewModel = SessionEndedViewModel.singleton
+    let viewModel = SessionEndedViewModel()
     
     lazy var viewWidth: CGFloat = self.view.frame.width
     lazy var viewHeight: CGFloat = self.view.frame.height

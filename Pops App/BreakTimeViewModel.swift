@@ -4,14 +4,8 @@ import UIKit
 
 final class BreakTimeViewModel {
     
-    static let singleton = BreakTimeViewModel()
+    let dataStore = DataStore.singleton
     
-    let dataStore = CoachesDataStore.singleton
-    
-    let sessionCoach: Coach!
-    
-    private init(){
-        self.sessionCoach = dataStore.getCurrentCoach()
-    }
+    init(){}
     
 }

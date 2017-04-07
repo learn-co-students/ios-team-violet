@@ -3,45 +3,31 @@ import Foundation
 import UIKit
 
 final class SetSessionViewModel {
-    
-    static let singleton = SetSessionViewModel()
-    
-    let dataStore = CoachesDataStore.singleton
+        
+    let dataStore = DataStore.singleton
 
-    let timesForCollectionView = [Time("1 hour"), Time("2 hours"), Time("3 hours"), Time("4 hours"), Time("5 hours"), Time("6 hours"), Time("7 hours"), Time("8 hours")]
+    let timesForCollectionView = [Time("1 hour", 1), Time("2 hours", 2), Time("3 hours", 3), Time("4 hours", 4), Time("5 hours", 5), Time("6 hours", 6), Time("7 hours", 7), Time("8 hours", 8)]
 
     let defaults = UserDefaults.standard
+
+    init(){}
     
-    let sessionCoach: Coach!
-    let user: User!
-    
-    private init(){
-        self.sessionCoach = dataStore.getCurrentCoach()
-        let userName = defaults.value(forKey: "userName") as? String ?? nil
-        let totalProps = defaults.value(forKey: "totalProps") as? Int ?? 0
-        let unlockedCoaches = defaults.value(forKey: "unlockedCoaches") as? [String] ?? ["Pops", "Baba"]
-        self.user = User(userName: userName, totalProps: totalProps, unlockedCoachNames: unlockedCoaches)
+    func startSessionOfLength(_ hours: Int) {
+        let currentSession = Session(sessionHours: hours, sessionDifficulty: dataStore.user.currentCoach.difficulty)
+        dataStore.user.currentSession = currentSession
     }
  
 }
 
 final class Time {
-    let string: String
+    let text: String
+    let hours: Int
     var isSelected = false
     
-    init(_ string: String) {
-        self.string = string
+    init(_ text: String, _ hours: Int) {
+        self.text = text
+        self.hours = hours
     }
-    
-//    var hashValue: Int {
-//        return string.hashValue
-//        
-//    }
-//    
-//    static func ==(lhs: Time, rhs: Time) -> Bool {
-//        return lhs.string == rhs.string
-//    }
-    
 }
 
 class HourCollectionViewCell: UICollectionViewCell {
@@ -50,18 +36,11 @@ class HourCollectionViewCell: UICollectionViewCell {
     
     var time: Time! {
         didSet {
-            hourLabel.text = time.string
+            hourLabel.text = time.text
             timeIsSelected = time.isSelected
             contentView.backgroundColor = time.isSelected ?  Palette.darkHeader.color : Palette.lightBlue.color
         }
     }
-    
-//    var time: String! {
-//        didSet {
-//            hourLabel.text = time
-//            contentView.backgroundColor = timeIsSelected ?  Palette.darkHeader.color : Palette.lightBlue.color
-//        }
-//    }
     
     var timeIsSelected = false {
         didSet {

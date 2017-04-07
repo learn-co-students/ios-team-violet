@@ -3,8 +3,9 @@ import Foundation
 
 final class BabaBreakViewModel {
     
-    static let singleton = BabaBreakViewModel()
-    private init(){}
+    lazy var dataStore = DataStore.singleton
+    
+    init(){}
     
     let manager = BabaBreakManager()
 }

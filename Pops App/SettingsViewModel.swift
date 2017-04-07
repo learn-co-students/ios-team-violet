@@ -4,11 +4,8 @@ import Foundation
 
 final class SettingsViewModel {
     
-    static let singleton = SettingsViewModel()
-    let dataStore = CoachesDataStore.singleton
-    let sessionCoach: Coach!
+    let dataStore = DataStore.singleton
     
-    private init(){
-        self.sessionCoach = dataStore.getCurrentCoach()
+    init(){
     }
 }

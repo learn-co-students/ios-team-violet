@@ -3,6 +3,7 @@ import UIKit
 
 class BabaBreakView: UIView {
 
-    let viewModel = BabaBreakViewModel.singleton
+    let viewModel = BabaBreakViewModel()
 
+    func prepareForEntertainment(){}
 }

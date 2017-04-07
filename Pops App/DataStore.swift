@@ -1,11 +1,20 @@
 import Foundation
 import UIKit
 
-final class CoachesDataStore {
+final class DataStore {
     
-    static let singleton = CoachesDataStore()
+    static let singleton = DataStore()
+    
     let defaults = UserDefaults.standard
-    private init(){}
+    var user: User!
+    
+    private init(){
+        let userName = defaults.value(forKey: "userName") as? String ?? nil
+        let totalProps = defaults.value(forKey: "totalProps") as? Int ?? 0
+        let unlockedCoaches = defaults.value(forKey: "unlockedCoaches") as? [String] ?? ["Pops", "Baba"]
+        let appNames = defaults.value(forKey: "appNames") as? [String] ?? ["Messages", "Email", "Facebook"]
+        self.user = User(userName: userName, totalProps: totalProps, unlockedCoachNames: unlockedCoaches, appNames: appNames, currentCoach: getCurrentCoach(), currentSession: nil)
+    }
     
     func getCurrentCoach() -> Coach {
         let coachName = defaults.value(forKey: "coachName") as? String ?? "Pops"
@@ -27,7 +36,7 @@ final class CoachesDataStore {
     }
 }
 
-private extension CoachesDataStore {
+private extension DataStore {
     func generatePops() -> Coach {
         let name = "Pops"
         let icon = UIImage(named: "IC_POPS")
@@ -49,7 +58,7 @@ private extension CoachesDataStore {
             [("Dear lord!", "Don't hurt yourself, sonny!")],
             ]
         let productivityStatements = [
-            "Keep working, bubby!"
+            ("Lock your phone!", "Keep working, bubby!")
         ]
         let breakStatements = [
             ("Congrats!", "Enjoy your break!")
@@ -93,7 +102,7 @@ private extension CoachesDataStore {
             [("Dear lord!", "Don't hurt yourself, sonny!")],
             ]
         let productivityStatements = [
-            "Keep working, bubby!"
+            ("Lock your phone!", "Keep working, bubby!")
         ]
         let breakStatements = [
             ("Congrats!", "Enjoy your break!")
@@ -137,7 +146,7 @@ private extension CoachesDataStore {
             [("Dear lord!", "Don't hurt yourself, sonny!")],
             ]
         let productivityStatements = [
-            "Keep working, bubby!"
+            ("Lock your phone!", "Keep working, bubby!")
         ]
         let breakStatements = [
             ("Congrats!", "Enjoy your break!")

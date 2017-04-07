@@ -3,8 +3,9 @@ import Foundation
 
 final class ChadBreakViewModel {
     
-    static let singleton = ChadBreakViewModel()
-    private init(){}
+    lazy var dataStore = DataStore.singleton
+
+    init(){}
     
     let manager = ChadBreakManager()
 }

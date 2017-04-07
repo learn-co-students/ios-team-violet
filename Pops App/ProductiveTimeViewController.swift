@@ -14,6 +14,7 @@ class ProductiveTimeViewController: UIViewController {
     var progressBarWidthAnchor: NSLayoutConstraint!
 
     let totalTimeLabel = UILabel()
+    
     let popsWindowView = UIView()
     let pepTalkLabel = UILabel()
     let popsIcon = UIImageView()
@@ -29,15 +30,9 @@ class ProductiveTimeViewController: UIViewController {
     
     var delegate: InstantiateViewControllerDelegate?
     
-    //properties that handle displaying data
-    var totalTime = 0 {
-        didSet {
-            totalTimeLabel.text = viewModel.formatTime(time: totalTime)
-        }
-    }
     var props = 0 {
         didSet {
-            propsLabel.text = "\(props) props"
+            propsLabel.text = "Props: \(props)"
         }
     }
     
@@ -64,13 +59,12 @@ class ProductiveTimeViewController: UIViewController {
         setupCharacterMessageHeader()
         setupPopsWindow()
         setupPopsIcon()
-       
-        viewModel.startTimers()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         animatePopsPopup()
+        viewModel.startTimers()
     }
 
     func dismissView() {
@@ -95,6 +89,7 @@ extension ProductiveTimeViewController {
     
     func setupPropsLabel() {
         view.addSubview(propsLabel)
+        self.propsLabel.isHidden = true
         propsLabel.text = "\(props) \nprops"
         propsLabel.font = UIFont(name: "Avenir-Heavy", size: 14)
         propsLabel.textColor = UIColor.white
@@ -145,7 +140,7 @@ extension ProductiveTimeViewController {
     
     func setupTotalTimeLabel() {
         view.addSubview(totalTimeLabel)
-        totalTimeLabel.text = "\(viewModel.formatTime(time: totalTime))"
+        totalTimeLabel.isHidden = true
         totalTimeLabel.textAlignment = .center
         totalTimeLabel.font = UIFont(name: "Avenir-Heavy", size: 20)
         totalTimeLabel.textColor = UIColor.white
@@ -214,17 +209,26 @@ extension ProductiveTimeViewController {
     }
 
     func skipBreak() {
-        viewModel.timer.invalidate()
-        viewModel.backgroundTimer.invalidate()
-        self.dismiss(animated: true, completion: nil)
-        delegate?.instantiateBreakTimeVC()
+        viewModel.productivityTimer.invalidate()
+        viewModel.totalTimer.invalidate()
+        self.view.layoutIfNeeded()
+        
+        UIView.animate(withDuration: 0.7, animations: {
+            self.popsBottomAnchorConstraint.constant = 100
+            self.view.layoutIfNeeded()
+        }) { _ in self.dismiss(animated: true, completion: nil)
+            self.delegate?.instantiateBreakTimeVC()
+        }
     }
     
     func animatePopsPopup() {
         self.view.layoutIfNeeded()
-        UIView.animate(withDuration: 1) {
+        UIView.animate(withDuration: 1, animations: {
             self.popsBottomAnchorConstraint.constant = 10
             self.view.layoutIfNeeded()
+        }) { _ in
+            self.propsLabel.isHidden = false
+            self.totalTimeLabel.isHidden = false
         }
     }
 }

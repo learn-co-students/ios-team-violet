@@ -3,8 +3,17 @@ import Foundation
 
 final class PopsBreakViewModel {
     
-    static let singleton = PopsBreakViewModel()
-    private init(){}
-    
+    lazy var dataStore = DataStore.singleton
     let manager = PopsBreakManager()
+
+    init(){}
+    
+    
+    func letPopsGetYouAVideo(completion: @escaping (String)-> ()) {
+        manager.getRandomYouTubeVideo { (videoID) in
+            completion(videoID)
+        }
+    }
+    
+    
 }
