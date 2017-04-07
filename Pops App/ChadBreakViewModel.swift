@@ -5,8 +5,7 @@ final class ChadBreakViewModel {
     
     lazy var dataStore = DataStore.singleton
 
-    static let singleton = ChadBreakViewModel()
-    private init(){}
+    init(){}
     
     let manager = ChadBreakManager()
 }

@@ -5,8 +5,7 @@ final class BabaBreakViewModel {
     
     lazy var dataStore = DataStore.singleton
     
-    static let singleton = BabaBreakViewModel()
-    private init(){}
+    init(){}
     
     let manager = BabaBreakManager()
 }

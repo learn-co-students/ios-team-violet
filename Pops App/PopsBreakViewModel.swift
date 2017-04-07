@@ -6,8 +6,7 @@ final class PopsBreakViewModel {
     lazy var dataStore = DataStore.singleton
     let manager = PopsBreakManager()
 
-    static let singleton = PopsBreakViewModel()
-    private init(){}
+    init(){}
     
     
     func letPopsGetYouAVideo(completion: @escaping (String)-> ()) {

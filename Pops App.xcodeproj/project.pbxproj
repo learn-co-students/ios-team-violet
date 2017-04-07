@@ -200,8 +200,8 @@
 		98E6828F1E931EB500BAEFE8 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				984727F91E97CC27006BD638 /* CoachTransitionView.swift */,
 				98E682891E931E9500BAEFE8 /* SetSessionViewController.swift */,
+				984727F91E97CC27006BD638 /* CoachTransitionView.swift */,
 				1F7C447E1E9408E80067ECCF /* SettingsViewController.swift */,
 				1F7C44801E9409050067ECCF /* ScoreboardViewController.swift */,
 				98E6828D1E931EAF00BAEFE8 /* ProductiveTimeViewController.swift */,

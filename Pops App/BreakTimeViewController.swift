@@ -3,7 +3,7 @@ import UIKit
 
 class BreakTimeViewController: UIViewController {
 
-    let viewModel = BreakTimeViewModel.singleton
+    let viewModel = BreakTimeViewModel()
     
     lazy var viewWidth: CGFloat = self.view.frame.width
     lazy var viewHeight: CGFloat = self.view.frame.height
@@ -52,7 +52,7 @@ class BreakTimeViewController: UIViewController {
     
     func presentBreakEntertainmentVC() {
         let breakEntertainmentVC = BreakEntertainmentViewController()
-        present(breakEntertainmentVC, animated: false, completion: nil)
+        present(breakEntertainmentVC, animated: true, completion: nil)
     }
     
     func setupEntertainMeButton() {

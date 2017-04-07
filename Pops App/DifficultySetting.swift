@@ -28,25 +28,25 @@ enum DifficultySetting {
         }
     }
     
-    var baseProductivityLength: Double {
+    var baseProductivityLength: Int {
         switch self {
         case .easy:
-            return 20.00
+            return 1200
         case .standard:
-            return 25.00
+            return 1500
         case .hard:
-            return 55.00
+            return 3300
         }
     }
     
-    var baseBreakLength: Double {
+    var baseBreakLength: Int {
         switch self {
         case .easy:
-            return 10.00
+            return 600
         case .standard:
-            return 5.00
+            return 300
         case .hard:
-            return 5.00
+            return 300
         }
     }
 }

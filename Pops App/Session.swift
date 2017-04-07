@@ -14,7 +14,11 @@ struct Session {
         }
     }
     
-    var cycleLength: Double {
+    var cycleLength: Int {
         return sessionDifficulty.baseProductivityLength + sessionDifficulty.baseBreakLength
     }
+    
+    let productivityTimer = Timer()
+    let breakTimer = Timer()
+    let totalTimer = Timer()
 }

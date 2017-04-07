@@ -4,7 +4,7 @@ import YouTubeiOSPlayerHelper
 
 class PopsBreakView: UIView {
 
-    let viewModel = PopsBreakViewModel.singleton
+    let viewModel = PopsBreakViewModel()
     
     lazy var viewWidth: CGFloat = self.frame.width
     lazy var viewHeight: CGFloat = self.frame.height
@@ -22,7 +22,7 @@ class PopsBreakView: UIView {
         super.init(frame: UIScreen.main.bounds)
         self.backgroundColor = .white
         setUpYouTubePlayerView()
-        setUpBackButton()
+        //setUpBackButton()
         setUpLineDividerView()
         setUpHeader()
         setUpBody()
@@ -55,6 +55,7 @@ class PopsBreakView: UIView {
     func setUpBackButton(){
         backButton.setTitle("!", for: .normal)
         backButton.backgroundColor = .black
+        backButton.addTarget(self, action: #selector(dismissPopsBreakView), for: .touchUpInside)
         
         self.addSubview(backButton)
         backButton.translatesAutoresizingMaskIntoConstraints = false
@@ -91,7 +92,7 @@ class PopsBreakView: UIView {
     }
 
     func setUpBody(){
-        body.numberOfLines = 6
+        body.numberOfLines = 5
         body.textColor = Palette.grey.color
         body.textAlignment = .left
         body.font = UIFont(name: "Avenir-Heavy", size: 14.0)
@@ -151,5 +152,8 @@ class PopsBreakView: UIView {
         likeButton.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 269/viewWidth).isActive = true
         likeButton.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 45/viewHeight).isActive = true
         likeButton.bottomAnchor.constraint(equalTo: dislikeButton.topAnchor, constant: -8).isActive = true
+    }
+    
+    func dismissPopsBreakView() {
     }
 }

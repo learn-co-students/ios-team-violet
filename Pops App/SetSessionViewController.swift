@@ -3,7 +3,7 @@ import UIKit
 
 class SetSessionViewController: UIViewController, UICollectionViewDelegateFlowLayout {
     
-    let viewModel = SetSessionViewModel.singleton
+    let viewModel = SetSessionViewModel()
     
     //Selected time for collection view
     var selectedTime: Time!
@@ -70,8 +70,9 @@ class SetSessionViewController: UIViewController, UICollectionViewDelegateFlowLa
     
     func presentProductiveTimeVC() {
         animatePopsDown()
-        let productiveTimeVC = ProductiveTimeViewController()
-        present(productiveTimeVC, animated: true, completion: nil)
+        if let indexPath = selectHourCollectionView.indexPathsForSelectedItems?[0] {
+        viewModel.startSessionOfLength((indexPath.row) + 1)
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {

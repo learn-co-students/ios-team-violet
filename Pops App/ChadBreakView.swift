@@ -3,7 +3,7 @@ import UIKit
 
 class ChadBreakView: UIView {
 
-    let viewModel = ChadBreakViewModel.singleton
+    let viewModel = ChadBreakViewModel()
 
     func prepareForEntertainment(){}
 }

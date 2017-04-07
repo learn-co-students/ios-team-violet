@@ -3,16 +3,14 @@ import Foundation
 import UIKit
 
 final class SetSessionViewModel {
-    
-    static let singleton = SetSessionViewModel()
-    
+        
     let dataStore = DataStore.singleton
 
-    let timesForCollectionView = [Time("1 hour"), Time("2 hours"), Time("3 hours"), Time("4 hours"), Time("5 hours"), Time("6 hours"), Time("7 hours"), Time("8 hours")]
+    let timesForCollectionView = [Time("1 hour", 1), Time("2 hours", 2), Time("3 hours", 3), Time("4 hours", 4), Time("5 hours", 5), Time("6 hours", 6), Time("7 hours", 7), Time("8 hours", 8)]
 
     let defaults = UserDefaults.standard
 
-    private init(){}
+    init(){}
     
     func startSessionOfLength(_ hours: Int) {
         let currentSession = Session(sessionHours: hours, sessionDifficulty: dataStore.user.currentCoach.difficulty)
@@ -22,11 +20,13 @@ final class SetSessionViewModel {
 }
 
 final class Time {
-    let string: String
+    let text: String
+    let hours: Int
     var isSelected = false
     
-    init(_ string: String) {
-        self.string = string
+    init(_ text: String, _ hours: Int) {
+        self.text = text
+        self.hours = hours
     }
 }
 
@@ -36,7 +36,7 @@ class HourCollectionViewCell: UICollectionViewCell {
     
     var time: Time! {
         didSet {
-            hourLabel.text = time.string
+            hourLabel.text = time.text
             timeIsSelected = time.isSelected
             contentView.backgroundColor = time.isSelected ?  Palette.darkHeader.color : Palette.lightBlue.color
         }

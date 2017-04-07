@@ -6,22 +6,25 @@ final class ProductiveTimeViewModel {
     let viewController: ProductiveTimeViewController
     let dataStore = DataStore.singleton
 
+    var productivityTimer: Timer
+    var totalTimer: Timer
+    
     init(vc: ProductiveTimeViewController){
         self.viewController = vc
+        self.productivityTimer = dataStore.user.currentSession?.productivityTimer ?? Timer()
+        self.totalTimer = dataStore.user.currentSession?.totalTimer ?? Timer()
+        self.productivityTimerCounter = dataStore.user.currentCoach.difficulty.baseProductivityLength
+        self.totalTimerCounter = (dataStore.user.currentSession?.cycles ?? 0) * (dataStore.user.currentSession?.cycleLength ?? 0)
     }
     
-    var timer = Timer()
-    var backgroundTimer = Timer()
-    
-    
     //counters: timerCounter, BackgroundCounter, progressBarCounter, props
-    var timerCounter = (DifficultySetting.standard.baseProductivityLength * 60) { //this keeps track of the time. think of these counters as seconds left.
+    var productivityTimerCounter = (DifficultySetting.standard.baseProductivityLength * 60) { //this keeps track of the time. think of these counters as seconds left.
         didSet {
-            viewController.totalTime = Int(timerCounter)
+            viewController.totalTimeLabel.text = formatTime(time: Int(productivityTimerCounter))
         }
     }
     
-    var backgroundCounter = 7200 //we probably need a user model to store how long the session will last.
+    var totalTimerCounter = 7200 //we probably need a user model to store how long the session will last.
     
     var props = 0 {
         didSet {
@@ -36,30 +39,30 @@ final class ProductiveTimeViewModel {
     }
     
     func startTimers() {
-        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { (timer) in
-           self.timerAction()
+        productivityTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { (timer) in
+           self.productivityTimerAction()
         })
-        backgroundTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { (timer) in
-            self.backgroundTimerAction()
+        totalTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { (timer) in
+            self.totalTimerAction()
         })
         
     }
     
     func stopTimers() {
-        timer.invalidate()
-        backgroundTimer.invalidate()
+        productivityTimer.invalidate()
+        totalTimer.invalidate()
     }
     
-    func timerAction() {
-        print("timer action: \(timerCounter)")
-        timerCounter -= 1
+    func productivityTimerAction() {
+        print("timer action: \(productivityTimerCounter)")
+        productivityTimerCounter -= 1
         props += 1
         progressBarCounter += 1
     }
     
-    func backgroundTimerAction() {
-        print("background timer action: \(backgroundCounter)")
-        backgroundCounter -= 1
+    func totalTimerAction() {
+        print("background timer action: \(totalTimerCounter)")
+        totalTimerCounter -= 1
     }
     
     func formatTime(time: Int) -> String {
