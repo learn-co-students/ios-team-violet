@@ -36,6 +36,16 @@ class SetSessionViewController: UIViewController, UICollectionViewDelegateFlowLa
     let coachTransitionView = CoachTransitionView()
     var sessionStarted: Bool = false
     
+    //
+    var newUser = true
+    var collectionViewLeadingAnchor: NSLayoutConstraint!
+    var startButtonCenterXAnchor: NSLayoutConstraint!
+    var stackViewTopAnchor: NSLayoutConstraint!
+    var lineDividerBottomAnchor: NSLayoutConstraint!
+    var characterMessageBodyLeadingAnchor: NSLayoutConstraint!
+    var characterMssageHeaderLeadingAnchor: NSLayoutConstraint!
+    var characterMssageHeaderTrailingAnchor: NSLayoutConstraint!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.white
@@ -51,6 +61,8 @@ class SetSessionViewController: UIViewController, UICollectionViewDelegateFlowLa
         setupHeaderView()
         setupSettingsButton()
         setupLeaderBoardButton()
+        
+        setupAllowNotificationButtons()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -134,14 +146,43 @@ extension SetSessionViewController {
         startButton.layer.masksToBounds = true
         startButton.setTitle("start", for: .normal)
         startButton.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 14.0)
-        startButton.addTarget(self, action: #selector(presentProductiveTimeVC), for: .touchUpInside)
+        
+        if newUser {
+            startButton.addTarget(self, action: #selector(animateAllowNotifications), for: .touchUpInside)
+        } else {
+           startButton.addTarget(self, action: #selector(presentProductiveTimeVC), for: .touchUpInside)
+        }
         
         view.addSubview(startButton)
         startButton.translatesAutoresizingMaskIntoConstraints = false
-        startButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        startButtonCenterXAnchor = startButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        startButtonCenterXAnchor.isActive = true
         startButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 269/viewWidth).isActive = true
         startButton.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 45/viewHeight).isActive = true
         startButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -viewHeight * (149.0/667.0)).isActive = true
+    }
+    
+    func animateAllowNotifications() {
+        self.view.layoutIfNeeded()
+        
+//        UIView.animate(withDuration: 1) {
+//            self.startButtonCenterXAnchor.constant += self.viewWidth
+//            self.collectionViewLeadingAnchor.constant += self.viewWidth
+//            self.stackViewTopAnchor.constant -= self.viewHeight
+//            self.view.layoutIfNeeded()
+//        }
+        
+        UIView.animate(withDuration: 1, animations: {
+            self.startButtonCenterXAnchor.constant += self.viewWidth
+            self.collectionViewLeadingAnchor.constant += self.viewWidth
+            self.characterMessageBodyLeadingAnchor.constant -= self.viewWidth
+            self.characterMssageHeaderTrailingAnchor.constant -= self.viewWidth
+            self.view.layoutIfNeeded()
+        }) { _ in
+            self.stackViewTopAnchor.constant -= 260
+            self.view.layoutIfNeeded()
+        }
+
     }
     
     func setupCollectionViewLayout() {
@@ -163,7 +204,8 @@ extension SetSessionViewController {
         
         view.addSubview(selectHourCollectionView)
         selectHourCollectionView.translatesAutoresizingMaskIntoConstraints = false
-        selectHourCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        collectionViewLeadingAnchor = selectHourCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
+        collectionViewLeadingAnchor.isActive = true
         selectHourCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         selectHourCollectionView.bottomAnchor.constraint(equalTo: startButton.topAnchor, constant: -viewHeight * (25/viewHeight)).isActive = true
         selectHourCollectionView.heightAnchor.constraint(equalToConstant: itemHeight).isActive = true
@@ -177,12 +219,14 @@ extension SetSessionViewController {
         view.addSubview(lineDividerView)
         lineDividerView.translatesAutoresizingMaskIntoConstraints = false
         lineDividerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        lineDividerView.bottomAnchor.constraint(equalTo: selectHourCollectionView.topAnchor, constant: -viewHeight * (25/viewHeight)).isActive = true
+        lineDividerBottomAnchor = lineDividerView.bottomAnchor.constraint(equalTo: selectHourCollectionView.topAnchor, constant: -viewHeight * (25/viewHeight))
+        lineDividerBottomAnchor.isActive = true
         lineDividerView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 269/viewWidth).isActive = true
         lineDividerView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 3/viewHeight).isActive = true
     }
     
     func setupCharacterMessageBody() {
+        characterMessageBody.lineBreakMode = NSLineBreakMode.byWordWrapping
         characterMessageBody.numberOfLines = 0
         characterMessageBody.textColor = Palette.grey.color
         characterMessageBody.textAlignment = .left
@@ -192,8 +236,10 @@ extension SetSessionViewController {
         view.addSubview(characterMessageBody)
         characterMessageBody.translatesAutoresizingMaskIntoConstraints = false
         characterMessageBody.bottomAnchor.constraint(equalTo: lineDividerView.topAnchor, constant: -viewHeight * (20/viewHeight)).isActive = true
-        characterMessageBody.leadingAnchor.constraint(equalTo: lineDividerView.leadingAnchor).isActive = true
-        characterMessageBody.trailingAnchor.constraint(equalTo: lineDividerView.trailingAnchor).isActive = true
+        characterMessageBodyLeadingAnchor = characterMessageBody.leadingAnchor.constraint(equalTo: lineDividerView.leadingAnchor)
+        characterMessageBodyLeadingAnchor.isActive = true
+        characterMssageHeaderTrailingAnchor = characterMessageBody.trailingAnchor.constraint(equalTo: lineDividerView.trailingAnchor)
+        characterMssageHeaderTrailingAnchor.isActive = true
     }
     
     func setupCharacterMessageHeader() {
@@ -297,6 +343,78 @@ extension SetSessionViewController {
 
     }
     
+}
+
+extension SetSessionViewController {
+   
+    func setupAllowNotificationButtons() {
+        let allowNotificationsButton = UIButton()
+        allowNotificationsButton.backgroundColor = Palette.aqua.color
+        allowNotificationsButton.layer.cornerRadius = 2.0
+        allowNotificationsButton.layer.masksToBounds = true
+        allowNotificationsButton.setTitle("notify me", for: .normal)
+        allowNotificationsButton.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 14.0)
+        
+        
+        let disallowNotificationsButton = UIButton()
+        disallowNotificationsButton.backgroundColor = Palette.lightGrey.color
+        disallowNotificationsButton.layer.cornerRadius = 2.0
+        disallowNotificationsButton.layer.masksToBounds = true
+        disallowNotificationsButton.setTitle("mute pops", for: .normal)
+        disallowNotificationsButton.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 14.0)
+        
+        let buttons = [allowNotificationsButton, disallowNotificationsButton]
+        
+        buttons.forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            $0.heightAnchor.constraint(equalToConstant: viewHeight * (45/667)).isActive = true
+            $0.widthAnchor.constraint(equalToConstant: viewWidth * (269/375)).isActive = true
+        }
+        
+        let stackView = UIStackView(arrangedSubviews: buttons)
+        stackView.axis = .vertical
+        stackView.distribution = .fillEqually
+        stackView.alignment = .fill
+        stackView.spacing = 18
+        
+        view.addSubview(stackView)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        stackViewTopAnchor = stackView.topAnchor.constraint(equalTo: view.bottomAnchor)
+        stackViewTopAnchor.isActive = true
+    }
+    
+    func setupCharacterMessageBodyForNotification() {
+        characterMessageBody.lineBreakMode = NSLineBreakMode.byWordWrapping
+        characterMessageBody.numberOfLines = 0
+        characterMessageBody.textColor = Palette.grey.color
+        characterMessageBody.textAlignment = .left
+        characterMessageBody.font = UIFont(name: "Avenir-Heavy", size: 14.0)
+        characterMessageBody.text = "I’ll make sure you’re super productive today. How long do you want to productive for?"
+        
+        view.addSubview(characterMessageBody)
+        characterMessageBody.translatesAutoresizingMaskIntoConstraints = false
+        characterMessageBody.bottomAnchor.constraint(equalTo: lineDividerView.topAnchor, constant: -viewHeight * (20/viewHeight)).isActive = true
+        characterMessageBodyLeadingAnchor = characterMessageBody.leadingAnchor.constraint(equalTo: lineDividerView.leadingAnchor)
+        characterMessageBodyLeadingAnchor.isActive = true
+        characterMssageHeaderTrailingAnchor = characterMessageBody.trailingAnchor.constraint(equalTo: lineDividerView.trailingAnchor)
+        characterMssageHeaderTrailingAnchor.isActive = true
+    }
+    
+    func setupCharacterMessageHeaderForNotification() {
+        characterMessageHeader.numberOfLines = 0
+        characterMessageHeader.textColor = UIColor.black
+        characterMessageHeader.textAlignment = .left
+        characterMessageHeader.font = UIFont(name: "Avenir-Black", size: 14.0)
+        characterMessageHeader.text = "Hey there, I'm Pops!"
+        
+        view.addSubview(characterMessageHeader)
+        characterMessageHeader.translatesAutoresizingMaskIntoConstraints = false
+        characterMessageHeader.bottomAnchor.constraint(equalTo: characterMessageBody.topAnchor, constant: -viewHeight * (5/viewHeight)).isActive = true
+        characterMessageHeader.leadingAnchor.constraint(equalTo: characterMessageBody.leadingAnchor).isActive = true
+        characterMessageHeader.trailingAnchor.constraint(equalTo: characterMessageBody.trailingAnchor).isActive = true
+    }
+
 }
 
 extension SetSessionViewController: InstantiateViewControllerDelegate {
