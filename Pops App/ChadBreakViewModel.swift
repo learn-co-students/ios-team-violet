@@ -3,8 +3,8 @@ import Foundation
 
 final class ChadBreakViewModel {
     
-    let dataStore = DataStore.singleton
-    
+    lazy var dataStore = DataStore.singleton
+
     static let singleton = ChadBreakViewModel()
     private init(){}
     

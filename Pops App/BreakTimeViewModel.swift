@@ -8,6 +8,7 @@ final class BreakTimeViewModel {
     let dataStore = DataStore.singleton
     
     private init(){
+        
     }
     
 }

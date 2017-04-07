@@ -5,4 +5,5 @@ class ChadBreakView: UIView {
 
     let viewModel = ChadBreakViewModel.singleton
 
+    func prepareForEntertainment(){}
 }

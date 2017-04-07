@@ -58,7 +58,7 @@ private extension DataStore {
             [("Dear lord!", "Don't hurt yourself, sonny!")],
             ]
         let productivityStatements = [
-            "Keep working, bubby!"
+            ("Lock your phone!", "Keep working, bubby!")
         ]
         let breakStatements = [
             ("Congrats!", "Enjoy your break!")
@@ -102,7 +102,7 @@ private extension DataStore {
             [("Dear lord!", "Don't hurt yourself, sonny!")],
             ]
         let productivityStatements = [
-            "Keep working, bubby!"
+            ("Lock your phone!", "Keep working, bubby!")
         ]
         let breakStatements = [
             ("Congrats!", "Enjoy your break!")
@@ -146,7 +146,7 @@ private extension DataStore {
             [("Dear lord!", "Don't hurt yourself, sonny!")],
             ]
         let productivityStatements = [
-            "Keep working, bubby!"
+            ("Lock your phone!", "Keep working, bubby!")
         ]
         let breakStatements = [
             ("Congrats!", "Enjoy your break!")

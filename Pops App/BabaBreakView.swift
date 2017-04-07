@@ -5,4 +5,5 @@ class BabaBreakView: UIView {
 
     let viewModel = BabaBreakViewModel.singleton
 
+    func prepareForEntertainment(){}
 }

@@ -17,7 +17,7 @@ class PopsBreakView: UIView {
     var likeButton = UIButton()
     var dislikeButton = UIButton()
     var skipButton = UIButton()
-    
+        
     init(){
         super.init(frame: UIScreen.main.bounds)
         self.backgroundColor = .white
@@ -40,15 +40,23 @@ class PopsBreakView: UIView {
         let playerHeight = UIScreen.main.bounds.height / 3
         let playerFrame = CGRect(x: 0, y: 0, width: playerWidth, height: playerHeight)
         player = YTPlayerView(frame: playerFrame)
-        player.load(withVideoId: "IWrKM_zLskQ")
-        self.addSubview(player)
+        
+        viewModel.letPopsGetYouAVideo { (videoID) in
+            DispatchQueue.main.async {
+                self.player.load(withVideoId: videoID)
+                self.header.text = self.viewModel.manager.popsVideos[0].title
+                self.body.text = self.viewModel.manager.popsVideos[0].description
+            }
+        }
+        
+        self.addSubview(self.player)
     }
     
     func setUpBackButton(){
         backButton.setTitle("!", for: .normal)
         backButton.backgroundColor = .black
         
-        player.addSubview(backButton)
+        self.addSubview(backButton)
         backButton.translatesAutoresizingMaskIntoConstraints = false
         backButton.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 25.0).isActive = true
         backButton.topAnchor.constraint(equalTo: self.topAnchor, constant: 25.0).isActive = true
@@ -74,7 +82,6 @@ class PopsBreakView: UIView {
         header.textColor = UIColor.black
         header.textAlignment = .left
         header.font = UIFont(name: "Avenir-Black", size: 14.0)
-        header.text = "I hope you find this video as entertaining as I do, ya ding-dong!"
         
         self.addSubview(header)
         header.translatesAutoresizingMaskIntoConstraints = false
@@ -84,11 +91,10 @@ class PopsBreakView: UIView {
     }
 
     func setUpBody(){
-        body.numberOfLines = 0
+        body.numberOfLines = 6
         body.textColor = Palette.grey.color
         body.textAlignment = .left
         body.font = UIFont(name: "Avenir-Heavy", size: 14.0)
-        body.text = "ENTERTAINMENT IS THE OPIATE OF THE MASSES. ALL HAIL AND OBEY ALL HAIL AND OBEY."
         
         self.addSubview(body)
         body.translatesAutoresizingMaskIntoConstraints = false
@@ -119,7 +125,7 @@ class PopsBreakView: UIView {
         dislikeButton.isEnabled = true
         dislikeButton.layer.cornerRadius = 2.0
         dislikeButton.layer.masksToBounds = true
-        dislikeButton.setTitle("Fuck this garbAGE", for: .normal)
+        dislikeButton.setTitle("garbAGE", for: .normal)
         dislikeButton.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 14.0)
         
         self.addSubview(dislikeButton)
@@ -136,7 +142,7 @@ class PopsBreakView: UIView {
         likeButton.isEnabled = true
         likeButton.layer.cornerRadius = 2.0
         likeButton.layer.masksToBounds = true
-        likeButton.setTitle("Hail yeah!", for: .normal)
+        likeButton.setTitle("Luv it", for: .normal)
         likeButton.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 14.0)
         
         self.addSubview(likeButton)
@@ -146,7 +152,4 @@ class PopsBreakView: UIView {
         likeButton.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 45/viewHeight).isActive = true
         likeButton.bottomAnchor.constraint(equalTo: dislikeButton.topAnchor, constant: -8).isActive = true
     }
-    
-
-    
 }

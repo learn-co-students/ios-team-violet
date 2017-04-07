@@ -31,7 +31,6 @@ class SetSessionViewController: UIViewController, UICollectionViewDelegateFlowLa
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.white
-        
         setupStartButton()
         setupCollectionViewLayout()
         setupCollectionView()
@@ -43,7 +42,6 @@ class SetSessionViewController: UIViewController, UICollectionViewDelegateFlowLa
         setupHeaderView()
         setupSettingsButton()
         setupLeaderBoardButton()
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
