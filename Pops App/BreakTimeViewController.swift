@@ -1,10 +1,11 @@
 
 import UIKit
 
-class BreakTimeViewController: UIViewController {
+class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate {
 
-    let viewModel = BreakTimeViewModel()
-    
+    var viewModel: BreakTimeViewModel!
+    var delegate: InstantiateViewControllerDelegate?
+
     lazy var viewWidth: CGFloat = self.view.frame.width
     lazy var viewHeight: CGFloat = self.view.frame.height
     lazy var itemWidth: CGFloat = self.view.frame.width * (269/self.view.frame.width)
@@ -27,6 +28,8 @@ class BreakTimeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        viewModel = BreakTimeViewModel(vc: self)
+        
         view.backgroundColor = UIColor.white
         setupUserAppsBackground()
         setupUserApps()
@@ -41,9 +44,10 @@ class BreakTimeViewController: UIViewController {
         setupLeaderBoardButton()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         animateCoachPopup()
+        viewModel.startTimer()
     }
     
     override var prefersStatusBarHidden: Bool {
@@ -53,6 +57,24 @@ class BreakTimeViewController: UIViewController {
     func presentBreakEntertainmentVC() {
         let breakEntertainmentVC = BreakEntertainmentViewController()
         present(breakEntertainmentVC, animated: true, completion: nil)
+    }
+    
+    func moveToProductivity() {
+        UIView.animate(withDuration: 0.7, animations: {
+            self.coachBottomAnchorConstraint.constant = 100
+            self.view.layoutIfNeeded()
+        }) { _ in self.dismiss(animated: true, completion: nil)
+            self.delegate?.instantiateProductiveTimeVC()
+        }
+    }
+    
+    func moveToSessionEnded() {
+        UIView.animate(withDuration: 0.7, animations: {
+            self.coachBottomAnchorConstraint.constant = 100
+            self.view.layoutIfNeeded()
+        }) { _ in self.dismiss(animated: true, completion: nil)
+            self.delegate?.instantiateSessionEndedVC()
+        }
     }
     
     func setupEntertainMeButton() {
@@ -250,7 +272,5 @@ class BreakTimeViewController: UIViewController {
             self.view.layoutIfNeeded()
         }
     }
-
-
 
 }

@@ -23,6 +23,16 @@ class SessionEndedViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .white
+        
+        setupDoneButton()
+        setupExtendHourButton()
+        setupLineDividerView()
+        setupCharacterMessageBody()
+        setupCharacterMessageHeader()
+        setupCoachWindow()
+        setupCoachIcon()
+        setupHeaderView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -34,9 +44,9 @@ class SessionEndedViewController: UIViewController {
         doneButton.backgroundColor = Palette.lightBlue.color
         doneButton.layer.cornerRadius = 2.0
         doneButton.layer.masksToBounds = true
-        doneButton.setTitle("extend for 1 hour", for: .normal)
+        doneButton.setTitle("let me go", for: .normal)
         doneButton.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 14.0)
-        doneButton.addTarget(self, action: #selector(presentSetSesssionVC), for: .touchUpInside)
+        doneButton.addTarget(self, action: #selector(presentSetSessionVC), for: .touchUpInside)
         
         view.addSubview(doneButton)
         doneButton.translatesAutoresizingMaskIntoConstraints = false
@@ -46,16 +56,17 @@ class SessionEndedViewController: UIViewController {
         doneButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -viewHeight * (150/667.0)).isActive = true
     }
     
-    func presentSetSesssionVC() {
-        let setSesssionVC = ProductiveTimeViewController()
-        present(setSesssionVC, animated: true, completion: nil)
+    func presentSetSessionVC() {
+        viewModel.dataStore.defaults.set(false, forKey: "sessionActive")
+        let setSessionVC = SetSessionViewController()
+        present(setSessionVC, animated: true, completion: nil)
     }
     
     func setupExtendHourButton() {
         extendHourButton.backgroundColor = Palette.lightBlue.color
         extendHourButton.layer.cornerRadius = 2.0
         extendHourButton.layer.masksToBounds = true
-        extendHourButton.setTitle("extend for 1 hour", for: .normal)
+        extendHourButton.setTitle("extend for an hour", for: .normal)
         extendHourButton.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 14.0)
         extendHourButton.addTarget(self, action: #selector(presentProductiveTimeVC), for: .touchUpInside)
         
@@ -68,7 +79,9 @@ class SessionEndedViewController: UIViewController {
     }
     
     func presentProductiveTimeVC() {
+        viewModel.dataStore.defaults.set(false, forKey: "sessionActive")
         let productiveTimeVC = ProductiveTimeViewController()
+        viewModel.startSessionOfLength(1)
         present(productiveTimeVC, animated: true, completion: nil)
     }
     
