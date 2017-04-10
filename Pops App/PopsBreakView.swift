@@ -22,7 +22,6 @@ class PopsBreakView: UIView {
         super.init(frame: UIScreen.main.bounds)
         self.backgroundColor = .white
         setUpYouTubePlayerView()
-        //setUpBackButton()
         setUpLineDividerView()
         setUpHeader()
         setUpBody()
@@ -50,19 +49,6 @@ class PopsBreakView: UIView {
         }
         
         self.addSubview(self.player)
-    }
-    
-    func setUpBackButton(){
-        backButton.setTitle("!", for: .normal)
-        backButton.backgroundColor = .black
-        backButton.addTarget(self, action: #selector(dismissPopsBreakView), for: .touchUpInside)
-        
-        self.addSubview(backButton)
-        backButton.translatesAutoresizingMaskIntoConstraints = false
-        backButton.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 25.0).isActive = true
-        backButton.topAnchor.constraint(equalTo: self.topAnchor, constant: 25.0).isActive = true
-        backButton.heightAnchor.constraint(equalToConstant: 21.0).isActive = true
-        backButton.widthAnchor.constraint(equalToConstant: 21.0).isActive = true
     }
     
     func setUpLineDividerView() {
@@ -153,7 +139,5 @@ class PopsBreakView: UIView {
         likeButton.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 45/viewHeight).isActive = true
         likeButton.bottomAnchor.constraint(equalTo: dislikeButton.topAnchor, constant: -8).isActive = true
     }
-    
-    func dismissPopsBreakView() {
-    }
+
 }
