@@ -5,7 +5,7 @@ protocol InstantiateViewControllerDelegate {
     func instantiateBreakTimeVC()
 }
 
-class ProductiveTimeViewController: UIViewController {
+class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDelegate {
 
     lazy var viewWidth: CGFloat = self.view.frame.width
     lazy var viewHeight: CGFloat = self.view.frame.height
@@ -13,15 +13,15 @@ class ProductiveTimeViewController: UIViewController {
     var viewModel: ProductiveTimeViewModel!
     var progressBarWidthAnchor: NSLayoutConstraint!
 
-    let totalTimeLabel = UILabel()
+    var productiveTimeLabel = UILabel()
     
-    let popsWindowView = UIView()
+    let coachWindowView = UIView()
     let pepTalkLabel = UILabel()
-    let popsIcon = UIImageView()
+    let coachIcon = UIImageView()
     let cancelSessionButton = UIButton()
     let progressBar = UIView()
-    let propsLabel = UILabel()
-    var popsBottomAnchorConstraint: NSLayoutConstraint!
+    var propsLabel = UILabel()
+    var coachBottomAnchorConstraint: NSLayoutConstraint!
     
     let characterMessageHeader = UILabel()
     let characterMessageBody = UILabel()
@@ -29,12 +29,6 @@ class ProductiveTimeViewController: UIViewController {
     let lockLabel = UILabel()
     
     var delegate: InstantiateViewControllerDelegate?
-    
-    var props = 0 {
-        didSet {
-            propsLabel.text = "Props: \(props)"
-        }
-    }
     
     var progress = 0.0 {
         didSet {
@@ -54,16 +48,16 @@ class ProductiveTimeViewController: UIViewController {
         setupLockLabel()
         
         setupCancelSessionButton()
-        setupTotalTimeLabel()
+        setupProductiveTimeLabel()
         setupCharacterMessageBody()
         setupCharacterMessageHeader()
-        setupPopsWindow()
-        setupPopsIcon()
+        setupCoachWindow()
+        setupCoachIcon()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        animatePopsPopup()
+        animateCoachPopup()
         viewModel.startTimers()
     }
 
@@ -90,7 +84,7 @@ extension ProductiveTimeViewController {
     func setupPropsLabel() {
         view.addSubview(propsLabel)
         self.propsLabel.isHidden = true
-        propsLabel.text = "\(props) \nprops"
+        propsLabel.text = viewModel.props.description
         propsLabel.font = UIFont(name: "Avenir-Heavy", size: 14)
         propsLabel.textColor = UIColor.white
         
@@ -138,18 +132,18 @@ extension ProductiveTimeViewController {
         cancelSessionButton.heightAnchor.constraint(equalToConstant: 20).isActive = true
     }
     
-    func setupTotalTimeLabel() {
-        view.addSubview(totalTimeLabel)
-        totalTimeLabel.isHidden = true
-        totalTimeLabel.textAlignment = .center
-        totalTimeLabel.font = UIFont(name: "Avenir-Heavy", size: 20)
-        totalTimeLabel.textColor = UIColor.white
+    func setupProductiveTimeLabel() {
+        view.addSubview(productiveTimeLabel)
+        productiveTimeLabel.isHidden = true
+        productiveTimeLabel.textAlignment = .center
+        productiveTimeLabel.font = UIFont(name: "Avenir-Heavy", size: 20)
+        productiveTimeLabel.textColor = UIColor.white
         
-        totalTimeLabel.translatesAutoresizingMaskIntoConstraints = false
-        totalTimeLabel.topAnchor.constraint(equalTo: cancelSessionButton.topAnchor, constant: -viewHeight * (120/667)).isActive = true
-        totalTimeLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0).isActive = true
-        totalTimeLabel.widthAnchor.constraint(equalToConstant: 150).isActive = true
-        totalTimeLabel.heightAnchor.constraint(equalToConstant: 25).isActive = true
+        productiveTimeLabel.translatesAutoresizingMaskIntoConstraints = false
+        productiveTimeLabel.topAnchor.constraint(equalTo: cancelSessionButton.topAnchor, constant: -viewHeight * (120/667)).isActive = true
+        productiveTimeLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0).isActive = true
+        productiveTimeLabel.widthAnchor.constraint(equalToConstant: 150).isActive = true
+        productiveTimeLabel.heightAnchor.constraint(equalToConstant: 25).isActive = true
     }
     
     func setupCharacterMessageBody() {
@@ -157,11 +151,11 @@ extension ProductiveTimeViewController {
         characterMessageBody.textColor = Palette.grey.color
         characterMessageBody.textAlignment = .left
         characterMessageBody.font = UIFont(name: "Avenir-Heavy", size: 14.0)
-        characterMessageBody.text = "I’ll notify you when it’s time for a break. If I see you playing with your phone while you should be working bad things will happen."
+        characterMessageBody.text = viewModel.dataStore.user.currentCoach.productivityStatements[0].body
         
         view.addSubview(characterMessageBody)
         characterMessageBody.translatesAutoresizingMaskIntoConstraints = false
-        characterMessageBody.bottomAnchor.constraint(equalTo: totalTimeLabel.topAnchor, constant: -viewHeight * (30/667)).isActive = true
+        characterMessageBody.bottomAnchor.constraint(equalTo: productiveTimeLabel.topAnchor, constant: -viewHeight * (30/667)).isActive = true
         characterMessageBody.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: viewWidth * (53/375)).isActive = true
         characterMessageBody.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -viewWidth * (53/375)).isActive = true
     }
@@ -171,7 +165,7 @@ extension ProductiveTimeViewController {
         characterMessageHeader.textColor = UIColor.white
         characterMessageHeader.textAlignment = .left
         characterMessageHeader.font = UIFont(name: "Avenir-Black", size: 14.0)
-        characterMessageHeader.text = "Lock your phone now."
+        characterMessageHeader.text = viewModel.dataStore.user.currentCoach.productivityStatements[0].header
         
         view.addSubview(characterMessageHeader)
         characterMessageHeader.translatesAutoresizingMaskIntoConstraints = false
@@ -180,32 +174,32 @@ extension ProductiveTimeViewController {
         characterMessageHeader.trailingAnchor.constraint(equalTo: characterMessageBody.trailingAnchor).isActive = true
     }
 
-    func setupPopsWindow() {
-        view.addSubview(popsWindowView)
-        popsWindowView.translatesAutoresizingMaskIntoConstraints = false
-        popsWindowView.backgroundColor = Palette.salmon.color
-        popsWindowView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        popsWindowView.bottomAnchor.constraint(equalTo: characterMessageHeader.topAnchor, constant: -viewHeight * (35/667)).isActive = true
-        popsWindowView.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        popsWindowView.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        popsWindowView.layer.cornerRadius = 50.0
-        popsWindowView.layer.masksToBounds = true
+    func setupCoachWindow() {
+        view.addSubview(coachWindowView)
+        coachWindowView.translatesAutoresizingMaskIntoConstraints = false
+        coachWindowView.backgroundColor = Palette.salmon.color
+        coachWindowView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        coachWindowView.bottomAnchor.constraint(equalTo: characterMessageHeader.topAnchor, constant: -viewHeight * (35/667)).isActive = true
+        coachWindowView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        coachWindowView.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        coachWindowView.layer.cornerRadius = 50.0
+        coachWindowView.layer.masksToBounds = true
     }
     
-    func setupPopsIcon() {
-        popsIcon.image = UIImage(named: "IC_POPS")
-        popsIcon.contentMode = .scaleAspectFit
+    func setupCoachIcon() {
+        coachIcon.image = viewModel.dataStore.user.currentCoach.icon
+        coachIcon.contentMode = .scaleAspectFit
         
-        popsWindowView.addSubview(popsIcon)
-        popsIcon.translatesAutoresizingMaskIntoConstraints = false
-        popsIcon.backgroundColor = UIColor.clear
+        coachWindowView.addSubview(coachIcon)
+        coachIcon.translatesAutoresizingMaskIntoConstraints = false
+        coachIcon.backgroundColor = UIColor.clear
         
-        popsBottomAnchorConstraint = popsIcon.bottomAnchor.constraint(equalTo: popsWindowView.bottomAnchor, constant: 100)
-        popsBottomAnchorConstraint.isActive = true
-        popsIcon.centerXAnchor.constraint(equalTo: popsWindowView.centerXAnchor, constant: 0).isActive = true
-        popsIcon.heightAnchor.constraint(equalToConstant: 80).isActive = true
-        popsIcon.widthAnchor.constraint(equalToConstant: 52).isActive = true
-        popsIcon.layer.masksToBounds = true
+        coachBottomAnchorConstraint = coachIcon.bottomAnchor.constraint(equalTo: coachWindowView.bottomAnchor, constant: 100)
+        coachBottomAnchorConstraint.isActive = true
+        coachIcon.centerXAnchor.constraint(equalTo: coachWindowView.centerXAnchor, constant: 0).isActive = true
+        coachIcon.heightAnchor.constraint(equalToConstant: 80).isActive = true
+        coachIcon.widthAnchor.constraint(equalToConstant: 52).isActive = true
+        coachIcon.layer.masksToBounds = true
     }
 
     func skipBreak() {
@@ -214,21 +208,21 @@ extension ProductiveTimeViewController {
         self.view.layoutIfNeeded()
         
         UIView.animate(withDuration: 0.7, animations: {
-            self.popsBottomAnchorConstraint.constant = 100
+            self.coachBottomAnchorConstraint.constant = 100
             self.view.layoutIfNeeded()
         }) { _ in self.dismiss(animated: true, completion: nil)
             self.delegate?.instantiateBreakTimeVC()
         }
     }
     
-    func animatePopsPopup() {
+    func animateCoachPopup() {
         self.view.layoutIfNeeded()
         UIView.animate(withDuration: 1, animations: {
-            self.popsBottomAnchorConstraint.constant = 10
+            self.coachBottomAnchorConstraint.constant = 10
             self.view.layoutIfNeeded()
         }) { _ in
             self.propsLabel.isHidden = false
-            self.totalTimeLabel.isHidden = false
+            self.productiveTimeLabel.isHidden = false
         }
     }
 }

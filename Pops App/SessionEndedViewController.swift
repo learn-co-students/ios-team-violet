@@ -14,12 +14,12 @@ class SessionEndedViewController: UIViewController {
     let characterMessageHeader = UILabel()
     let characterMessageBody = UILabel()
     
-    let popsWindowView = UIView()
-    let popsIcon = UIImageView()
+    let coachWindowView = UIView()
+    let coachIcon = UIImageView()
     
     let headerView = UIView()
     
-    var popsBottomAnchorConstraint: NSLayoutConstraint!
+    var coachBottomAnchorConstraint: NSLayoutConstraint!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,7 +27,7 @@ class SessionEndedViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        animatePopsPopup()
+        animateCoachPopup()
     }
     
     func setupDoneButton() {
@@ -90,7 +90,7 @@ class SessionEndedViewController: UIViewController {
         characterMessageBody.textColor = Palette.grey.color
         characterMessageBody.textAlignment = .left
         characterMessageBody.font = UIFont(name: "Avenir-Heavy", size: 14.0)
-        characterMessageBody.text = "Wanna make me super proud and extend your productivity for another hour?"
+        characterMessageBody.text = viewModel.dataStore.user.currentCoach.endSessionStatements[0].body
         
         view.addSubview(characterMessageBody)
         characterMessageBody.translatesAutoresizingMaskIntoConstraints = false
@@ -104,7 +104,7 @@ class SessionEndedViewController: UIViewController {
         characterMessageHeader.textColor = UIColor.black
         characterMessageHeader.textAlignment = .left
         characterMessageHeader.font = UIFont(name: "Avenir-Black", size: 14.0)
-        characterMessageHeader.text = "Woah 2 hours went by fast!"
+        characterMessageHeader.text = viewModel.dataStore.user.currentCoach.endSessionStatements[0].header
         
         view.addSubview(characterMessageHeader)
         characterMessageHeader.translatesAutoresizingMaskIntoConstraints = false
@@ -113,32 +113,32 @@ class SessionEndedViewController: UIViewController {
         characterMessageHeader.trailingAnchor.constraint(equalTo: characterMessageBody.trailingAnchor).isActive = true
     }
     
-    func setupPopsWindow() {
-        view.addSubview(popsWindowView)
-        popsWindowView.translatesAutoresizingMaskIntoConstraints = false
-        popsWindowView.backgroundColor = Palette.salmon.color
-        popsWindowView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        popsWindowView.bottomAnchor.constraint(equalTo: characterMessageHeader.topAnchor, constant: -viewHeight * (40/667)).isActive = true
-        popsWindowView.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        popsWindowView.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        popsWindowView.layer.cornerRadius = 50.0
-        popsWindowView.layer.masksToBounds = true
+    func setupCoachWindow() {
+        view.addSubview(coachWindowView)
+        coachWindowView.translatesAutoresizingMaskIntoConstraints = false
+        coachWindowView.backgroundColor = Palette.salmon.color
+        coachWindowView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        coachWindowView.bottomAnchor.constraint(equalTo: characterMessageHeader.topAnchor, constant: -viewHeight * (40/667)).isActive = true
+        coachWindowView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        coachWindowView.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        coachWindowView.layer.cornerRadius = 50.0
+        coachWindowView.layer.masksToBounds = true
     }
     
-    func setupPopsIcon() {
-        popsIcon.image = UIImage(named: "IC_POPS")
-        popsIcon.contentMode = .scaleAspectFit
+    func setupCoachIcon() {
+        coachIcon.image = viewModel.dataStore.user.currentCoach.icon
+        coachIcon.contentMode = .scaleAspectFit
         
-        popsWindowView.addSubview(popsIcon)
-        popsIcon.translatesAutoresizingMaskIntoConstraints = false
-        popsIcon.backgroundColor = UIColor.clear
+        coachWindowView.addSubview(coachIcon)
+        coachIcon.translatesAutoresizingMaskIntoConstraints = false
+        coachIcon.backgroundColor = UIColor.clear
         
-        popsBottomAnchorConstraint = popsIcon.bottomAnchor.constraint(equalTo: popsWindowView.bottomAnchor, constant: 100)
-        popsBottomAnchorConstraint.isActive = true
-        popsIcon.centerXAnchor.constraint(equalTo: popsWindowView.centerXAnchor, constant: 0).isActive = true
-        popsIcon.heightAnchor.constraint(equalToConstant: 80).isActive = true
-        popsIcon.widthAnchor.constraint(equalToConstant: 52).isActive = true
-        popsIcon.layer.masksToBounds = true
+        coachBottomAnchorConstraint = coachIcon.bottomAnchor.constraint(equalTo: coachWindowView.bottomAnchor, constant: 100)
+        coachBottomAnchorConstraint.isActive = true
+        coachIcon.centerXAnchor.constraint(equalTo: coachWindowView.centerXAnchor, constant: 0).isActive = true
+        coachIcon.heightAnchor.constraint(equalToConstant: 80).isActive = true
+        coachIcon.widthAnchor.constraint(equalToConstant: 52).isActive = true
+        coachIcon.layer.masksToBounds = true
     }
     
     func setupHeaderView() {
@@ -152,10 +152,10 @@ class SessionEndedViewController: UIViewController {
         headerView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
     }
     
-    func animatePopsPopup() {
+    func animateCoachPopup() {
         self.view.layoutIfNeeded()
         UIView.animate(withDuration: 1) {
-            self.popsBottomAnchorConstraint.constant = 10
+            self.coachBottomAnchorConstraint.constant = 10
             self.view.layoutIfNeeded()
         }
     }

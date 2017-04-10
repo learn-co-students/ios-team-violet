@@ -9,9 +9,9 @@ final class DataStore {
     var user: User!
     
     private init(){
-        let userName = defaults.value(forKey: "userName") as? String ?? nil
+        let userName = defaults.value(forKey: "username") as? String ?? nil
         let totalProps = defaults.value(forKey: "totalProps") as? Int ?? 0
-        let unlockedCoaches = defaults.value(forKey: "unlockedCoaches") as? [String] ?? ["Pops", "Baba"]
+        let unlockedCoaches = defaults.value(forKey: "unlockedCoaches") as? [String] ?? ["Pops"]
         let appNames = defaults.value(forKey: "appNames") as? [String] ?? ["Messages", "Email", "Facebook"]
         self.user = User(userName: userName, totalProps: totalProps, unlockedCoachNames: unlockedCoaches, appNames: appNames, currentCoach: getCurrentCoach(), currentSession: nil)
     }

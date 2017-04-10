@@ -20,10 +20,10 @@ class BreakTimeViewController: UIViewController {
     let settingsButton = UIButton()
     let leaderBoardButton = UIButton()
     
-    let popsWindowView = UIView()
-    let popsIcon = UIImageView()
+    let coachWindowView = UIView()
+    let coachIcon = UIImageView()
     
-    var popsBottomAnchorConstraint: NSLayoutConstraint!
+    var coachBottomAnchorConstraint: NSLayoutConstraint!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,8 +34,8 @@ class BreakTimeViewController: UIViewController {
         setupLineDividerView()
         setupCharacterMessageBody()
         setupCharacterMessageHeader()
-        setupPopsWindow()
-        setupPopsIcon()
+        setupCoachWindow()
+        setupCoachIcon()
         setupHeaderView()
         setupSettingsButton()
         setupLeaderBoardButton()
@@ -43,7 +43,7 @@ class BreakTimeViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        animatePopsPopup()
+        animateCoachPopup()
     }
     
     override var prefersStatusBarHidden: Bool {
@@ -89,7 +89,7 @@ class BreakTimeViewController: UIViewController {
         characterMessageBody.textColor = Palette.grey.color
         characterMessageBody.textAlignment = .left
         characterMessageBody.font = UIFont(name: "Avenir-Heavy", size: 14.0)
-        characterMessageBody.text = "I made it easy for you to catch up on texts, email and Facebook. I’m also pretty entertaining, so feel free to spend your break with me."
+        characterMessageBody.text = viewModel.dataStore.user.currentCoach.breakStatements[0].body
         
         view.addSubview(characterMessageBody)
         characterMessageBody.translatesAutoresizingMaskIntoConstraints = false
@@ -103,7 +103,7 @@ class BreakTimeViewController: UIViewController {
         characterMessageHeader.textColor = UIColor.black
         characterMessageHeader.textAlignment = .left
         characterMessageHeader.font = UIFont(name: "Avenir-Black", size: 14.0)
-        characterMessageHeader.text = "It’s time for a 5 minute break!"
+        characterMessageHeader.text = viewModel.dataStore.user.currentCoach.breakStatements[0].header
         
         view.addSubview(characterMessageHeader)
         characterMessageHeader.translatesAutoresizingMaskIntoConstraints = false
@@ -112,32 +112,32 @@ class BreakTimeViewController: UIViewController {
         characterMessageHeader.trailingAnchor.constraint(equalTo: characterMessageBody.trailingAnchor).isActive = true
     }
     
-    func setupPopsWindow() {
-        view.addSubview(popsWindowView)
-        popsWindowView.translatesAutoresizingMaskIntoConstraints = false
-        popsWindowView.backgroundColor = Palette.salmon.color
-        popsWindowView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        popsWindowView.bottomAnchor.constraint(equalTo: characterMessageHeader.topAnchor, constant: -viewHeight * (40/667)).isActive = true
-        popsWindowView.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        popsWindowView.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        popsWindowView.layer.cornerRadius = 50.0
-        popsWindowView.layer.masksToBounds = true
+    func setupCoachWindow() {
+        view.addSubview(coachWindowView)
+        coachWindowView.translatesAutoresizingMaskIntoConstraints = false
+        coachWindowView.backgroundColor = Palette.salmon.color
+        coachWindowView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        coachWindowView.bottomAnchor.constraint(equalTo: characterMessageHeader.topAnchor, constant: -viewHeight * (40/667)).isActive = true
+        coachWindowView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        coachWindowView.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        coachWindowView.layer.cornerRadius = 50.0
+        coachWindowView.layer.masksToBounds = true
     }
     
-    func setupPopsIcon() {
-        popsIcon.image = UIImage(named: "IC_POPS")
-        popsIcon.contentMode = .scaleAspectFit
+    func setupCoachIcon() {
+        coachIcon.image = viewModel.dataStore.user.currentCoach.icon
+        coachIcon.contentMode = .scaleAspectFit
         
-        popsWindowView.addSubview(popsIcon)
-        popsIcon.translatesAutoresizingMaskIntoConstraints = false
-        popsIcon.backgroundColor = UIColor.clear
+        coachWindowView.addSubview(coachIcon)
+        coachIcon.translatesAutoresizingMaskIntoConstraints = false
+        coachIcon.backgroundColor = UIColor.clear
         
-        popsBottomAnchorConstraint = popsIcon.bottomAnchor.constraint(equalTo: popsWindowView.bottomAnchor, constant: 100)
-        popsBottomAnchorConstraint.isActive = true
-        popsIcon.centerXAnchor.constraint(equalTo: popsWindowView.centerXAnchor, constant: 0).isActive = true
-        popsIcon.heightAnchor.constraint(equalToConstant: 80).isActive = true
-        popsIcon.widthAnchor.constraint(equalToConstant: 52).isActive = true
-        popsIcon.layer.masksToBounds = true
+        coachBottomAnchorConstraint = coachIcon.bottomAnchor.constraint(equalTo: coachWindowView.bottomAnchor, constant: 100)
+        coachBottomAnchorConstraint.isActive = true
+        coachIcon.centerXAnchor.constraint(equalTo: coachWindowView.centerXAnchor, constant: 0).isActive = true
+        coachIcon.heightAnchor.constraint(equalToConstant: 80).isActive = true
+        coachIcon.widthAnchor.constraint(equalToConstant: 52).isActive = true
+        coachIcon.layer.masksToBounds = true
     }
     
     func setupHeaderView() {
@@ -243,10 +243,10 @@ class BreakTimeViewController: UIViewController {
         leaderBoardButton.widthAnchor.constraint(equalToConstant: 23.0).isActive = true
     }
     
-    func animatePopsPopup() {
+    func animateCoachPopup() {
         self.view.layoutIfNeeded()
         UIView.animate(withDuration: 1) {
-            self.popsBottomAnchorConstraint.constant = 10
+            self.coachBottomAnchorConstraint.constant = 10
             self.view.layoutIfNeeded()
         }
     }
