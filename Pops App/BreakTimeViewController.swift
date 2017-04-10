@@ -224,7 +224,7 @@ class BreakTimeViewController: UIViewController {
     func setupSettingsButton() {
         settingsButton.setBackgroundImage(#imageLiteral(resourceName: "IC_Settings-1"), for: .normal)
         
-        headerView.addSubview(settingsButton)
+        view.addSubview(settingsButton)
         settingsButton.translatesAutoresizingMaskIntoConstraints = false
         settingsButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 25.0).isActive = true
         settingsButton.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 21.0).isActive = true
@@ -254,7 +254,7 @@ class BreakTimeViewController: UIViewController {
     }
     
     func presentSettingsVC() {
-        let settingsVC= SettingsViewController()
+        let settingsVC = SettingsViewController()
         present(settingsVC, animated: true, completion: nil)
     }
     

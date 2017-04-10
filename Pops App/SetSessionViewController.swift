@@ -155,7 +155,7 @@ extension SetSessionViewController {
         startButton.setTitle("start", for: .normal)
         startButton.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 14.0)
         
-        if defaults.value(forKey: "returningUser") == nil {
+        if defaults.value(forKey: "returningUser") != nil {
             startButton.addTarget(self, action: #selector(animateAllowNotifications), for: .touchUpInside)
         } else {
            startButton.addTarget(self, action: #selector(presentProductiveTimeVC), for: .touchUpInside)
