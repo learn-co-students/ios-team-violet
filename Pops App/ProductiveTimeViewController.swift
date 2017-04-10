@@ -60,6 +60,10 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
         animateCoachPopup()
         viewModel.startTimers()
     }
+    
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
 
     func dismissView() {
         self.dismiss(animated: true, completion: nil)
