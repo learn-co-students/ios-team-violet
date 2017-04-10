@@ -3,6 +3,8 @@ import Foundation
 import YouTubeiOSPlayerHelper
 
 final class PopsBreakManager {
+    let defaults = UserDefaults.standard
+    
     let baseURL = "https://www.googleapis.com/youtube/v3/playlistItems?"
     let key = "key=AIzaSyB3MeDmXLwcZK6JQKoA3ffM7e16E3_9I2k"
     let part = "part=snippet"
@@ -10,7 +12,12 @@ final class PopsBreakManager {
     let maxResults = "maxResults=50"
     
     var popsVideos: [Video] = []
-   
+    var dislikedVideoIDs: [String]
+    
+    init() {
+        dislikedVideoIDs = defaults.value(forKey: "dislikedVideoIDs") as? [String] ?? []
+    }
+
     func getRandomYouTubeVideo(completion: @escaping (String) -> ()) {
         let url = URL(string: baseURL + key + "&" + part + "&" + playlistID + "&" + maxResults)
         guard let verifiedURL = url else { completion("9bZkp7q19f0") ; return }
@@ -24,10 +31,12 @@ final class PopsBreakManager {
             
             receivedVideos.forEach({ (video) in
                 let snippet = video["snippet"] as? [String: Any] ?? [:]
-                let title = snippet["title"] as? String ?? "No Title"
-                let description = snippet["description"] as? String ?? "No Description"
                 let resourceId = snippet["resourceId"] as? [String: Any] ?? [:]
                 let id = resourceId["videoId"] as? String ?? "No Video ID"
+                if self.dislikedVideoIDs.contains(id) { print("fuck \(id)"); return }
+                
+                let title = snippet["title"] as? String ?? "No Title"
+                let description = snippet["description"] as? String ?? "No Description"
                 let newVideo = Video(id: id, title: title, description: description)
                 
                 let randomIndex = Int(arc4random_uniform(UInt32(self.popsVideos.count)))

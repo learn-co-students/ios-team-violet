@@ -16,7 +16,7 @@ class PopsBreakView: UIView {
     var body = UILabel()
     var likeButton = UIButton()
     var dislikeButton = UIButton()
-    var skipButton = UIButton()
+    var nextButton = UIButton()
         
     init(){
         super.init(frame: UIScreen.main.bounds)
@@ -25,7 +25,7 @@ class PopsBreakView: UIView {
         setUpLineDividerView()
         setUpHeader()
         setUpBody()
-        setUpSkipButton()
+        setUpNextButton()
         setUpDislikeButton()
         setUpLikeButton()
     }
@@ -43,8 +43,9 @@ class PopsBreakView: UIView {
         viewModel.letPopsGetYouAVideo { (videoID) in
             DispatchQueue.main.async {
                 self.player.load(withVideoId: videoID)
-                self.header.text = self.viewModel.manager.popsVideos[0].title
-                self.body.text = self.viewModel.manager.popsVideos[0].description
+                let currentVideoIndex = self.viewModel.currentVideoIndex
+                self.header.text = self.viewModel.manager.popsVideos[currentVideoIndex].title
+                self.body.text = self.viewModel.manager.popsVideos[currentVideoIndex].description
             }
         }
         
@@ -90,19 +91,20 @@ class PopsBreakView: UIView {
         body.trailingAnchor.constraint(equalTo: lineDividerView.trailingAnchor).isActive = true
     }
     
-    func setUpSkipButton() {
-        skipButton.backgroundColor = Palette.aqua.color
-        skipButton.alpha = 1
-        skipButton.isEnabled = true
-        skipButton.setTitle("Next", for: .normal)
-        skipButton.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 14.0)
+    func setUpNextButton() {
+        nextButton.backgroundColor = Palette.aqua.color
+        nextButton.alpha = 1
+        nextButton.isEnabled = true
+        nextButton.setTitle("Next", for: .normal)
+        nextButton.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 14.0)
+        nextButton.addTarget(self, action: #selector(nextButtonTapped), for: .touchUpInside)
         
-        self.addSubview(skipButton)
-        skipButton.translatesAutoresizingMaskIntoConstraints = false
-        skipButton.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        skipButton.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
-        skipButton.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.097).isActive = true
-        skipButton.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
+        self.addSubview(nextButton)
+        nextButton.translatesAutoresizingMaskIntoConstraints = false
+        nextButton.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        nextButton.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
+        nextButton.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.097).isActive = true
+        nextButton.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
     }
     
     func setUpDislikeButton() {
@@ -112,15 +114,17 @@ class PopsBreakView: UIView {
         dislikeButton.isEnabled = true
         dislikeButton.layer.cornerRadius = 2.0
         dislikeButton.layer.masksToBounds = true
-        dislikeButton.setTitle("garbAGE", for: .normal)
+        dislikeButton.setTitle("don't show this again", for: .normal)
         dislikeButton.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 14.0)
+        dislikeButton.layer.borderColor = UIColor.black.cgColor
+        dislikeButton.addTarget(self, action: #selector(dislikeButtonTapped), for: .touchUpInside)
         
         self.addSubview(dislikeButton)
         dislikeButton.translatesAutoresizingMaskIntoConstraints = false
         dislikeButton.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
         dislikeButton.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 269/viewWidth).isActive = true
         dislikeButton.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 45/viewHeight).isActive = true
-        dislikeButton.bottomAnchor.constraint(equalTo: skipButton.topAnchor, constant: -20).isActive = true
+        dislikeButton.bottomAnchor.constraint(equalTo: nextButton.topAnchor, constant: -20).isActive = true
     }
     
     func setUpLikeButton() {
@@ -129,8 +133,10 @@ class PopsBreakView: UIView {
         likeButton.isEnabled = true
         likeButton.layer.cornerRadius = 2.0
         likeButton.layer.masksToBounds = true
-        likeButton.setTitle("Luv it", for: .normal)
+        likeButton.setTitle("add to faves", for: .normal)
         likeButton.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 14.0)
+        likeButton.layer.borderColor = UIColor.black.cgColor
+        likeButton.addTarget(self, action: #selector(likeButtonTapped), for: .touchUpInside)
         
         self.addSubview(likeButton)
         likeButton.translatesAutoresizingMaskIntoConstraints = false
@@ -140,4 +146,38 @@ class PopsBreakView: UIView {
         likeButton.bottomAnchor.constraint(equalTo: dislikeButton.topAnchor, constant: -8).isActive = true
     }
 
+    func likeButtonTapped() {
+        UIView.animate(withDuration: 0.1) {
+            self.dislikeButton.layer.borderWidth = 0
+            self.likeButton.layer.borderWidth = 1
+        }
+        
+        viewModel.userLikedVideo()
+    }
+    
+    func dislikeButtonTapped() {
+        viewModel.userDislikedVideo()
+        nextButtonTapped()
+    }
+    
+    func nextButtonTapped() {
+        let newVideoIndex = viewModel.letPopsGetYouADifferentVideo()
+        let newVideo = viewModel.manager.popsVideos[newVideoIndex]
+        self.player.load(withVideoId: newVideo.id)
+        
+        UIView.animate(withDuration: 0.2) {
+            self.likeButton.layer.borderWidth = 0
+            self.dislikeButton.layer.borderWidth = 0
+            self.header.alpha = 0
+            self.body.alpha = 0
+        }
+        
+        self.header.text = newVideo.title
+        self.body.text = newVideo.description
+        
+        UIView.animate(withDuration: 0.2) { 
+            self.header.alpha = 1
+            self.body.alpha = 1
+        }
+    }
 }

@@ -6,6 +6,9 @@ protocol ProductiveTimeViewModelDelegate: class {
     var productiveTimeLabel: UILabel {get set}
     var propsLabel: UILabel {get set}
     var progress: Double {get set}
+    
+    func animateCancelToSkip()
+    func moveToBreak()
 }
 
 
@@ -17,8 +20,6 @@ final class ProductiveTimeViewModel {
 
     //timers and counters
     var productivityTimer: Timer
-    var totalTimer: Timer
-    
     var productivityTimerCounter: Int {
         didSet {
             delegate.productiveTimeLabel.text = formatTime(time: Int(productivityTimerCounter))
@@ -34,46 +35,37 @@ final class ProductiveTimeViewModel {
     init(vc: ProductiveTimeViewController){
         self.delegate = vc
         self.productivityTimer = dataStore.user.currentSession?.productivityTimer ?? Timer()
-        self.totalTimer = dataStore.user.currentSession?.totalTimer ?? Timer()
         self.props = dataStore.user.totalProps
         self.productivityTimerCounter = dataStore.user.currentCoach.difficulty.baseProductivityLength
-        self.totalTimerCounter = (dataStore.user.currentSession?.cycles ?? 0) * (dataStore.user.currentSession?.cycleLength ?? 0)
     }
-    
-    var totalTimerCounter: Int
-    
+        
     var progressBarCounter = 0.0 {
         didSet {
-            delegate.progress = progressBarCounter / 1500.00 //this is only for pops,
+            delegate.progress = progressBarCounter / 1500.00 //this is only for standard difficulty.
         }
     }
     
-    func startTimers() {
+    func startTimer() {
         productivityTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { (timer) in
            self.productivityTimerAction()
         })
-        totalTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { (timer) in
-            self.totalTimerAction()
-        })
-        
-    }
-    
-    func stopTimers() {
-        productivityTimer.invalidate()
-        totalTimer.invalidate()
     }
     
     func productivityTimerAction() {
-        print("timer action: \(productivityTimerCounter)")
+        print("productivity timer: \(productivityTimerCounter)")
         productivityTimerCounter -= 1
         props += 1
         defaults.set(props, forKey: "totalProps")
+        
         progressBarCounter += 1
-    }
-    
-    func totalTimerAction() {
-        print("background timer action: \(totalTimerCounter)")
-        totalTimerCounter -= 1
+        if progressBarCounter == 5 {
+            delegate.animateCancelToSkip()
+        }
+        
+        if productivityTimerCounter == 0 {
+            productivityTimer.invalidate()
+            delegate.moveToBreak()
+        }
     }
     
     func formatTime(time: Int) -> String {
@@ -93,6 +85,12 @@ final class ProductiveTimeViewModel {
             let seconds = time % 60
             return String(format:"%02i", seconds)
         }
+    }
+        
+    func skipToBreak() {
+        productivityTimer.invalidate()
+        dataStore.user.totalProps -= dataStore.user.currentCoach.difficulty.basePenaltyForLeavingProductivityScreen
+        defaults.set(dataStore.user.totalProps, forKey: "totalProps")
     }
 }
 

@@ -5,10 +5,9 @@ import UIKit
 final class SetSessionViewModel {
         
     let dataStore = DataStore.singleton
-
-    let timesForCollectionView = [Time("1 hour", 1), Time("2 hours", 2), Time("3 hours", 3), Time("4 hours", 4), Time("5 hours", 5), Time("6 hours", 6), Time("7 hours", 7), Time("8 hours", 8)]
-
     let defaults = UserDefaults.standard
+    
+    let timesForCollectionView = [Time("1 hour", 1), Time("2 hours", 2), Time("3 hours", 3), Time("4 hours", 4), Time("5 hours", 5), Time("6 hours", 6), Time("7 hours", 7), Time("8 hours", 8)]
 
     init(){}
     
