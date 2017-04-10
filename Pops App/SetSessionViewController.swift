@@ -155,7 +155,7 @@ extension SetSessionViewController {
         startButton.setTitle("start", for: .normal)
         startButton.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 14.0)
         
-        if defaults.value(forKey: "returningUser") != nil {
+        if defaults.value(forKey: "returningUser") == nil {
             startButton.addTarget(self, action: #selector(animateAllowNotifications), for: .touchUpInside)
         } else {
            startButton.addTarget(self, action: #selector(presentProductiveTimeVC), for: .touchUpInside)
@@ -176,14 +176,24 @@ extension SetSessionViewController {
         UIView.animate(withDuration: 1, animations: {
             self.startButtonCenterXAnchor.constant += self.viewWidth
             self.collectionViewLeadingAnchor.constant += self.viewWidth
-            self.characterMessageBodyLeadingAnchor.constant -= self.viewWidth
-            self.characterMssageHeaderTrailingAnchor.constant -= self.viewWidth
+            self.characterMessageBody.alpha = 0
+            self.characterMessageHeader.alpha = 0
+            self.settingsButton.alpha = 0
+            self.leaderBoardButton.alpha = 0
             self.view.layoutIfNeeded()
+            
         }) { _ in
-            self.stackViewTopAnchor.constant -= 260
-            self.view.layoutIfNeeded()
+            
+            UIView.animate(withDuration: 0.8, delay: 0, options: [.curveEaseOut], animations: {
+                self.characterMessageBody.text = "Focus on your work for the next 30 minutes and I’ll notify you when it’s time for a short break."
+                self.characterMessageHeader.text = "How will I make sure you’re productive?"
+                self.characterMessageBody.alpha = 1
+                self.characterMessageHeader.alpha = 1
+                self.stackViewTopAnchor.constant -= 260
+                self.view.layoutIfNeeded()
+            }, completion: nil)
+            
         }
-
     }
     
     func setupCollectionViewLayout() {
@@ -272,7 +282,7 @@ extension SetSessionViewController {
     func setupCoachIcon() {
         coachIcon.image = viewModel.dataStore.user.currentCoach.icon
         coachIcon.contentMode = .scaleAspectFit
-        
+    
         coachWindowView.addSubview(coachIcon)
         coachIcon.translatesAutoresizingMaskIntoConstraints = false
         coachIcon.backgroundColor = UIColor.clear
@@ -363,6 +373,7 @@ extension SetSessionViewController {
         disallowNotificationsButton.layer.masksToBounds = true
         disallowNotificationsButton.setTitle("mute pops", for: .normal)
         disallowNotificationsButton.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 14.0)
+
         
         let buttons = [allowNotificationsButton, disallowNotificationsButton]
         
