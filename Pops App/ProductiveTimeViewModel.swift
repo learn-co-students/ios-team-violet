@@ -1,10 +1,19 @@
 
 import Foundation
+import UIKit
+
+protocol ProductiveTimeViewModelDelegate: class {
+    var productiveTimeLabel: UILabel {get set}
+    var propsLabel: UILabel {get set}
+    var progress: Double {get set}
+}
+
 
 final class ProductiveTimeViewModel {
     
-    let viewController: ProductiveTimeViewController
+    weak var delegate: ProductiveTimeViewModelDelegate!
     let dataStore = DataStore.singleton
+    let defaults = UserDefaults.standard
 
     //timers and counters
     var productivityTimer: Timer
@@ -12,20 +21,21 @@ final class ProductiveTimeViewModel {
     
     var productivityTimerCounter: Int {
         didSet {
-            viewController.totalTimeLabel.text = formatTime(time: Int(productivityTimerCounter))
+            delegate.productiveTimeLabel.text = formatTime(time: Int(productivityTimerCounter))
         }
     }
     
-    var props = 0 {
+    var props: Int {
         didSet {
-            viewController.propsLabel.text = "Props: \(props)"
+            delegate.propsLabel.text = "Props: \(props)"
         }
     }
     
     init(vc: ProductiveTimeViewController){
-        self.viewController = vc
+        self.delegate = vc
         self.productivityTimer = dataStore.user.currentSession?.productivityTimer ?? Timer()
         self.totalTimer = dataStore.user.currentSession?.totalTimer ?? Timer()
+        self.props = dataStore.user.totalProps
         self.productivityTimerCounter = dataStore.user.currentCoach.difficulty.baseProductivityLength
         self.totalTimerCounter = (dataStore.user.currentSession?.cycles ?? 0) * (dataStore.user.currentSession?.cycleLength ?? 0)
     }
@@ -34,7 +44,7 @@ final class ProductiveTimeViewModel {
     
     var progressBarCounter = 0.0 {
         didSet {
-            viewController.progress = progressBarCounter / 1500.00 //this is only for pops,
+            delegate.progress = progressBarCounter / 1500.00 //this is only for pops,
         }
     }
     
@@ -57,6 +67,7 @@ final class ProductiveTimeViewModel {
         print("timer action: \(productivityTimerCounter)")
         productivityTimerCounter -= 1
         props += 1
+        defaults.set(props, forKey: "totalProps")
         progressBarCounter += 1
     }
     

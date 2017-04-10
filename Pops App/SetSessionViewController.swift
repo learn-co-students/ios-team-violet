@@ -4,6 +4,7 @@ import UIKit
 class SetSessionViewController: UIViewController, UICollectionViewDelegateFlowLayout {
     
     let viewModel = SetSessionViewModel()
+    let defaults = UserDefaults.standard
     
     //Selected time for collection view
     var selectedTime: Time!
@@ -22,14 +23,14 @@ class SetSessionViewController: UIViewController, UICollectionViewDelegateFlowLa
     let lineDividerView = UIView()
     let characterMessageBody = UILabel()
     let characterMessageHeader = UILabel()
-    let popsWindowView = UIView()
-    let popsIcon = UIImageView()
+    let coachWindowView = UIView()
+    let coachIcon = UIImageView()
     let headerView = UIView()
     let settingsButton = UIButton()
     let leaderBoardButton = UIButton()
     
     //Needed to animate pops
-    var popsBottomAnchorConstraint: NSLayoutConstraint!
+    var coachBottomAnchorConstraint: NSLayoutConstraint!
     
     //Transition View Properties
     let coachImageView = UIImageView()
@@ -37,7 +38,6 @@ class SetSessionViewController: UIViewController, UICollectionViewDelegateFlowLa
     var sessionStarted: Bool = false
     
     //
-    var newUser = false
     var collectionViewLeadingAnchor: NSLayoutConstraint!
     var startButtonCenterXAnchor: NSLayoutConstraint!
     var stackViewTopAnchor: NSLayoutConstraint!
@@ -48,6 +48,12 @@ class SetSessionViewController: UIViewController, UICollectionViewDelegateFlowLa
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        if defaults.value(forKey: "returningUser") == nil {
+            settingsButton.alpha = 0
+        }
+        
+        leaderBoardButton.alpha = 0
+        
         view.backgroundColor = UIColor.white
         setupStartButton()
         setupCollectionViewLayout()
@@ -55,8 +61,8 @@ class SetSessionViewController: UIViewController, UICollectionViewDelegateFlowLa
         setupLineDividerView()
         setupCharacterMessageBody()
         setupCharacterMessageHeader()
-        setupPopsWindow()
-        setupPopsIcon()
+        setupCoachWindow()
+        setupCoachIcon()
         setupHeaderView()
         setupSettingsButton()
         setupLeaderBoardButton()
@@ -66,7 +72,7 @@ class SetSessionViewController: UIViewController, UICollectionViewDelegateFlowLa
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        animatePopsPopup()
+        animateCoachPopup()
         view.insertSubview(coachTransitionView, aboveSubview: self.view)
         coachTransitionView.isHidden = !sessionStarted
     }
@@ -81,7 +87,7 @@ class SetSessionViewController: UIViewController, UICollectionViewDelegateFlowLa
     }
     
     func presentProductiveTimeVC() {
-        animatePopsDown()
+        animateCoachDown()
         if let indexPath = selectHourCollectionView.indexPathsForSelectedItems?[0] {
         viewModel.startSessionOfLength((indexPath.row) + 1)
         }
@@ -149,7 +155,7 @@ extension SetSessionViewController {
         startButton.setTitle("start", for: .normal)
         startButton.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 14.0)
         
-        if newUser {
+        if defaults.value(forKey: "returningUser") != nil {
             startButton.addTarget(self, action: #selector(animateAllowNotifications), for: .touchUpInside)
         } else {
            startButton.addTarget(self, action: #selector(presentProductiveTimeVC), for: .touchUpInside)
@@ -166,13 +172,6 @@ extension SetSessionViewController {
     
     func animateAllowNotifications() {
         self.view.layoutIfNeeded()
-        
-//        UIView.animate(withDuration: 1) {
-//            self.startButtonCenterXAnchor.constant += self.viewWidth
-//            self.collectionViewLeadingAnchor.constant += self.viewWidth
-//            self.stackViewTopAnchor.constant -= self.viewHeight
-//            self.view.layoutIfNeeded()
-//        }
         
         UIView.animate(withDuration: 1, animations: {
             self.startButtonCenterXAnchor.constant += self.viewWidth
@@ -233,7 +232,7 @@ extension SetSessionViewController {
         characterMessageBody.textColor = Palette.grey.color
         characterMessageBody.textAlignment = .left
         characterMessageBody.font = UIFont(name: "Avenir-Heavy", size: 14.0)
-        characterMessageBody.text = "I’ll make sure you’re super productive today. How long do you want to productive for?"
+        characterMessageBody.text = viewModel.dataStore.user.currentCoach.introStatements[0].body
         
         view.addSubview(characterMessageBody)
         characterMessageBody.translatesAutoresizingMaskIntoConstraints = false
@@ -249,7 +248,7 @@ extension SetSessionViewController {
         characterMessageHeader.textColor = UIColor.black
         characterMessageHeader.textAlignment = .left
         characterMessageHeader.font = UIFont(name: "Avenir-Black", size: 14.0)
-        characterMessageHeader.text = "Hey there, I'm Pops!"
+        characterMessageHeader.text = viewModel.dataStore.user.currentCoach.introStatements[0].header
         
         view.addSubview(characterMessageHeader)
         characterMessageHeader.translatesAutoresizingMaskIntoConstraints = false
@@ -258,32 +257,32 @@ extension SetSessionViewController {
         characterMessageHeader.trailingAnchor.constraint(equalTo: characterMessageBody.trailingAnchor).isActive = true
     }
     
-    func setupPopsWindow() {
-        view.addSubview(popsWindowView)
-        popsWindowView.translatesAutoresizingMaskIntoConstraints = false
-        popsWindowView.backgroundColor = Palette.salmon.color
-        popsWindowView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        popsWindowView.bottomAnchor.constraint(equalTo: characterMessageHeader.topAnchor, constant: -viewHeight * (40/667)).isActive = true
-        popsWindowView.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        popsWindowView.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        popsWindowView.layer.cornerRadius = 50.0
-        popsWindowView.layer.masksToBounds = true
+    func setupCoachWindow() {
+        view.addSubview(coachWindowView)
+        coachWindowView.translatesAutoresizingMaskIntoConstraints = false
+        coachWindowView.backgroundColor = Palette.salmon.color
+        coachWindowView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        coachWindowView.bottomAnchor.constraint(equalTo: characterMessageHeader.topAnchor, constant: -viewHeight * (40/667)).isActive = true
+        coachWindowView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        coachWindowView.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        coachWindowView.layer.cornerRadius = 50.0
+        coachWindowView.layer.masksToBounds = true
     }
     
-    func setupPopsIcon() {
-        popsIcon.image = UIImage(named: "IC_POPS")
-        popsIcon.contentMode = .scaleAspectFit
+    func setupCoachIcon() {
+        coachIcon.image = viewModel.dataStore.user.currentCoach.icon
+        coachIcon.contentMode = .scaleAspectFit
         
-        popsWindowView.addSubview(popsIcon)
-        popsIcon.translatesAutoresizingMaskIntoConstraints = false
-        popsIcon.backgroundColor = UIColor.clear
+        coachWindowView.addSubview(coachIcon)
+        coachIcon.translatesAutoresizingMaskIntoConstraints = false
+        coachIcon.backgroundColor = UIColor.clear
         
-        popsBottomAnchorConstraint = popsIcon.bottomAnchor.constraint(equalTo: popsWindowView.bottomAnchor, constant: 100)
-        popsBottomAnchorConstraint.isActive = true
-        popsIcon.centerXAnchor.constraint(equalTo: popsWindowView.centerXAnchor, constant: 0).isActive = true
-        popsIcon.heightAnchor.constraint(equalToConstant: 80).isActive = true
-        popsIcon.widthAnchor.constraint(equalToConstant: 52).isActive = true
-        popsIcon.layer.masksToBounds = true
+        coachBottomAnchorConstraint = coachIcon.bottomAnchor.constraint(equalTo: coachWindowView.bottomAnchor, constant: 100)
+        coachBottomAnchorConstraint.isActive = true
+        coachIcon.centerXAnchor.constraint(equalTo: coachWindowView.centerXAnchor, constant: 0).isActive = true
+        coachIcon.heightAnchor.constraint(equalToConstant: 80).isActive = true
+        coachIcon.widthAnchor.constraint(equalToConstant: 52).isActive = true
+        coachIcon.layer.masksToBounds = true
     }
 
     func setupHeaderView() {
@@ -319,19 +318,19 @@ extension SetSessionViewController {
         leaderBoardButton.widthAnchor.constraint(equalToConstant: 23.0).isActive = true
     }
     
-    func animatePopsPopup() {
+    func animateCoachPopup() {
         self.view.layoutIfNeeded()
         UIView.animate(withDuration: 1) {
-            self.popsBottomAnchorConstraint.constant = 10
+            self.coachBottomAnchorConstraint.constant = 10
             self.view.layoutIfNeeded()
         }
     }
     
-    func animatePopsDown() {
+    func animateCoachDown() {
         self.view.layoutIfNeeded()
         
         UIView.animate(withDuration: 0.7, animations: {
-            self.popsBottomAnchorConstraint.constant = 100
+            self.coachBottomAnchorConstraint.constant = 100
             self.view.layoutIfNeeded()
 
         }) { _ in
