@@ -18,11 +18,11 @@ final class Session {
         return sessionDifficulty.baseProductivityLength + sessionDifficulty.baseBreakLength
     }
     
-    let productivityTimer = Timer()
-    let breakTimer = Timer()
+    var productivityTimer = Timer()
+    var breakTimer = Timer()
+   
     var sessionTimer = Timer()
     var sessionTimerCounter = 0
-
     var sessionTimerStartCounter: Int {
             return cycles * cycleLength
     }

@@ -3,13 +3,13 @@ import UIKit
 
 class BreakEntertainmentViewController: UIViewController {
 
-    let viewModel = BreakEntertainmentViewModel()
+    weak var delegate: InstantiateViewControllerDelegate!
+
     var breakView = UIView()
     var backButton = UIButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        breakView = viewModel.dataStore.user.currentCoach.breakView
         
         self.view.addSubview(breakView)
         breakView.center = self.view.center
@@ -36,6 +36,7 @@ class BreakEntertainmentViewController: UIViewController {
     
     func dismissCoachBreakView() {
         self.dismiss(animated: true, completion: nil)
+        delegate?.instantiateBreakTimeVC()
     }
     
 }

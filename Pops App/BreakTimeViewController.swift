@@ -4,7 +4,7 @@ import UIKit
 class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate {
 
     var viewModel: BreakTimeViewModel!
-    var delegate: InstantiateViewControllerDelegate?
+    weak var delegate: InstantiateViewControllerDelegate?
 
     lazy var viewWidth: CGFloat = self.view.frame.width
     lazy var viewHeight: CGFloat = self.view.frame.height
@@ -42,12 +42,13 @@ class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate {
         setupHeaderView()
         setupSettingsButton()
         setupLeaderBoardButton()
+        viewModel.startTimer()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        viewModel.delegate = self
         animateCoachPopup()
-        viewModel.startTimer()
     }
     
     override var prefersStatusBarHidden: Bool {
@@ -55,8 +56,12 @@ class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate {
     }
     
     func presentBreakEntertainmentVC() {
-        let breakEntertainmentVC = BreakEntertainmentViewController()
-        present(breakEntertainmentVC, animated: true, completion: nil)
+        UIView.animate(withDuration: 0.7, animations: {
+        self.coachBottomAnchorConstraint.constant = 100
+        self.view.layoutIfNeeded()
+    }) {_ in self.dismiss(animated: true, completion: nil)
+        self.delegate?.instantiateBreakEntertainmentVC()
+        }
     }
     
     func moveToProductivity() {

@@ -10,15 +10,16 @@ protocol BreakTimeViewModelDelegate: class {
 final class BreakTimeViewModel {
     
     let dataStore = DataStore.singleton
-    let delegate: BreakTimeViewController!
+    weak var delegate: BreakTimeViewModelDelegate!
     
     var breakTimer: Timer
     var breakTimerCounter: Int
-    
-    init(vc: BreakTimeViewController){
+        
+    init(vc: BreakTimeViewModelDelegate){
         self.delegate = vc
         self.breakTimer = dataStore.user.currentSession?.productivityTimer ?? Timer()
-        self.breakTimerCounter = dataStore.user.currentCoach.difficulty.baseBreakLength
+        self.breakTimerCounter = 10
+            //dataStore.user.currentCoach.difficulty.baseBreakLength
     }
     
     func startTimer() {
@@ -30,7 +31,7 @@ final class BreakTimeViewModel {
     func breakTimerAction() {
         print("break timer: \(breakTimerCounter)")
         breakTimerCounter -= 1
-        
+      
         if breakTimerCounter == 0 {
             breakTimer.invalidate()
             delegate.moveToProductivity()

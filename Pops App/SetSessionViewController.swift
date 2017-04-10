@@ -443,6 +443,13 @@ extension SetSessionViewController: InstantiateViewControllerDelegate {
         let sessionEndedVC = SessionEndedViewController()
         present(sessionEndedVC, animated: true, completion: nil)
     }
+    
+    func instantiateBreakEntertainmentVC() {
+        let breakEntertainmentVC = BreakEntertainmentViewController()
+        breakEntertainmentVC.breakView = viewModel.dataStore.user.currentCoach.breakView
+        breakEntertainmentVC.delegate = self
+        present(breakEntertainmentVC, animated: true, completion: nil)
+    }
 }
 
 

@@ -1,10 +1,11 @@
 
 import UIKit
 
-protocol InstantiateViewControllerDelegate {
+protocol InstantiateViewControllerDelegate: class {
     func instantiateBreakTimeVC()
     func instantiateProductiveTimeVC()
     func instantiateSessionEndedVC()
+    func instantiateBreakEntertainmentVC()
 }
 
 class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDelegate {
@@ -30,7 +31,7 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
     let lockIconImageView = UIImageView()
     let lockLabel = UILabel()
     
-    var delegate: InstantiateViewControllerDelegate?
+    weak var delegate: InstantiateViewControllerDelegate?
     
     var progress = 0.0 {
         didSet {
@@ -58,7 +59,7 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+        super.viewDidAppear(animated)        
         animateCoachPopup()
         viewModel.startTimer()
         if viewModel.defaults.value(forKey: "sessionActive") as? Bool == false {
