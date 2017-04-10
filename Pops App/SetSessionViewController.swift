@@ -165,26 +165,28 @@ extension SetSessionViewController {
     }
     
     func animateAllowNotifications() {
-        self.view.layoutIfNeeded()
         
-//        UIView.animate(withDuration: 1) {
-//            self.startButtonCenterXAnchor.constant += self.viewWidth
-//            self.collectionViewLeadingAnchor.constant += self.viewWidth
-//            self.stackViewTopAnchor.constant -= self.viewHeight
-//            self.view.layoutIfNeeded()
-//        }
-        
-        UIView.animate(withDuration: 1, animations: {
+        UIView.animate(withDuration: 0.8, animations: {
             self.startButtonCenterXAnchor.constant += self.viewWidth
             self.collectionViewLeadingAnchor.constant += self.viewWidth
-            self.characterMessageBodyLeadingAnchor.constant -= self.viewWidth
-            self.characterMssageHeaderTrailingAnchor.constant -= self.viewWidth
+            self.characterMessageBody.alpha = 0
+            self.characterMessageHeader.alpha = 0
+            self.settingsButton.alpha = 0
+            self.leaderBoardButton.alpha = 0
             self.view.layoutIfNeeded()
+            
         }) { _ in
-            self.stackViewTopAnchor.constant -= 260
-            self.view.layoutIfNeeded()
+            
+            UIView.animate(withDuration: 0.8, delay: 0, options: [.curveEaseOut], animations: {
+                self.characterMessageBody.text = "Focus on your work for the next 30 minutes and I’ll notify you when it’s time for a short break."
+                self.characterMessageHeader.text = "How will I make sure you’re productive?"
+                self.characterMessageBody.alpha = 1
+                self.characterMessageHeader.alpha = 1
+                self.stackViewTopAnchor.constant -= 260
+                self.view.layoutIfNeeded()
+            }, completion: nil)
+            
         }
-
     }
     
     func setupCollectionViewLayout() {
@@ -277,7 +279,7 @@ extension SetSessionViewController {
         popsWindowView.addSubview(popsIcon)
         popsIcon.translatesAutoresizingMaskIntoConstraints = false
         popsIcon.backgroundColor = UIColor.clear
-        
+
         popsBottomAnchorConstraint = popsIcon.bottomAnchor.constraint(equalTo: popsWindowView.bottomAnchor, constant: 100)
         popsBottomAnchorConstraint.isActive = true
         popsIcon.centerXAnchor.constraint(equalTo: popsWindowView.centerXAnchor, constant: 0).isActive = true
@@ -364,6 +366,7 @@ extension SetSessionViewController {
         disallowNotificationsButton.layer.masksToBounds = true
         disallowNotificationsButton.setTitle("mute pops", for: .normal)
         disallowNotificationsButton.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 14.0)
+
         
         let buttons = [allowNotificationsButton, disallowNotificationsButton]
         
