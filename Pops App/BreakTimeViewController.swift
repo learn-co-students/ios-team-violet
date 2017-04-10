@@ -230,6 +230,8 @@ class BreakTimeViewController: UIViewController {
         settingsButton.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 21.0).isActive = true
         settingsButton.heightAnchor.constraint(equalToConstant: 21.0).isActive = true
         settingsButton.widthAnchor.constraint(equalToConstant: 21.0).isActive = true
+        
+        settingsButton.addTarget(self, action: #selector(presentSettingsVC), for: .touchUpInside)
     }
     
     func setupLeaderBoardButton() {
@@ -250,6 +252,12 @@ class BreakTimeViewController: UIViewController {
             self.view.layoutIfNeeded()
         }
     }
+    
+    func presentSettingsVC() {
+        let settingsVC= SettingsViewController()
+        present(settingsVC, animated: true, completion: nil)
+    }
+    
 
 
 
