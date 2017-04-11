@@ -42,12 +42,17 @@ class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate {
         setupHeaderView()
         setupSettingsButton()
         setupLeaderBoardButton()
-        viewModel.startTimer()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        viewModel.delegate = self
+        if viewModel.breakIsOn == false {
+            viewModel.startTimer()
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        viewModel.delegate = self
         animateCoachPopup()
     }
     
@@ -59,8 +64,11 @@ class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate {
         UIView.animate(withDuration: 0.7, animations: {
         self.coachBottomAnchorConstraint.constant = 100
         self.view.layoutIfNeeded()
-    }) {_ in self.dismiss(animated: true, completion: nil)
-        self.delegate?.instantiateBreakEntertainmentVC()
+    }) {_ in
+        let breakEntertainmentVC = BreakEntertainmentViewController()
+        breakEntertainmentVC.breakView = self.viewModel.dataStore.user.currentCoach.breakView
+        self.viewModel.delegate = breakEntertainmentVC
+        self.present(breakEntertainmentVC, animated: true, completion: nil)
         }
     }
     
@@ -68,8 +76,8 @@ class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate {
         UIView.animate(withDuration: 0.7, animations: {
             self.coachBottomAnchorConstraint.constant = 100
             self.view.layoutIfNeeded()
-        }) { _ in self.dismiss(animated: true, completion: nil)
-            self.delegate?.instantiateProductiveTimeVC()
+        }) { _ in
+            self.present(ProductiveTimeViewController(), animated: true, completion: nil)
         }
     }
     
@@ -78,7 +86,7 @@ class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate {
             self.coachBottomAnchorConstraint.constant = 100
             self.view.layoutIfNeeded()
         }) { _ in self.dismiss(animated: true, completion: nil)
-            self.delegate?.instantiateSessionEndedVC()
+            self.present(SessionEndedViewController(), animated: true, completion: nil)
         }
     }
     

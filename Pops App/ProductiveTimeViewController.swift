@@ -30,9 +30,7 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
     let characterMessageBody = UILabel()
     let lockIconImageView = UIImageView()
     let lockLabel = UILabel()
-    
-    weak var delegate: InstantiateViewControllerDelegate?
-    
+        
     var progress = 0.0 {
         didSet {
             self.progressBarWidthAnchor.constant = CGFloat(self.view.frame.width * CGFloat(self.progress) )
@@ -67,11 +65,6 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
             viewModel.defaults.set(true, forKey: "sessionActive")
         }
     }
-
-    func dismissView() {
-        self.dismiss(animated: true, completion: nil)
-    }
-
 }
 
 extension ProductiveTimeViewController {
@@ -217,7 +210,6 @@ extension ProductiveTimeViewController {
             self.coachBottomAnchorConstraint.constant = 100
             self.view.layoutIfNeeded()
         }) { _ in self.dismiss(animated: true, completion: nil)
-            self.dismissView()
         }
     }
     
@@ -225,8 +217,7 @@ extension ProductiveTimeViewController {
         UIView.animate(withDuration: 0.7, animations: {
             self.coachBottomAnchorConstraint.constant = 100
             self.view.layoutIfNeeded()
-        }) { _ in self.dismiss(animated: true, completion: nil)
-            self.delegate?.instantiateBreakTimeVC()
+        }) { _ in self.present(BreakTimeViewController(), animated: true, completion: nil)
         }
     }
     
@@ -238,8 +229,7 @@ extension ProductiveTimeViewController {
         UIView.animate(withDuration: 0.7, animations: {
             self.coachBottomAnchorConstraint.constant = 100
             self.view.layoutIfNeeded()
-        }) { _ in self.dismiss(animated: true, completion: nil)
-            self.delegate?.instantiateBreakTimeVC()
+        }) { _ in self.present(BreakTimeViewController(), animated: true, completion: nil)
         }
     }
     

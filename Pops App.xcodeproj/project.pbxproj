@@ -32,7 +32,6 @@
 		1FBEEC6A1E952F760099F413 /* BreakTimeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FBEEC691E952F760099F413 /* BreakTimeViewModel.swift */; };
 		1FBEEC7B1E9564330099F413 /* YouTubeiOSPlayerHelper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FBEEC7A1E9564330099F413 /* YouTubeiOSPlayerHelper.framework */; };
 		1FBEEC7D1E9588130099F413 /* BreakEntertainmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FBEEC7C1E9588130099F413 /* BreakEntertainmentViewController.swift */; };
-		1FBEEC7F1E9588B00099F413 /* BreakEntertainmentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FBEEC7E1E9588B00099F413 /* BreakEntertainmentViewModel.swift */; };
 		1FBEEC811E9591250099F413 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FBEEC801E9591250099F413 /* User.swift */; };
 		1FBEEC831E9692370099F413 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FBEEC821E9692370099F413 /* Session.swift */; };
 		984727FA1E97CC27006BD638 /* CoachTransitionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 984727F91E97CC27006BD638 /* CoachTransitionView.swift */; };
@@ -71,7 +70,6 @@
 		1FBEEC691E952F760099F413 /* BreakTimeViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BreakTimeViewModel.swift; sourceTree = "<group>"; };
 		1FBEEC7A1E9564330099F413 /* YouTubeiOSPlayerHelper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = YouTubeiOSPlayerHelper.framework; path = Carthage/Build/iOS/YouTubeiOSPlayerHelper.framework; sourceTree = "<group>"; };
 		1FBEEC7C1E9588130099F413 /* BreakEntertainmentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BreakEntertainmentViewController.swift; sourceTree = "<group>"; };
-		1FBEEC7E1E9588B00099F413 /* BreakEntertainmentViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BreakEntertainmentViewModel.swift; sourceTree = "<group>"; };
 		1FBEEC801E9591250099F413 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		1FBEEC821E9692370099F413 /* Session.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		984727F91E97CC27006BD638 /* CoachTransitionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoachTransitionView.swift; sourceTree = "<group>"; };
@@ -106,7 +104,6 @@
 				1F7C448F1E940AA70067ECCF /* ScoreboardViewModel.swift */,
 				1F7C44911E940AB90067ECCF /* ProductiveTimeViewModel.swift */,
 				1FBEEC691E952F760099F413 /* BreakTimeViewModel.swift */,
-				1FBEEC7E1E9588B00099F413 /* BreakEntertainmentViewModel.swift */,
 				1F7C44A81E9439420067ECCF /* SessionEndedViewModel.swift */,
 				1F7C44951E940AE20067ECCF /* Break View Models */,
 			);
@@ -313,7 +310,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1FBEEC7F1E9588B00099F413 /* BreakEntertainmentViewModel.swift in Sources */,
 				1F7C44921E940AB90067ECCF /* ProductiveTimeViewModel.swift in Sources */,
 				984727FA1E97CC27006BD638 /* CoachTransitionView.swift in Sources */,
 				1F7C44881E9409A90067ECCF /* BabaBreakView.swift in Sources */,

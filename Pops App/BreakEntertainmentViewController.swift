@@ -1,7 +1,7 @@
 
 import UIKit
 
-class BreakEntertainmentViewController: UIViewController {
+class BreakEntertainmentViewController: UIViewController, BreakTimeViewModelDelegate {
 
     weak var delegate: InstantiateViewControllerDelegate!
 
@@ -34,9 +34,16 @@ class BreakEntertainmentViewController: UIViewController {
         backButton.widthAnchor.constraint(equalToConstant: 21.0).isActive = true
     }
     
+    func moveToProductivity() {
+        self.present(ProductiveTimeViewController(), animated: true, completion: nil)
+    }
+    
+    func moveToSessionEnded() {
+        self.present(SessionEndedViewController(), animated: true, completion: nil)
+    }
+    
     func dismissCoachBreakView() {
         self.dismiss(animated: true, completion: nil)
-        delegate?.instantiateBreakTimeVC()
     }
     
 }

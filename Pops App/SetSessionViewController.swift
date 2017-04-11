@@ -344,7 +344,6 @@ extension SetSessionViewController {
 
         }) { _ in
             let productiveTimeVC = ProductiveTimeViewController()
-            productiveTimeVC.delegate = self
             self.present(productiveTimeVC, animated: true, completion: nil )
         }
 
@@ -424,32 +423,3 @@ extension SetSessionViewController {
     }
 
 }
-
-extension SetSessionViewController: InstantiateViewControllerDelegate {
-    
-    func instantiateBreakTimeVC() {
-        let breakTimeVC = BreakTimeViewController()
-        breakTimeVC.delegate = self
-        present(breakTimeVC, animated: true, completion: nil)
-    }
-    
-    func instantiateProductiveTimeVC() {
-        let productiveTimeVC = ProductiveTimeViewController()
-        productiveTimeVC.delegate = self
-        present(productiveTimeVC, animated: true, completion: nil)
-    }
-    
-    func instantiateSessionEndedVC() {
-        let sessionEndedVC = SessionEndedViewController()
-        present(sessionEndedVC, animated: true, completion: nil)
-    }
-    
-    func instantiateBreakEntertainmentVC() {
-        let breakEntertainmentVC = BreakEntertainmentViewController()
-        breakEntertainmentVC.breakView = viewModel.dataStore.user.currentCoach.breakView
-        breakEntertainmentVC.delegate = self
-        present(breakEntertainmentVC, animated: true, completion: nil)
-    }
-}
-
-

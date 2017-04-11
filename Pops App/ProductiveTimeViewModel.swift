@@ -20,7 +20,7 @@ final class ProductiveTimeViewModel {
 
     //timers and counters
     var productivityTimer: Timer
-    var productivityTimerCounter: Int {
+    var productivityTimerCounter: Int = 0 {
         didSet {
             delegate.productiveTimeLabel.text = formatTime(time: Int(productivityTimerCounter))
         }
@@ -36,7 +36,6 @@ final class ProductiveTimeViewModel {
         self.delegate = vc
         self.productivityTimer = dataStore.user.currentSession?.productivityTimer ?? Timer()
         self.props = dataStore.user.totalProps
-        self.productivityTimerCounter = dataStore.user.currentCoach.difficulty.baseProductivityLength
     }
         
     var progressBarCounter = 0.0 {
@@ -46,6 +45,8 @@ final class ProductiveTimeViewModel {
     }
     
     func startTimer() {
+        self.productivityTimerCounter = dataStore.user.currentCoach.difficulty.baseProductivityLength
+
         productivityTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { (timer) in
            self.productivityTimerAction()
         })

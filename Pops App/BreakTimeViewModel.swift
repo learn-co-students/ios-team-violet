@@ -13,16 +13,18 @@ final class BreakTimeViewModel {
     weak var delegate: BreakTimeViewModelDelegate!
     
     var breakTimer: Timer
-    var breakTimerCounter: Int
+    var breakTimerCounter: Int = 0
+    var breakIsOn: Bool = false
         
     init(vc: BreakTimeViewModelDelegate){
         self.delegate = vc
         self.breakTimer = dataStore.user.currentSession?.productivityTimer ?? Timer()
-        self.breakTimerCounter = 10
-            //dataStore.user.currentCoach.difficulty.baseBreakLength
-    }
+            }
     
     func startTimer() {
+        self.breakTimerCounter = dataStore.user.currentCoach.difficulty.baseBreakLength
+
+        breakIsOn = true
         breakTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { (timer) in
             self.breakTimerAction()
         })
@@ -32,7 +34,8 @@ final class BreakTimeViewModel {
         print("break timer: \(breakTimerCounter)")
         breakTimerCounter -= 1
       
-        if breakTimerCounter == 0 {
+        if breakTimerCounter <= 0 {
+            breakIsOn = false
             breakTimer.invalidate()
             delegate.moveToProductivity()
         }
