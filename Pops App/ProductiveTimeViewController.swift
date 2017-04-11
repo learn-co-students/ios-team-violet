@@ -65,6 +65,10 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
             viewModel.defaults.set(true, forKey: "sessionActive")
         }
     }
+ 
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
 }
 
 extension ProductiveTimeViewController {

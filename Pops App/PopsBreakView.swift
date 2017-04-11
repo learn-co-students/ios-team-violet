@@ -22,12 +22,11 @@ class PopsBreakView: UIView {
         super.init(frame: UIScreen.main.bounds)
         self.backgroundColor = .white
         setUpYouTubePlayerView()
-        setUpLineDividerView()
         setUpHeader()
-        setUpBody()
-        setUpNextButton()
-        setUpDislikeButton()
+        setUpLineDividerView()
         setUpLikeButton()
+        setUpDislikeButton()
+        setUpNextButton()
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -52,19 +51,6 @@ class PopsBreakView: UIView {
         self.addSubview(self.player)
     }
     
-    func setUpLineDividerView() {
-        lineDividerView.backgroundColor = Palette.lightGrey.color
-        lineDividerView.layer.cornerRadius = 2.0
-        lineDividerView.layer.masksToBounds = true
-        
-        self.addSubview(lineDividerView)
-        lineDividerView.translatesAutoresizingMaskIntoConstraints = false
-        lineDividerView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        lineDividerView.topAnchor.constraint(equalTo: player.bottomAnchor, constant: 20).isActive = true
-        lineDividerView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 269/viewWidth).isActive = true
-        lineDividerView.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 3/viewHeight).isActive = true
-    }
-   
     func setUpHeader(){
         header.numberOfLines = 0
         header.textColor = UIColor.black
@@ -73,29 +59,67 @@ class PopsBreakView: UIView {
         
         self.addSubview(header)
         header.translatesAutoresizingMaskIntoConstraints = false
-        header.topAnchor.constraint(equalTo: lineDividerView.bottomAnchor, constant: 20).isActive = true
-        header.leadingAnchor.constraint(equalTo: lineDividerView.leadingAnchor).isActive = true
-        header.trailingAnchor.constraint(equalTo: lineDividerView.trailingAnchor).isActive = true
-    }
-
-    func setUpBody(){
-        body.numberOfLines = 5
-        body.textColor = Palette.grey.color
-        body.textAlignment = .left
-        body.font = UIFont(name: "Avenir-Heavy", size: 14.0)
-        
-        self.addSubview(body)
-        body.translatesAutoresizingMaskIntoConstraints = false
-        body.topAnchor.constraint(equalTo: header.bottomAnchor, constant: 20).isActive = true
-        body.leadingAnchor.constraint(equalTo: lineDividerView.leadingAnchor).isActive = true
-        body.trailingAnchor.constraint(equalTo: lineDividerView.trailingAnchor).isActive = true
+        header.topAnchor.constraint(equalTo: player.bottomAnchor, constant: viewHeight * (92/667)).isActive = true
+        header.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: viewWidth * (53/375)).isActive = true
+        header.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -viewWidth * (53/375)).isActive = true
     }
     
+    func setUpLineDividerView() {
+        lineDividerView.backgroundColor = Palette.lightGrey.color
+        lineDividerView.layer.cornerRadius = 2.0
+        lineDividerView.layer.masksToBounds = true
+        
+        self.addSubview(lineDividerView)
+        lineDividerView.translatesAutoresizingMaskIntoConstraints = false
+        lineDividerView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        lineDividerView.topAnchor.constraint(equalTo: header.bottomAnchor, constant: viewHeight * (30/667)).isActive = true
+        lineDividerView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 269/viewWidth).isActive = true
+        lineDividerView.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 3/viewHeight).isActive = true
+    }
+   
+    func setUpLikeButton() {
+        likeButton.backgroundColor = Palette.lightBlue.color
+        likeButton.alpha = 1
+        likeButton.isEnabled = true
+        likeButton.layer.cornerRadius = 2.0
+        likeButton.layer.masksToBounds = true
+        likeButton.setTitle("love this", for: .normal)
+        likeButton.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 14.0)
+        likeButton.addTarget(self, action: #selector(likeButtonTapped), for: .touchUpInside)
+        
+        self.addSubview(likeButton)
+        likeButton.translatesAutoresizingMaskIntoConstraints = false
+        likeButton.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        likeButton.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 269/viewWidth).isActive = true
+        likeButton.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 45/viewHeight).isActive = true
+        likeButton.topAnchor.constraint(equalTo: lineDividerView.bottomAnchor, constant: viewHeight * (33/viewHeight)).isActive = true
+    }
+    
+    func setUpDislikeButton() {
+        dislikeButton.backgroundColor = Palette.lightGrey.color
+        dislikeButton.setTitleColor(.black, for: .normal)
+        dislikeButton.alpha = 1
+        dislikeButton.isEnabled = true
+        dislikeButton.layer.cornerRadius = 2.0
+        dislikeButton.layer.masksToBounds = true
+        dislikeButton.setTitle("this sucks", for: .normal)
+        dislikeButton.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 14.0)
+        dislikeButton.setTitleColor(Palette.darkText.color, for: .normal)
+        dislikeButton.addTarget(self, action: #selector(dislikeButtonTapped), for: .touchUpInside)
+        
+        self.addSubview(dislikeButton)
+        dislikeButton.translatesAutoresizingMaskIntoConstraints = false
+        dislikeButton.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        dislikeButton.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 269/viewWidth).isActive = true
+        dislikeButton.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 45/667).isActive = true
+        dislikeButton.topAnchor.constraint(equalTo: likeButton.bottomAnchor, constant: viewHeight * (15/667)).isActive = true
+    }
+
     func setUpNextButton() {
         nextButton.backgroundColor = Palette.aqua.color
         nextButton.alpha = 1
         nextButton.isEnabled = true
-        nextButton.setTitle("Next", for: .normal)
+        nextButton.setTitle("Next Video", for: .normal)
         nextButton.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 14.0)
         nextButton.addTarget(self, action: #selector(nextButtonTapped), for: .touchUpInside)
         
@@ -107,55 +131,20 @@ class PopsBreakView: UIView {
         nextButton.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
     }
     
-    func setUpDislikeButton() {
-        dislikeButton.backgroundColor = Palette.lightGrey.color
-        dislikeButton.setTitleColor(.black, for: .normal)
-        dislikeButton.alpha = 1
-        dislikeButton.isEnabled = true
-        dislikeButton.layer.cornerRadius = 2.0
-        dislikeButton.layer.masksToBounds = true
-        dislikeButton.setTitle("don't show this again", for: .normal)
-        dislikeButton.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 14.0)
-        dislikeButton.layer.borderColor = UIColor.black.cgColor
-        dislikeButton.addTarget(self, action: #selector(dislikeButtonTapped), for: .touchUpInside)
-        
-        self.addSubview(dislikeButton)
-        dislikeButton.translatesAutoresizingMaskIntoConstraints = false
-        dislikeButton.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        dislikeButton.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 269/viewWidth).isActive = true
-        dislikeButton.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 45/viewHeight).isActive = true
-        dislikeButton.bottomAnchor.constraint(equalTo: nextButton.topAnchor, constant: -20).isActive = true
-    }
     
-    func setUpLikeButton() {
-        likeButton.backgroundColor = Palette.lightBlue.color
-        likeButton.alpha = 1
-        likeButton.isEnabled = true
-        likeButton.layer.cornerRadius = 2.0
-        likeButton.layer.masksToBounds = true
-        likeButton.setTitle("add to faves", for: .normal)
-        likeButton.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 14.0)
-        likeButton.layer.borderColor = UIColor.black.cgColor
-        likeButton.addTarget(self, action: #selector(likeButtonTapped), for: .touchUpInside)
-        
-        self.addSubview(likeButton)
-        likeButton.translatesAutoresizingMaskIntoConstraints = false
-        likeButton.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        likeButton.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 269/viewWidth).isActive = true
-        likeButton.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 45/viewHeight).isActive = true
-        likeButton.bottomAnchor.constraint(equalTo: dislikeButton.topAnchor, constant: -8).isActive = true
-    }
-
     func likeButtonTapped() {
+        
         UIView.animate(withDuration: 0.1) {
-            self.dislikeButton.layer.borderWidth = 0
-            self.likeButton.layer.borderWidth = 1
+            self.likeButton.backgroundColor = Palette.navy.color
         }
         
         viewModel.userLikedVideo()
     }
     
     func dislikeButtonTapped() {
+        UIView.animate(withDuration: 0.1) {
+            self.dislikeButton.backgroundColor = Palette.grey.color
+        }
         viewModel.userDislikedVideo()
         nextButtonTapped()
     }
@@ -166,8 +155,8 @@ class PopsBreakView: UIView {
         self.player.load(withVideoId: newVideo.id)
         
         UIView.animate(withDuration: 0.2) {
-            self.likeButton.layer.borderWidth = 0
-            self.dislikeButton.layer.borderWidth = 0
+            self.likeButton.backgroundColor = Palette.lightBlue.color
+            self.dislikeButton.backgroundColor = Palette.lightGrey.color
             self.header.alpha = 0
             self.body.alpha = 0
         }
