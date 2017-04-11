@@ -10,15 +10,14 @@ class SettingsViewController: UIViewController {
 
     let viewModel = SettingsViewModel()
     
-    //let stackView = UIStackView()
+    //view properties
     let endBreakView = UIView()
     let endBreakViewLabelLeft = UILabel()
     let endBreakViewLabelRight = UILabel()
     let endSessionView = UIView()
     let endSessionLabelLeft = UILabel()
     let endSessionLabelRight = UILabel()
-    let containerViewOne = UIView()
-    let containerViewTwo = UIView()
+
     let settingsOne = SettingsObj(icon: #imageLiteral(resourceName: "IC_ContactUs"), text: "contact us")
     let settingsTwo = SettingsObj(icon: #imageLiteral(resourceName: "IC_SharePops"), text: "share pops")
     let divider1 = UIView()
@@ -30,11 +29,9 @@ class SettingsViewController: UIViewController {
     let propsLabel = UILabel()
     let totalHoursLabel = UILabel()
     let hoursProductiveLabel = UILabel()
-    let dismissIcon = UIImageView()
+    let dismissIcon = UIButton()
     let progressBar = UIView()
     var progressBarWidth = NSLayoutConstraint()
-    
-    
     var stackView = UIStackView()
     
     override func viewDidLoad() {
@@ -48,6 +45,19 @@ class SettingsViewController: UIViewController {
         setupEndBreakView()
         
     }
+
+    func dismissCurrentView() {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
+}
+
+//view setups
+extension SettingsViewController {
+    
     
     func setupProgressBar() {
         view.addSubview(progressBar)
@@ -58,18 +68,17 @@ class SettingsViewController: UIViewController {
         progressBar.heightAnchor.constraint(greaterThanOrEqualToConstant: 4).isActive = true
         progressBarWidth = progressBar.widthAnchor.constraint(equalToConstant: 10)
         progressBarWidth.isActive = true
-        
     }
     
     func setupDismissIcon() {
         view.addSubview(dismissIcon)
         dismissIcon.translatesAutoresizingMaskIntoConstraints = false
-        dismissIcon.image = #imageLiteral(resourceName: "IC_SharePops")
+        dismissIcon.setBackgroundImage(#imageLiteral(resourceName: "IC_SharePops"), for: .normal)
         dismissIcon.topAnchor.constraint(equalTo: view.topAnchor, constant: 20).isActive = true
         dismissIcon.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
         dismissIcon.widthAnchor.constraint(equalToConstant: 25).isActive = true
         dismissIcon.heightAnchor.constraint(equalToConstant: 25).isActive = true
-        
+        dismissIcon.addTarget(self, action: #selector(dismissCurrentView), for: .touchUpInside)
     }
     
     func setupPropsHoursView() {
@@ -96,7 +105,6 @@ class SettingsViewController: UIViewController {
         propsLabel.widthAnchor.constraint(equalTo: totalPropsLabel.widthAnchor, constant: 0).isActive = true
         propsLabel.leadingAnchor.constraint(equalTo: propsHoursView.leadingAnchor, constant: 0).isActive = true
         
-        
         totalHoursLabel.text = "200"
         totalHoursLabel.font = UIFont(name: "Avenir-Heavy", size: 17)
         totalHoursLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -113,9 +121,6 @@ class SettingsViewController: UIViewController {
         hoursProductiveLabel.leadingAnchor.constraint(equalTo: totalHoursLabel.leadingAnchor, constant: 0).isActive = true
         hoursProductiveLabel.heightAnchor.constraint(equalTo: propsLabel.heightAnchor, constant: 0).isActive = true
         hoursProductiveLabel.widthAnchor.constraint(greaterThanOrEqualToConstant: 150).isActive = true
-        
-        
-        
     }
     
     func setupStackView() {
@@ -223,83 +228,5 @@ class SettingsViewController: UIViewController {
         endBreakViewLabelRight.heightAnchor.constraint(equalToConstant: 17).isActive = true
         endBreakViewLabelRight.widthAnchor.constraint(equalTo: endBreakView.widthAnchor, multiplier: 0.4).isActive = true
         endBreakViewLabelRight.centerYAnchor.constraint(equalTo: endBreakView.centerYAnchor, constant: 0).isActive = true
-
-        
     }
 }
-
-class CustomSettingsView: UIView {
-
-    let iconImgView = UIImageView()
-    let textLabel = UILabel()
-    let arrowImgView = UIImageView()
-    var settings: SettingsObj! {
-        didSet {
-            setupView()
-        }
-    }
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-    
-    init(settings: SettingsObj) {
-        self.settings = settings
-        super.init(frame: CGRect.zero)
-        setupView()
-    }
-    
-    func setupView() {
-        iconImgView.image = settings.icon
-        textLabel.text = settings.text
-        setupTextLabel()
-        setupIcon()
-        setupArrowIcon()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    func setupTextLabel() {
-        self.addSubview(textLabel)
-        textLabel.translatesAutoresizingMaskIntoConstraints = false
-        textLabel.font = UIFont(name: "Avenir-Heavy", size: 13)
-        textLabel.textAlignment = .left
-        
-        textLabel.heightAnchor.constraint(equalToConstant: 15).isActive = true
-        textLabel.widthAnchor.constraint(greaterThanOrEqualToConstant: 50).isActive = true
-        textLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 35).isActive = true
-        textLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: 0).isActive = true
-        
-        
-    }
-    
-    func setupIcon() {
-        self.addSubview(iconImgView)
-        iconImgView.translatesAutoresizingMaskIntoConstraints = false
-        iconImgView.contentMode = .scaleAspectFit
-        
-        iconImgView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10).isActive = true
-        iconImgView.heightAnchor.constraint(equalTo: textLabel.heightAnchor, constant: 0).isActive = true
-        iconImgView.widthAnchor.constraint(equalTo: iconImgView.heightAnchor, constant: 0).isActive = true
-        iconImgView.centerYAnchor.constraint(equalTo: textLabel.centerYAnchor, constant: 0).isActive = true
-        
-    }
-    
-    func setupArrowIcon() {
-        self.addSubview(arrowImgView)
-        arrowImgView.translatesAutoresizingMaskIntoConstraints = false
-        arrowImgView.contentMode = .scaleAspectFit
-        arrowImgView.image = #imageLiteral(resourceName: "IC_ContactUs")
-        
-        arrowImgView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10).isActive = true
-        arrowImgView.heightAnchor.constraint(equalToConstant: 15).isActive = true
-        arrowImgView.widthAnchor.constraint(equalTo: arrowImgView.heightAnchor, multiplier: 1).isActive = true
-        arrowImgView.centerYAnchor.constraint(equalTo: textLabel.centerYAnchor).isActive = true
-    }
-
-    
-    
-}
-

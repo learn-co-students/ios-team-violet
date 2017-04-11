@@ -1,15 +1,14 @@
 
 import UIKit
 
-class BreakEntertainmentViewController: UIViewController {
+class BreakEntertainmentViewController: UIViewController, BreakTimeViewModelDelegate {
 
-    let viewModel = BreakEntertainmentViewModel()
+
     var breakView = UIView()
     var backButton = UIButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        breakView = viewModel.dataStore.user.currentCoach.breakView
         
         self.view.addSubview(breakView)
         breakView.center = self.view.center
@@ -34,8 +33,15 @@ class BreakEntertainmentViewController: UIViewController {
         backButton.widthAnchor.constraint(equalToConstant: 21.0).isActive = true
     }
     
+    func moveToProductivity() {
+        self.present(ProductiveTimeViewController(), animated: true, completion: nil)
+    }
+    
+    func moveToSessionEnded() {
+        self.present(SessionEndedViewController(), animated: true, completion: nil)
+    }
+    
     func dismissCoachBreakView() {
         self.dismiss(animated: true, completion: nil)
     }
-    
 }

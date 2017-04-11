@@ -33,29 +33,34 @@ class SetSessionViewController: UIViewController {
     //Needed to animate pops
     var coachBottomAnchorConstraint: NSLayoutConstraint!
     
-    //Transition View Properties
-    let coachImageView = UIImageView()
-    let coachTransitionView = CoachTransitionView()
-    
-    //First Animation
+    //First Onboarding Animation
     var collectionViewLeadingAnchor: NSLayoutConstraint!
     var startButtonCenterXAnchor: NSLayoutConstraint!
     var allowNotificationButtonsStackViewTopAnchor: NSLayoutConstraint!
     
-    //Second Animation
+    //Second Onboarding Animation
     var allowNotificationButtonsStackViewXAnchor: NSLayoutConstraint!
     var readyButtonsStackViewTopAnchor: NSLayoutConstraint!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if viewModel.defaults.value(forKey: "returningUser") == nil {
+        if viewModel.dataStore.defaults.value(forKey: "returningUser") == nil {
             settingsButton.alpha = 0
         }
         
+        //no leaderboard yet
         leaderBoardButton.alpha = 0
         
         view.backgroundColor = UIColor.white
+        
+        
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
         setupStartButton()
         setupCollectionViewLayout()
         setupCollectionView()
@@ -68,35 +73,39 @@ class SetSessionViewController: UIViewController {
         setupSettingsButton()
         setupLeaderBoardButton()
         
-        setupAllowNotificationButtons()
-        setupReadyButtons()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+        if viewModel.dataStore.defaults.value(forKey: "returningUser") == nil {
+            setupAllowNotificationButtons()
+            setupReadyButtons()
+        }
+
         animateCoachPopup()
-        view.insertSubview(coachTransitionView, aboveSubview: self.view)
-        let sessionActive: Bool = viewModel.defaults.value(forKey: "sessionActive") as? Bool ?? false
-        coachTransitionView.isHidden = !sessionActive
+
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-       
+    func startButtonTapped() {
+        viewModel.dataStore.defaults.set(true, forKey: "returningUser")
+        presentProductiveTimeVC()
+        if let indexPath = selectHourCollectionView.indexPathsForSelectedItems?[0] {
+            viewModel.startSessionOfLength((indexPath.row) + 1)
+        }
+    }
+    
+    func presentProductiveTimeVC() {
+        self.view.layoutIfNeeded()
+        UIView.animate(withDuration: 0.7, animations: {
+            self.coachBottomAnchorConstraint.constant = 100
+            self.view.layoutIfNeeded()
+            
+        }) { _ in
+            let productiveTimeVC = ProductiveTimeViewController()
+            self.present(productiveTimeVC, animated: true, completion: nil )
+        }
+        
     }
     
     override var prefersStatusBarHidden: Bool {
         return true
     }
-    
-    func presentProductiveTimeVC() {
-        viewModel.defaults.set(true, forKey: "returningUser")
-        animateCoachDown()
-        if let indexPath = selectHourCollectionView.indexPathsForSelectedItems?[0] {
-            viewModel.startSessionOfLength((indexPath.row) + 1)
-        }
-    }
-
     
 }
 
@@ -124,47 +133,28 @@ extension SetSessionViewController: UICollectionViewDataSource, UICollectionView
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         let currentCell = cell as! HourCollectionViewCell
-        currentCell.backgroundColor = Palette.lightBlue.color
-        currentCell.timeTwo = viewModel.timesForCollectionView[indexPath.row]
+        currentCell.time = viewModel.timesForCollectionView[indexPath.row]
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         let cell = collectionView.cellForItem(at: indexPath) as! HourCollectionViewCell
         
-        //guard !cell.timeIsSelected else { return }
+        guard !cell.timeIsSelected else { return }
         
-        collViewIndexPath = collectionView.indexPathsForSelectedItems?[0]
+        selectedTime?.isSelected = false
+        let visibleCells = collectionView.visibleCells as! [HourCollectionViewCell]
+        visibleCells.forEach { $0.deselectCell() }
+
+        selectedTime = cell.time
         
-        if let collIndexPath = collViewIndexPath {
-            
-            let deselectedCell = collectionView.cellForItem(at: collIndexPath)
-            
-            deselectedCell?.backgroundColor = Palette.lightBlue.color
-            
-        }
-        
-        cell.backgroundColor = Palette.navy.color
-        
-        self.startButton.alpha = 1.0
-        
-//        selectedTime?.isSelected = false
-//        
-//        let visibleCells = collectionView.visibleCells as! [HourCollectionViewCell]
-//     
-//        visibleCells.forEach { $0.resetBackground() }
-//
-//        selectedTime = cell.time
-//        
-//        cell.timeIsSelected = true
-//        
-//        UIView.animate(withDuration: 0.3, animations: {
-//            self.startButton.alpha = cell.timeIsSelected ? 1.0 : 0.3
-//            self.startButton.isEnabled = cell.timeIsSelected ? true : false
-//        })
-        
+        cell.timeIsSelected = !cell.timeIsSelected
+        UIView.animate(withDuration: 0.3, animations: {
+            self.startButton.alpha = cell.timeIsSelected ? 1.0 : 0.3
+            self.startButton.isEnabled = cell.timeIsSelected ? true : false
+        })
+
     }
-    
 }
 
 //View Setups
@@ -174,18 +164,18 @@ extension SetSessionViewController {
         startButton.backgroundColor = Palette.aqua.color
        
         startButton.alpha = 0.3
-        
         startButton.isEnabled = false
+        
         startButton.layer.cornerRadius = 2.0
         startButton.layer.masksToBounds = true
         startButton.setTitle("start", for: .normal)
         startButton.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 14.0)
         
 
-        if viewModel.defaults.value(forKey: "returningUser") == nil {
+        if viewModel.dataStore.defaults.value(forKey: "returningUser") == nil {
             startButton.addTarget(self, action: #selector(animateAllowNotifications), for: .touchUpInside)
         } else {
-           startButton.addTarget(self, action: #selector(presentProductiveTimeVC), for: .touchUpInside)
+           startButton.addTarget(self, action: #selector(startButtonTapped), for: .touchUpInside)
         }
         
         view.addSubview(startButton)
@@ -197,95 +187,6 @@ extension SetSessionViewController {
         startButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: startButtonBottomConstraint()).isActive = true
     }
     
-    func animateAllowNotifications() {
-        self.view.layoutIfNeeded()
-        
-        UIView.animate(withDuration: 0.8, animations: {
-            self.startButtonCenterXAnchor.constant += self.viewWidth
-            self.collectionViewLeadingAnchor.constant += self.viewWidth
-            self.characterMessageBody.alpha = 0
-            self.characterMessageHeader.alpha = 0
-            self.settingsButton.alpha = 0
-            self.leaderBoardButton.alpha = 0
-            self.view.layoutIfNeeded()
-            
-        }) { _ in
-            
-            UIView.animate(withDuration: 0.6, delay: 0, options: [.curveEaseOut], animations: {
-                self.characterMessageBody.text = "It’s simple. You’ll focus on work that doesn’t require your phone for blocks of 25 minutes. In between each block, I’ll notify you to take a 5 minute break."
-                self.characterMessageHeader.text = "Wondering how this will work?"
-                self.characterMessageBody.alpha = 1
-                self.characterMessageHeader.alpha = 1
-                self.allowNotificationButtonsStackViewTopAnchor.constant -= self.stackViewContraint()
-                self.view.layoutIfNeeded()
-            }, completion: nil)
-            
-        }
-    }
-    
-    func screenHeight() -> CGFloat {
-        return UIScreen.main.bounds.height
-    }
-    
-    func screenWidth() -> CGFloat {
-        return UIScreen.main.bounds.width
-    }
-    
-    func animateReadyButtons() {
-        
-        UIView.animate(withDuration: 1, animations: {
-            self.allowNotificationButtonsStackViewXAnchor.constant += self.viewWidth
-            self.characterMessageBody.alpha = 0
-            self.characterMessageHeader.alpha = 0
-            self.view.layoutIfNeeded()
-            
-        }) { _ in
-            
-            UIView.animate(withDuration: 0.8, delay: 0, options: [.curveEaseOut], animations: {
-                self.characterMessageBody.text = "As long as you don’t touch your phone when you shouldn’t, I’ll give you props! Your goal is to collect as many of my props as possible."
-                self.characterMessageHeader.text = "Ready to be super productive?"
-                self.characterMessageBody.alpha = 1
-                self.characterMessageHeader.alpha = 1
-                self.readyButtonsStackViewTopAnchor.constant -= self.stackViewContraint()
-                self.view.layoutIfNeeded()
-            }, completion: nil)
-            
-        }
-
-    }
-    
-    func startButtonBottomConstraint() -> CGFloat {
-        switch(self.screenHeight()) {
-        case 568:
-            return -100
-        case 667:
-            return -149
-        default:
-            return -149
-        }
-    }
-    
-    func stackViewContraint() -> CGFloat {
-        switch(self.screenHeight()) {
-        case 568:
-            return 210
-        case 667:
-            return 260
-        default:
-            return 260
-        }
-    }
-    
-    func collectionViewLeftInset() -> CGFloat {
-        switch(self.screenHeight()) {
-        case 568:
-            return 26
-        case 667:
-            return 53
-        default:
-            return 72
-        }
-    }
     
     func setupCollectionViewLayout() {
         let leftInset = collectionViewLeftInset()
@@ -424,25 +325,11 @@ extension SetSessionViewController {
         }
     }
     
-    func animateCoachDown() {
-        self.view.layoutIfNeeded()
-        
-        UIView.animate(withDuration: 0.7, animations: {
-            self.coachBottomAnchorConstraint.constant = 100
-            self.view.layoutIfNeeded()
-
-        }) { _ in
-            let productiveTimeVC = ProductiveTimeViewController()
-            productiveTimeVC.delegate = self
-            self.present(productiveTimeVC, animated: true, completion: nil )
-        }
-
-    }
-    
 }
 
+//Onboarding Setups and Animations
 extension SetSessionViewController {
-   
+    
     func setupAllowNotificationButtons() {
         let allowNotificationsButton = UIButton()
         allowNotificationsButton.backgroundColor = Palette.aqua.color
@@ -459,7 +346,7 @@ extension SetSessionViewController {
         disallowNotificationsButton.setTitle("mute pops", for: .normal)
         disallowNotificationsButton.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 14.0)
         disallowNotificationsButton.setTitleColor(Palette.darkText.color, for: .normal)
-
+        
         let buttons = [allowNotificationsButton, disallowNotificationsButton]
         
         buttons.forEach {
@@ -490,7 +377,8 @@ extension SetSessionViewController {
         readyButton.layer.masksToBounds = true
         readyButton.setTitle("ready", for: .normal)
         readyButton.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 14.0)
-        readyButton.addTarget(self, action: #selector(presentProductiveTimeVC), for: .touchUpInside)
+        readyButton.addTarget(self, action: #selector(animateBackToSetSession), for: .touchUpInside)
+        readyButton.addTarget(self, action: #selector(startButtonTapped), for: .touchUpInside)
         
         let notReadyButton = UIButton()
         notReadyButton.backgroundColor = Palette.lightGrey.color
@@ -522,9 +410,35 @@ extension SetSessionViewController {
         readyButtonsStackViewTopAnchor.isActive = true
     }
     
+    func animateAllowNotifications() {
+        self.view.layoutIfNeeded()
+        
+        UIView.animate(withDuration: 0.8, animations: {
+            self.startButtonCenterXAnchor.constant += self.viewWidth
+            self.collectionViewLeadingAnchor.constant += self.viewWidth
+            self.characterMessageBody.alpha = 0
+            self.characterMessageHeader.alpha = 0
+            self.settingsButton.alpha = 0
+            self.leaderBoardButton.alpha = 0
+            self.view.layoutIfNeeded()
+            
+        }) { _ in
+            
+            UIView.animate(withDuration: 0.6, delay: 0, options: [.curveEaseOut], animations: {
+                self.characterMessageBody.text = "It’s simple. You’ll focus on work that doesn’t require your phone for blocks of 25 minutes. In between each block, I’ll notify you to take a 5 minute break."
+                self.characterMessageHeader.text = "Wondering how this will work?"
+                self.characterMessageBody.alpha = 1
+                self.characterMessageHeader.alpha = 1
+                self.allowNotificationButtonsStackViewTopAnchor.constant -= self.stackViewContraint()
+                self.view.layoutIfNeeded()
+            }, completion: nil)
+            
+        }
+    }
+   
     func animateBackToSetSession() {
         
-        viewModel.defaults.set(true, forKey: "returningUser")
+        viewModel.dataStore.defaults.set(true, forKey: "returningUser")
         
         UIView.animate(withDuration: 0.8, animations: {
             self.readyButtonsStackViewTopAnchor.constant += self.stackViewContraint()
@@ -543,34 +457,82 @@ extension SetSessionViewController {
                 self.setupStartButton()
                 self.setupCollectionViewLayout()
                 self.setupCollectionView()
-                //self.startButtonCenterXAnchor.constant -= self.viewWidth
-                //self.collectionViewLeadingAnchor.constant -= self.viewWidth
                 self.view.layoutIfNeeded()
             }, completion: nil)
             
         }
 
     }
+    
+    func animateReadyButtons() {
+        
+        UIView.animate(withDuration: 1, animations: {
+            self.allowNotificationButtonsStackViewXAnchor.constant += self.viewWidth
+            self.characterMessageBody.alpha = 0
+            self.characterMessageHeader.alpha = 0
+            self.view.layoutIfNeeded()
+            
+        }) { _ in
+            
+            UIView.animate(withDuration: 0.8, delay: 0, options: [.curveEaseOut], animations: {
+                self.characterMessageBody.text = "As long as you don’t touch your phone when you shouldn’t, I’ll give you props! Your goal is to collect as many of my props as possible."
+                self.characterMessageHeader.text = "Ready to be super productive?"
+                self.characterMessageBody.alpha = 1
+                self.characterMessageHeader.alpha = 1
+                self.readyButtonsStackViewTopAnchor.constant -= self.stackViewContraint()
+                self.view.layoutIfNeeded()
+            }, completion: nil)
+            
+        }
+        
+    }
+
 
 }
 
-extension SetSessionViewController: InstantiateViewControllerDelegate {
+//Device Specific Constraints
+extension SetSessionViewController {
     
-    func instantiateBreakTimeVC() {
-        let breakTimeVC = BreakTimeViewController()
-        breakTimeVC.delegate = self
-        present(breakTimeVC, animated: true, completion: nil)
+    func screenHeight() -> CGFloat {
+        return UIScreen.main.bounds.height
     }
     
-    func instantiateProductiveTimeVC() {
-        let productiveTimeVC = ProductiveTimeViewController()
-        productiveTimeVC.delegate = self
-        present(productiveTimeVC, animated: true, completion: nil)
+    func screenWidth() -> CGFloat {
+        return UIScreen.main.bounds.width
+    }
+
+    
+    func startButtonBottomConstraint() -> CGFloat {
+        switch(self.screenHeight()) {
+        case 568:
+            return -100
+        case 667:
+            return -149
+        default:
+            return -149
+        }
     }
     
-    func instantiateSessionEndedVC() {
-        let sessionEndedVC = SessionEndedViewController()
-        present(sessionEndedVC, animated: true, completion: nil)
+    func stackViewContraint() -> CGFloat {
+        switch(self.screenHeight()) {
+        case 568:
+            return 210
+        case 667:
+            return 260
+        default:
+            return 260
+        }
+    }
+    
+    func collectionViewLeftInset() -> CGFloat {
+        switch(self.screenHeight()) {
+        case 568:
+            return 26
+        case 667:
+            return 53
+        default:
+            return 72
+        }
     }
 }
 
