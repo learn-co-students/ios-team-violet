@@ -36,8 +36,9 @@ final class PopsBreakManager {
                 if self.dislikedVideoIDs.contains(id) { print("fuck \(id)"); return }
                 
                 let title = snippet["title"] as? String ?? "No Title"
+                let capitalizedTitle = title.capitalized
                 let description = snippet["description"] as? String ?? "No Description"
-                let newVideo = Video(id: id, title: title, description: description)
+                let newVideo = Video(id: id, title: capitalizedTitle, description: description)
                 
                 let randomIndex = Int(arc4random_uniform(UInt32(self.popsVideos.count)))
                 self.popsVideos.insert(newVideo, at: randomIndex)
