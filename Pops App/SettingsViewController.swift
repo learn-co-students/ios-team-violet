@@ -10,7 +10,7 @@ class SettingsViewController: UIViewController {
 
     let viewModel = SettingsViewModel()
     
-    //let stackView = UIStackView()
+    //view properties
     let endBreakView = UIView()
     let endBreakViewLabelLeft = UILabel()
     let endBreakViewLabelRight = UILabel()
@@ -33,8 +33,6 @@ class SettingsViewController: UIViewController {
     let dismissIcon = UIButton()
     let progressBar = UIView()
     var progressBarWidth = NSLayoutConstraint()
-    
-    
     var stackView = UIStackView()
     
     override func viewDidLoad() {
@@ -48,6 +46,18 @@ class SettingsViewController: UIViewController {
         setupEndBreakView()
         
     }
+
+    
+    func dismissCurrentView() {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+   
+}
+
+//view setups
+extension SettingsViewController {
+    
     
     func setupProgressBar() {
         view.addSubview(progressBar)
@@ -71,11 +81,6 @@ class SettingsViewController: UIViewController {
         dismissIcon.heightAnchor.constraint(equalToConstant: 25).isActive = true
         dismissIcon.addTarget(self, action: #selector(dismissCurrentView), for: .touchUpInside)
         
-        
-    }
-    
-    func dismissCurrentView() {
-        self.dismiss(animated: true, completion: nil)
     }
     
     func setupPropsHoursView() {
@@ -229,7 +234,7 @@ class SettingsViewController: UIViewController {
         endBreakViewLabelRight.heightAnchor.constraint(equalToConstant: 17).isActive = true
         endBreakViewLabelRight.widthAnchor.constraint(equalTo: endBreakView.widthAnchor, multiplier: 0.4).isActive = true
         endBreakViewLabelRight.centerYAnchor.constraint(equalTo: endBreakView.centerYAnchor, constant: 0).isActive = true
-
+        
         
     }
 }
@@ -304,12 +309,7 @@ class CustomSettingsView: UIView {
         arrowImgView.widthAnchor.constraint(equalTo: arrowImgView.heightAnchor, multiplier: 1).isActive = true
         arrowImgView.centerYAnchor.constraint(equalTo: textLabel.centerYAnchor).isActive = true
     }
-    
-    func dismissView() {
-        self.dismissView()
-    }
-
-    
-    
 }
+
+
 
