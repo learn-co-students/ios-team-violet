@@ -7,7 +7,7 @@ final class SetSessionViewModel {
     let dataStore = DataStore.singleton
     let defaults = UserDefaults.standard
     
-    let timesForCollectionView = [Time("1 hour", 1), Time("2 hours", 2), Time("3 hours", 3), Time("4 hours", 4), Time("5 hours", 5), Time("6 hours", 6), Time("7 hours", 7), Time("8 hours", 8)]
+    let timesForCollectionView = [Time("1 hour"), Time("2 hours"), Time("3 hours"), Time("4 hours"), Time("5 hours"), Time("6 hours"), Time("7 hours"), Time("8 hours")]
 
     init(){}
     
@@ -20,12 +20,12 @@ final class SetSessionViewModel {
 
 final class Time {
     let text: String
-    let hours: Int
+    //let hours: Int
     var isSelected = false
     
-    init(_ text: String, _ hours: Int) {
+    init(_ text: String) {
         self.text = text
-        self.hours = hours
+        //self.hours = hours
     }
 }
 
@@ -48,8 +48,8 @@ class HourCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    func resetBackground() {
-        contentView.backgroundColor = Palette.lightBlue.color
+    func deselectCell() {
+        timeIsSelected = false
     }
     
     override init(frame: CGRect) {

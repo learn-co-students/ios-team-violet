@@ -90,6 +90,7 @@ final class ProductiveTimeViewModel {
         
     func skipToBreak() {
         productivityTimer.invalidate()
+        dataStore.user.currentSession?.sessionTimerCounter -= productivityTimerCounter
         dataStore.user.totalProps -= dataStore.user.currentCoach.difficulty.basePenaltyForLeavingProductivityScreen
         defaults.set(dataStore.user.totalProps, forKey: "totalProps")
     }

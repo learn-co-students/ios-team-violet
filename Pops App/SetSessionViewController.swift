@@ -130,7 +130,7 @@ extension SetSessionViewController: UICollectionViewDataSource, UICollectionView
         
         selectedTime?.isSelected = false
         let visibleCells = collectionView.visibleCells as! [HourCollectionViewCell]
-        visibleCells.forEach { $0.resetBackground() }
+        visibleCells.forEach { $0.deselectCell() }
 
         selectedTime = cell.time
         

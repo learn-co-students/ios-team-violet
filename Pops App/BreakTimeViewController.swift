@@ -86,7 +86,7 @@ class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate {
         UIView.animate(withDuration: 0.7, animations: {
             self.coachBottomAnchorConstraint.constant = 100
             self.view.layoutIfNeeded()
-        }) { _ in self.dismiss(animated: true, completion: nil)
+        }) { _ in
             self.present(SessionEndedViewController(), animated: true, completion: nil)
         }
     }
