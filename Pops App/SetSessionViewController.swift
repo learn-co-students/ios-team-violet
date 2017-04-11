@@ -4,7 +4,6 @@ import UIKit
 class SetSessionViewController: UIViewController {
     
     let viewModel = SetSessionViewModel()
-    let defaults = UserDefaults.standard
     
     //Selected time for collection view
     var selectedTime: Time!
@@ -35,7 +34,6 @@ class SetSessionViewController: UIViewController {
     //Transition View Properties
     let coachImageView = UIImageView()
     let coachTransitionView = CoachTransitionView()
-    var sessionStarted: Bool = false
     
     //First Animation
     var collectionViewLeadingAnchor: NSLayoutConstraint!
@@ -48,8 +46,8 @@ class SetSessionViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        if defaults.value(forKey: "returningUser") == nil {
+
+        if viewModel.defaults.value(forKey: "returningUser") == nil {
             settingsButton.alpha = 0
         }
         
@@ -76,7 +74,8 @@ class SetSessionViewController: UIViewController {
         super.viewWillAppear(animated)
         animateCoachPopup()
         view.insertSubview(coachTransitionView, aboveSubview: self.view)
-        coachTransitionView.isHidden = !sessionStarted
+        let sessionActive: Bool = viewModel.defaults.value(forKey: "sessionActive") as? Bool ?? false
+        coachTransitionView.isHidden = !sessionActive
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -89,7 +88,7 @@ class SetSessionViewController: UIViewController {
     }
     
     func presentProductiveTimeVC() {
-        defaults.set(true, forKey: "returningUser")
+        viewModel.defaults.set(true, forKey: "returningUser")
         animateCoachDown()
         if let indexPath = selectHourCollectionView.indexPathsForSelectedItems?[0] {
             viewModel.startSessionOfLength((indexPath.row) + 1)
@@ -161,7 +160,8 @@ extension SetSessionViewController {
         startButton.setTitle("start", for: .normal)
         startButton.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 14.0)
         
-        if defaults.value(forKey: "returningUser") == nil {
+
+        if viewModel.defaults.value(forKey: "returningUser") != nil {
             startButton.addTarget(self, action: #selector(animateAllowNotifications), for: .touchUpInside)
         } else {
            startButton.addTarget(self, action: #selector(presentProductiveTimeVC), for: .touchUpInside)
@@ -413,10 +413,7 @@ extension SetSessionViewController {
         }) { _ in
             let productiveTimeVC = ProductiveTimeViewController()
             productiveTimeVC.delegate = self
-            self.present(productiveTimeVC, animated: true, completion: {
-                self.sessionStarted = true
-            })
-            
+            self.present(productiveTimeVC, animated: true, completion: nil )
         }
 
     }
@@ -506,8 +503,7 @@ extension SetSessionViewController {
     
     func animateBackToSetSession() {
         
-        defaults.set(true, forKey: "returningUser")
-        defaults.set(true, forKey: "startButton")
+        viewModel.defaults.set(true, forKey: "returningUser")
         
         UIView.animate(withDuration: 0.8, animations: {
             self.readyButtonsStackViewTopAnchor.constant += self.stackViewContraint()
@@ -541,9 +537,20 @@ extension SetSessionViewController: InstantiateViewControllerDelegate {
     
     func instantiateBreakTimeVC() {
         let breakTimeVC = BreakTimeViewController()
+        breakTimeVC.delegate = self
         present(breakTimeVC, animated: true, completion: nil)
     }
     
+    func instantiateProductiveTimeVC() {
+        let productiveTimeVC = ProductiveTimeViewController()
+        productiveTimeVC.delegate = self
+        present(productiveTimeVC, animated: true, completion: nil)
+    }
+    
+    func instantiateSessionEndedVC() {
+        let sessionEndedVC = SessionEndedViewController()
+        present(sessionEndedVC, animated: true, completion: nil)
+    }
 }
 
 

@@ -24,7 +24,7 @@ class BreakEntertainmentViewController: UIViewController {
     func setUpBackButton(){
         backButton.setTitle("!", for: .normal)
         backButton.backgroundColor = .black
-        backButton.addTarget(self, action: #selector(dismissPopsBreakView), for: .touchUpInside)
+        backButton.addTarget(self, action: #selector(dismissCoachBreakView), for: .touchUpInside)
         
         breakView.addSubview(backButton)
         backButton.translatesAutoresizingMaskIntoConstraints = false
@@ -34,7 +34,7 @@ class BreakEntertainmentViewController: UIViewController {
         backButton.widthAnchor.constraint(equalToConstant: 21.0).isActive = true
     }
     
-    func dismissPopsBreakView() {
+    func dismissCoachBreakView() {
         self.dismiss(animated: true, completion: nil)
     }
     

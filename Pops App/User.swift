@@ -3,7 +3,7 @@ import Foundation
 
 struct User {
     let userName: String?
-    let totalProps: Int
+    var totalProps: Int
     let unlockedCoachNames: [String]
     let appNames: [String]
     var currentCoach: Coach

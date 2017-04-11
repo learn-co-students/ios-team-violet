@@ -3,6 +3,8 @@ import UIKit
 
 protocol InstantiateViewControllerDelegate {
     func instantiateBreakTimeVC()
+    func instantiateProductiveTimeVC()
+    func instantiateSessionEndedVC()
 }
 
 class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDelegate {
@@ -58,7 +60,11 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         animateCoachPopup()
-        viewModel.startTimers()
+        viewModel.startTimer()
+        if viewModel.defaults.value(forKey: "sessionActive") as? Bool == false {
+            viewModel.dataStore.user.currentSession?.startSessionTimer()
+            viewModel.defaults.set(true, forKey: "sessionActive")
+        }
     }
     
     override var prefersStatusBarHidden: Bool {
@@ -123,16 +129,15 @@ extension ProductiveTimeViewController {
     
     func setupCancelSessionButton() {
         view.addSubview(cancelSessionButton)
-        cancelSessionButton.setTitle("im weak", for: .normal)
-        cancelSessionButton.titleLabel?.text = "im weak"
+        cancelSessionButton.setTitle("cancel session", for: .normal)
+        cancelSessionButton.titleLabel?.text = "cancel session"
         cancelSessionButton.titleLabel?.textColor = Palette.grey.color
         cancelSessionButton.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 13.0)
-        cancelSessionButton.addTarget(self, action: #selector(skipBreak), for: .touchUpInside)
+        cancelSessionButton.addTarget(self, action: #selector(cancelSession), for: .touchUpInside)
         
         cancelSessionButton.translatesAutoresizingMaskIntoConstraints = false
         cancelSessionButton.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0).isActive = true
         cancelSessionButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -40).isActive = true
-        cancelSessionButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
         cancelSessionButton.heightAnchor.constraint(equalToConstant: 20).isActive = true
     }
     
@@ -205,10 +210,32 @@ extension ProductiveTimeViewController {
         coachIcon.widthAnchor.constraint(equalToConstant: 52).isActive = true
         coachIcon.layer.masksToBounds = true
     }
-
-    func skipBreak() {
+    
+    func cancelSession() {
         viewModel.productivityTimer.invalidate()
-        viewModel.totalTimer.invalidate()
+        viewModel.dataStore.user.currentSession?.sessionTimer.invalidate()
+        viewModel.defaults.set(false, forKey: "sessionActive")
+        
+        UIView.animate(withDuration: 0.7, animations: {
+            self.coachBottomAnchorConstraint.constant = 100
+            self.view.layoutIfNeeded()
+        }) { _ in self.dismiss(animated: true, completion: nil)
+            self.dismissView()
+        }
+    }
+    
+    func moveToBreak() {
+        UIView.animate(withDuration: 0.7, animations: {
+            self.coachBottomAnchorConstraint.constant = 100
+            self.view.layoutIfNeeded()
+        }) { _ in self.dismiss(animated: true, completion: nil)
+            self.delegate?.instantiateBreakTimeVC()
+        }
+    }
+    
+    func skipToBreak() {
+        viewModel.skipToBreak()
+        
         self.view.layoutIfNeeded()
         
         UIView.animate(withDuration: 0.7, animations: {
@@ -228,5 +255,12 @@ extension ProductiveTimeViewController {
             self.propsLabel.isHidden = false
             self.productiveTimeLabel.isHidden = false
         }
+    }
+    
+    func animateCancelToSkip() {
+        self.cancelSessionButton.setTitle("early break plz", for: .normal)
+        self.cancelSessionButton.titleLabel?.text = "early break plz"
+        self.cancelSessionButton.removeTarget(self, action: #selector(self.cancelSession), for: .touchUpInside)
+        self.cancelSessionButton.addTarget(self, action: #selector(self.skipToBreak), for: .touchUpInside)
     }
 }
