@@ -60,8 +60,8 @@ class PopsBreakView: UIView {
         self.addSubview(header)
         header.translatesAutoresizingMaskIntoConstraints = false
         header.topAnchor.constraint(equalTo: player.bottomAnchor, constant: viewHeight * (92/667)).isActive = true
-        header.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: viewWidth * (53/375)).isActive = true
-        header.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -viewWidth * (53/375)).isActive = true
+        header.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: headerLeadingContraint()).isActive = true
+        header.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -headerLeadingContraint()).isActive = true
     }
     
     func setUpLineDividerView() {
@@ -111,7 +111,7 @@ class PopsBreakView: UIView {
         dislikeButton.translatesAutoresizingMaskIntoConstraints = false
         dislikeButton.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
         dislikeButton.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 269/viewWidth).isActive = true
-        dislikeButton.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 45/667).isActive = true
+        dislikeButton.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 45/viewHeight).isActive = true
         dislikeButton.topAnchor.constraint(equalTo: likeButton.bottomAnchor, constant: viewHeight * (15/667)).isActive = true
     }
 
@@ -169,4 +169,26 @@ class PopsBreakView: UIView {
             self.body.alpha = 1
         }
     }
+}
+
+extension PopsBreakView {
+    func screenHeight() -> CGFloat {
+        return UIScreen.main.bounds.height
+    }
+    
+    func screenWidth() -> CGFloat {
+        return UIScreen.main.bounds.width
+    }
+    
+    func headerLeadingContraint() -> CGFloat {
+        switch(self.screenHeight()) {
+        case 568:
+            return 24
+        case 667:
+            return 53
+        default:
+            return 53
+        }
+    }
+
 }

@@ -7,6 +7,8 @@ class SetSessionViewController: UIViewController {
     
     //Selected time for collection view
     var selectedTime: Time!
+    var collViewIndexPath: IndexPath?
+    var isCellSelected = false
     
     //Helper properties
     lazy var viewWidth: CGFloat = self.view.frame.width
@@ -122,25 +124,44 @@ extension SetSessionViewController: UICollectionViewDataSource, UICollectionView
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         let currentCell = cell as! HourCollectionViewCell
-        currentCell.time = viewModel.timesForCollectionView[indexPath.row]
+        currentCell.backgroundColor = Palette.lightBlue.color
+        currentCell.timeTwo = viewModel.timesForCollectionView[indexPath.row]
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
         let cell = collectionView.cellForItem(at: indexPath) as! HourCollectionViewCell
         
-        guard !cell.timeIsSelected else { return }
+        //guard !cell.timeIsSelected else { return }
         
-        selectedTime?.isSelected = false
-        let visibleCells = collectionView.visibleCells as! [HourCollectionViewCell]
-        visibleCells.forEach { $0.resetBackground() }
-
-        selectedTime = cell.time
+        collViewIndexPath = collectionView.indexPathsForSelectedItems?[0]
         
-        cell.timeIsSelected = !cell.timeIsSelected
-        UIView.animate(withDuration: 0.3, animations: {
-            self.startButton.alpha = cell.timeIsSelected ? 1.0 : 0.3
-            self.startButton.isEnabled = cell.timeIsSelected ? true : false
-        })
+        if let collIndexPath = collViewIndexPath {
+            
+            let deselectedCell = collectionView.cellForItem(at: collIndexPath)
+            
+            deselectedCell?.backgroundColor = Palette.lightBlue.color
+            
+        }
+        
+        cell.backgroundColor = Palette.navy.color
+        
+        self.startButton.alpha = 1.0
+        
+//        selectedTime?.isSelected = false
+//        
+//        let visibleCells = collectionView.visibleCells as! [HourCollectionViewCell]
+//     
+//        visibleCells.forEach { $0.resetBackground() }
+//
+//        selectedTime = cell.time
+//        
+//        cell.timeIsSelected = true
+//        
+//        UIView.animate(withDuration: 0.3, animations: {
+//            self.startButton.alpha = cell.timeIsSelected ? 1.0 : 0.3
+//            self.startButton.isEnabled = cell.timeIsSelected ? true : false
+//        })
         
     }
     

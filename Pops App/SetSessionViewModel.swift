@@ -7,7 +7,7 @@ final class SetSessionViewModel {
     let dataStore = DataStore.singleton
     let defaults = UserDefaults.standard
     
-    let timesForCollectionView = [Time("1 hour", 1), Time("2 hours", 2), Time("3 hours", 3), Time("4 hours", 4), Time("5 hours", 5), Time("6 hours", 6), Time("7 hours", 7), Time("8 hours", 8)]
+    let timesForCollectionView = ["1 hour", "2 hours", "3 hours", "4 hours", "5 hours", "6 hours", "7 hours", "8 hours"]
 
     init(){}
     
@@ -33,25 +33,32 @@ class HourCollectionViewCell: UICollectionViewCell {
     
     let hourLabel = UILabel()
     
-    var time: Time! {
+    var timeTwo: String! {
         didSet {
-            hourLabel.text = time.text
-            timeIsSelected = time.isSelected
-            contentView.backgroundColor = time.isSelected ?  Palette.darkHeader.color : Palette.lightBlue.color
+            hourLabel.text = timeTwo
+            //contentView.backgroundColor = Palette.lightBlue.color
         }
     }
     
-    var timeIsSelected = false {
-        didSet {
-            time.isSelected = timeIsSelected
-            contentView.backgroundColor = time.isSelected ?  Palette.darkHeader.color : Palette.lightBlue.color
-        }
-    }
-    
-    func resetBackground() {
-        contentView.backgroundColor = Palette.lightBlue.color
-    }
-    
+//    var time: Time! {
+//        didSet {
+//            hourLabel.text = time.text
+//            //timeIsSelected = time.isSelected
+//            contentView.backgroundColor = time.isSelected ?  Palette.darkHeader.color : Palette.lightBlue.color
+//        }
+//    }
+//    
+//    var timeIsSelected = false {
+//        didSet {
+//            time.isSelected = timeIsSelected
+//            contentView.backgroundColor = time.isSelected ?  Palette.darkHeader.color : Palette.lightBlue.color
+//        }
+//    }
+//    
+//    func resetBackground() {
+//        contentView.backgroundColor = Palette.lightBlue.color
+//    }
+//    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupLabel()
