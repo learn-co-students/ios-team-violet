@@ -31,9 +31,6 @@ class SetSessionViewController: UIViewController {
     //Needed to animate pops
     var coachBottomAnchorConstraint: NSLayoutConstraint!
     
-    //Transition View Properties
-    let coachImageView = UIImageView()
-    
     //First Animation
     var collectionViewLeadingAnchor: NSLayoutConstraint!
     var startButtonCenterXAnchor: NSLayoutConstraint!
@@ -53,6 +50,11 @@ class SetSessionViewController: UIViewController {
         leaderBoardButton.alpha = 0
         
         view.backgroundColor = UIColor.white
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         setupStartButton()
         setupCollectionViewLayout()
         setupCollectionView()
@@ -65,12 +67,19 @@ class SetSessionViewController: UIViewController {
         setupSettingsButton()
         setupLeaderBoardButton()
         
-        setupAllowNotificationButtons()
-        setupReadyButtons()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+        if viewModel.defaults.value(forKey: "returningUser") == nil {
+            setupAllowNotificationButtons()
+            setupReadyButtons()
+        }
+        
+        if viewModel.defaults.value(forKey: "returningUSer") != nil {
+            UIView.animate(withDuration: 0.1, animations: {
+                self.view.layoutIfNeeded()
+                self.allowNotificationButtonsStackViewXAnchor.constant += self.viewWidth
+                self.readyButtonsStackViewTopAnchor.constant += self.viewHeight
+            })
+        }
+        
         animateCoachPopup()
     }
     
@@ -517,8 +526,6 @@ extension SetSessionViewController {
                 self.setupStartButton()
                 self.setupCollectionViewLayout()
                 self.setupCollectionView()
-                //self.startButtonCenterXAnchor.constant -= self.viewWidth
-                //self.collectionViewLeadingAnchor.constant -= self.viewWidth
                 self.view.layoutIfNeeded()
             }, completion: nil)
             
