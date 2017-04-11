@@ -34,7 +34,6 @@
 		1FBEEC7D1E9588130099F413 /* BreakEntertainmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FBEEC7C1E9588130099F413 /* BreakEntertainmentViewController.swift */; };
 		1FBEEC811E9591250099F413 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FBEEC801E9591250099F413 /* User.swift */; };
 		1FBEEC831E9692370099F413 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FBEEC821E9692370099F413 /* Session.swift */; };
-		984727FA1E97CC27006BD638 /* CoachTransitionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 984727F91E97CC27006BD638 /* CoachTransitionView.swift */; };
 		98E682781E931E4F00BAEFE8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E682771E931E4F00BAEFE8 /* AppDelegate.swift */; };
 		98E6827F1E931E4F00BAEFE8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 98E6827E1E931E4F00BAEFE8 /* Assets.xcassets */; };
 		98E682821E931E4F00BAEFE8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 98E682801E931E4F00BAEFE8 /* LaunchScreen.storyboard */; };
@@ -72,7 +71,6 @@
 		1FBEEC7C1E9588130099F413 /* BreakEntertainmentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BreakEntertainmentViewController.swift; sourceTree = "<group>"; };
 		1FBEEC801E9591250099F413 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		1FBEEC821E9692370099F413 /* Session.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
-		984727F91E97CC27006BD638 /* CoachTransitionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoachTransitionView.swift; sourceTree = "<group>"; };
 		98E682741E931E4F00BAEFE8 /* Pops App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pops App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		98E682771E931E4F00BAEFE8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		98E6827E1E931E4F00BAEFE8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -198,7 +196,6 @@
 			isa = PBXGroup;
 			children = (
 				98E682891E931E9500BAEFE8 /* SetSessionViewController.swift */,
-				984727F91E97CC27006BD638 /* CoachTransitionView.swift */,
 				1F7C447E1E9408E80067ECCF /* SettingsViewController.swift */,
 				1F7C44801E9409050067ECCF /* ScoreboardViewController.swift */,
 				98E6828D1E931EAF00BAEFE8 /* ProductiveTimeViewController.swift */,
@@ -311,7 +308,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				1F7C44921E940AB90067ECCF /* ProductiveTimeViewModel.swift in Sources */,
-				984727FA1E97CC27006BD638 /* CoachTransitionView.swift in Sources */,
 				1F7C44881E9409A90067ECCF /* BabaBreakView.swift in Sources */,
 				1F7C44811E9409050067ECCF /* ScoreboardViewController.swift in Sources */,
 				98E682921E9322A300BAEFE8 /* Extensions.swift in Sources */,

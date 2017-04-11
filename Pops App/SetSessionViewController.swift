@@ -33,7 +33,6 @@ class SetSessionViewController: UIViewController, UICollectionViewDelegateFlowLa
     
     //Transition View Properties
     let coachImageView = UIImageView()
-    let coachTransitionView = CoachTransitionView()
     
     //
     var collectionViewLeadingAnchor: NSLayoutConstraint!
@@ -71,9 +70,6 @@ class SetSessionViewController: UIViewController, UICollectionViewDelegateFlowLa
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         animateCoachPopup()
-        view.insertSubview(coachTransitionView, aboveSubview: self.view)
-        let sessionActive: Bool = viewModel.defaults.value(forKey: "sessionActive") as? Bool ?? false
-        coachTransitionView.isHidden = !sessionActive
     }
     
     override func viewWillDisappear(_ animated: Bool) {
