@@ -55,6 +55,7 @@ class SetSessionViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         setupStartButton()
         setupCollectionViewLayout()
         setupCollectionView()
@@ -71,15 +72,7 @@ class SetSessionViewController: UIViewController {
             setupAllowNotificationButtons()
             setupReadyButtons()
         }
-        
-        if viewModel.defaults.value(forKey: "returningUSer") != nil {
-            UIView.animate(withDuration: 0.1, animations: {
-                self.view.layoutIfNeeded()
-                self.allowNotificationButtonsStackViewXAnchor.constant += self.viewWidth
-                self.readyButtonsStackViewTopAnchor.constant += self.viewHeight
-            })
-        }
-        
+
         animateCoachPopup()
     }
     
@@ -473,6 +466,7 @@ extension SetSessionViewController {
         readyButton.layer.masksToBounds = true
         readyButton.setTitle("ready", for: .normal)
         readyButton.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 14.0)
+        readyButton.addTarget(self, action: #selector(animateBackToSetSession), for: .touchUpInside)
         readyButton.addTarget(self, action: #selector(presentProductiveTimeVC), for: .touchUpInside)
         
         let notReadyButton = UIButton()
