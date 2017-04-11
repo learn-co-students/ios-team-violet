@@ -30,7 +30,7 @@ class SettingsViewController: UIViewController {
     let propsLabel = UILabel()
     let totalHoursLabel = UILabel()
     let hoursProductiveLabel = UILabel()
-    let dismissIcon = UIImageView()
+    let dismissIcon = UIButton()
     let progressBar = UIView()
     var progressBarWidth = NSLayoutConstraint()
     
@@ -64,12 +64,18 @@ class SettingsViewController: UIViewController {
     func setupDismissIcon() {
         view.addSubview(dismissIcon)
         dismissIcon.translatesAutoresizingMaskIntoConstraints = false
-        dismissIcon.image = #imageLiteral(resourceName: "IC_SharePops")
+        dismissIcon.setBackgroundImage(#imageLiteral(resourceName: "IC_SharePops"), for: .normal)
         dismissIcon.topAnchor.constraint(equalTo: view.topAnchor, constant: 20).isActive = true
         dismissIcon.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
         dismissIcon.widthAnchor.constraint(equalToConstant: 25).isActive = true
         dismissIcon.heightAnchor.constraint(equalToConstant: 25).isActive = true
+        dismissIcon.addTarget(self, action: #selector(dismissCurrentView), for: .touchUpInside)
         
+        
+    }
+    
+    func dismissCurrentView() {
+        self.dismiss(animated: true, completion: nil)
     }
     
     func setupPropsHoursView() {
@@ -297,6 +303,10 @@ class CustomSettingsView: UIView {
         arrowImgView.heightAnchor.constraint(equalToConstant: 15).isActive = true
         arrowImgView.widthAnchor.constraint(equalTo: arrowImgView.heightAnchor, multiplier: 1).isActive = true
         arrowImgView.centerYAnchor.constraint(equalTo: textLabel.centerYAnchor).isActive = true
+    }
+    
+    func dismissView() {
+        self.dismissView()
     }
 
     
