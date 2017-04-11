@@ -31,6 +31,7 @@ class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate {
         viewModel = BreakTimeViewModel(vc: self)
         
         view.backgroundColor = UIColor.white
+        leaderBoardButton.alpha = 0
         setupUserAppsBackground()
         setupUserApps()
         setupEntertainMeButton()
@@ -186,10 +187,12 @@ class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate {
     
     func setupUserApps() {
         let messagesApp = UIView()
+        let messagesGesture = UITapGestureRecognizer(target: self, action: #selector(self.openMessagesApp))
+        messagesApp.addGestureRecognizer(messagesGesture)
         messagesApp.backgroundColor = Palette.green.color
         
         let messagesIconView = UIImageView()
-        messagesIconView.image = UIImage(named: "IC_MessagesApp")
+        messagesIconView.image = UIImage(named: "IC_messageApp")
         messagesApp.addSubview(messagesIconView)
         messagesIconView.translatesAutoresizingMaskIntoConstraints = false
         messagesIconView.widthAnchor.constraint(equalToConstant: viewWidth * (22/375)).isActive = true
@@ -198,26 +201,32 @@ class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate {
         messagesIconView.centerXAnchor.constraint(equalTo: messagesApp.centerXAnchor).isActive = true
         
         let emailApp = UIView()
-        emailApp.backgroundColor = Palette.salmon.color
+        let emailGesture = UITapGestureRecognizer(target: self, action: #selector(self.openEmailApp))
+        emailApp.addGestureRecognizer(emailGesture)
+        emailApp.tag = 2
+        emailApp.backgroundColor = Palette.purple.color
         
         let emailIconView = UIImageView()
-        emailIconView.image = UIImage(named: "IC_Email App")
+        emailIconView.image = UIImage(named: "IC_emailApp")
         emailApp.addSubview(emailIconView)
         emailIconView.translatesAutoresizingMaskIntoConstraints = false
-        emailIconView.widthAnchor.constraint(equalToConstant: viewWidth * (20/375)).isActive = true
+        emailIconView.widthAnchor.constraint(equalToConstant: viewWidth * (23/375)).isActive = true
         emailIconView.heightAnchor.constraint(equalToConstant: viewWidth * (20/375)).isActive = true
         emailIconView.centerYAnchor.constraint(equalTo: emailApp.centerYAnchor).isActive = true
         emailIconView.centerXAnchor.constraint(equalTo: emailApp.centerXAnchor).isActive = true
         
         let facebookApp = UIView()
+        let facebookGesture = UITapGestureRecognizer(target: self, action: #selector(self.openFacebookApp))
+        facebookApp.addGestureRecognizer(facebookGesture)
+        facebookApp.tag = 3
         facebookApp.backgroundColor = Palette.navy.color
         
         let facebookIconView = UIImageView()
-        facebookIconView.image = UIImage(named: "facebook")
+        facebookIconView.image = UIImage(named: "IC_facebookApp")
         facebookApp.addSubview(facebookIconView)
         facebookIconView.translatesAutoresizingMaskIntoConstraints = false
-        facebookIconView.widthAnchor.constraint(equalToConstant: viewWidth * (20/375)).isActive = true
-        facebookIconView.heightAnchor.constraint(equalToConstant: viewWidth * (20/375)).isActive = true
+        facebookIconView.widthAnchor.constraint(equalToConstant: viewWidth * (13/375)).isActive = true
+        facebookIconView.heightAnchor.constraint(equalToConstant: viewWidth * (21/375)).isActive = true
         facebookIconView.centerYAnchor.constraint(equalTo: facebookApp.centerYAnchor).isActive = true
         facebookIconView.centerXAnchor.constraint(equalTo: facebookApp.centerXAnchor).isActive = true
         
@@ -241,6 +250,43 @@ class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.centerXAnchor.constraint(equalTo: userAppsBackgroundView.centerXAnchor).isActive = true
         stackView.centerYAnchor.constraint(equalTo: userAppsBackgroundView.centerYAnchor).isActive = true
+    }
+    
+    func openMessagesApp() {
+        print("opening messages")
+        
+        let messagesURL =  NSURL(string: "sms:")!
+        
+        if UIApplication.shared.canOpenURL(messagesURL as URL) {
+            UIApplication.shared.open(messagesURL as URL)
+        }
+        
+    }
+    
+    func openEmailApp() {
+        print("opening email")
+        
+        let mailURL = NSURL(string: "message://")!
+        
+        if UIApplication.shared.canOpenURL(mailURL as URL) {
+            UIApplication.shared.open(mailURL as URL)
+        }
+        
+    }
+    
+    func openFacebookApp() {
+          print("opening facebook")
+        
+        let appURL = NSURL(string: "facebook://user?username=")!
+        let webURL = NSURL(string: "https://facebook.com")!
+        
+        let app = UIApplication.shared
+        
+        if app.canOpenURL(appURL as URL) {
+            app.open(appURL as URL)
+        } else {
+            app.open(webURL as URL)
+        }
     }
     
     func setupSettingsButton() {

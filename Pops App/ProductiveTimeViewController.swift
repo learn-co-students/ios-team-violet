@@ -66,6 +66,10 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
             viewModel.defaults.set(true, forKey: "sessionActive")
         }
     }
+    
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
 
     func dismissView() {
         self.dismiss(animated: true, completion: nil)
