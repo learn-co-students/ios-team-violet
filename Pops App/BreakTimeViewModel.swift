@@ -7,17 +7,29 @@ protocol BreakTimeViewModelDelegate: class {
     func moveToSessionEnded()
 }
 
+protocol BreakTimeViewModelProgressBarDelegate: class {
+    var progressBarWidthAnchor: NSLayoutConstraint! {get set}
+}
+
 final class BreakTimeViewModel {
     
     let dataStore = DataStore.singleton
     weak var delegate: BreakTimeViewModelDelegate!
+    weak var progressBarDelegate: BreakTimeViewModelProgressBarDelegate!
     
     var breakTimer: Timer
     var breakTimerCounter: Int = 0
     var breakIsOn: Bool = false
+    
+    var progressBarCounter = 0.0 {
+        didSet {
+            progressBarDelegate.progressBarWidthAnchor.constant = CGFloat(UIScreen.main.bounds.width * CGFloat(self.progressBarCounter) )
+        }
+    }
         
-    init(vc: BreakTimeViewModelDelegate){
-        self.delegate = vc
+    init(delegate: BreakTimeViewModelDelegate, progressBarDelegate: BreakTimeViewModelProgressBarDelegate){
+        self.delegate = delegate
+        self.progressBarDelegate = progressBarDelegate
         self.breakTimer = dataStore.user.currentSession?.productivityTimer ?? Timer()
             }
     
@@ -45,5 +57,7 @@ final class BreakTimeViewModel {
             dataStore.user.currentSession = nil
             delegate.moveToSessionEnded()
         }
+        
+        progressBarCounter += 1.0 / Double(dataStore.user.currentCoach.difficulty.baseBreakLength)
     }
 }

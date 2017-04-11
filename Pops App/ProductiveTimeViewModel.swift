@@ -5,7 +5,7 @@ import UIKit
 protocol ProductiveTimeViewModelDelegate: class {
     var productiveTimeLabel: UILabel {get set}
     var propsLabel: UILabel {get set}
-    var progress: Double {get set}
+    var progressBarWidthAnchor: NSLayoutConstraint! {get set}
     
     func animateCancelToSkip()
     func moveToBreak()
@@ -16,7 +16,7 @@ final class ProductiveTimeViewModel {
     
     weak var delegate: ProductiveTimeViewModelDelegate!
     let dataStore = DataStore.singleton
-    let defaults = UserDefaults.standard
+    
 
     //timers and counters
     var productivityTimer: Timer
@@ -32,16 +32,19 @@ final class ProductiveTimeViewModel {
         }
     }
     
+    var cancelCountdown = 5
+    
+    var progressBarCounter = 0.0 {
+        didSet {
+            delegate.progressBarWidthAnchor.constant = CGFloat(UIScreen.main.bounds.width * CGFloat(self.progressBarCounter) )
+        }
+    }
+    
     init(vc: ProductiveTimeViewController){
         self.delegate = vc
         self.productivityTimer = dataStore.user.currentSession?.productivityTimer ?? Timer()
         self.props = dataStore.user.totalProps
-    }
-        
-    var progressBarCounter = 0.0 {
-        didSet {
-            delegate.progress = progressBarCounter / 1500.00 //this is only for standard difficulty.
-        }
+        delegate.propsLabel.text = "Props: \(props)"
     }
     
     func startTimer() {
@@ -56,17 +59,23 @@ final class ProductiveTimeViewModel {
         print("productivity timer: \(productivityTimerCounter)")
         productivityTimerCounter -= 1
         props += 1
-        defaults.set(props, forKey: "totalProps")
+        dataStore.user.totalProps += 1
+        dataStore.defaults.set(dataStore.user.totalProps, forKey: "totalProps")
         
-        progressBarCounter += 1
-        if progressBarCounter == 5 {
+        if cancelCountdown > 0 {
+            cancelCountdown -= 1
+        }
+        if cancelCountdown <= 0 {
             delegate.animateCancelToSkip()
         }
+        
+        progressBarCounter += 1.0 / Double(dataStore.user.currentCoach.difficulty.baseProductivityLength)
         
         if productivityTimerCounter == 0 {
             productivityTimer.invalidate()
             delegate.moveToBreak()
         }
+        
     }
     
     func formatTime(time: Int) -> String {
@@ -92,7 +101,7 @@ final class ProductiveTimeViewModel {
         productivityTimer.invalidate()
         dataStore.user.currentSession?.sessionTimerCounter -= productivityTimerCounter
         dataStore.user.totalProps -= dataStore.user.currentCoach.difficulty.basePenaltyForLeavingProductivityScreen
-        defaults.set(dataStore.user.totalProps, forKey: "totalProps")
+        dataStore.defaults.set(dataStore.user.totalProps, forKey: "totalProps")
     }
 }
 

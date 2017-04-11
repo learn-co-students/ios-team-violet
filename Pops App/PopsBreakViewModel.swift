@@ -20,7 +20,6 @@ final class PopsBreakViewModel {
         dislikedVideoIDs = defaults.value(forKey: "dislikedVideoIDs") as? [String] ?? []
     }
     
-    
     func letPopsGetYouAVideo(completion: @escaping (String)-> ()) {
         manager.getRandomYouTubeVideo { (videoID) in
             completion(videoID)

@@ -40,6 +40,21 @@ class SessionEndedViewController: UIViewController {
         animateCoachPopup()
     }
     
+    func presentSetSessionVC() {
+        viewModel.dataStore.defaults.set(false, forKey: "sessionActive")
+        let setSessionVC = SetSessionViewController()
+        present(setSessionVC, animated: true, completion: nil)
+    }
+    
+    func presentProductiveTimeVC() {
+        viewModel.dataStore.defaults.set(false, forKey: "sessionActive")
+        let productiveTimeVC = ProductiveTimeViewController()
+        viewModel.startSessionOfLength(1)
+        present(productiveTimeVC, animated: true, completion: nil)
+    }
+}
+
+extension SessionEndedViewController {
     func setupDoneButton() {
         doneButton.backgroundColor = Palette.lightBlue.color
         doneButton.layer.cornerRadius = 2.0
@@ -54,12 +69,6 @@ class SessionEndedViewController: UIViewController {
         doneButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 269/viewWidth).isActive = true
         doneButton.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 45/viewHeight).isActive = true
         doneButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -viewHeight * (150/667.0)).isActive = true
-    }
-    
-    func presentSetSessionVC() {
-        viewModel.dataStore.defaults.set(false, forKey: "sessionActive")
-        let setSessionVC = SetSessionViewController()
-        present(setSessionVC, animated: true, completion: nil)
     }
     
     func setupExtendHourButton() {
@@ -77,14 +86,7 @@ class SessionEndedViewController: UIViewController {
         extendHourButton.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 45/viewHeight).isActive = true
         extendHourButton.bottomAnchor.constraint(equalTo: doneButton.topAnchor, constant: -viewHeight * (15/667.0)).isActive = true
     }
-    
-    func presentProductiveTimeVC() {
-        viewModel.dataStore.defaults.set(false, forKey: "sessionActive")
-        let productiveTimeVC = ProductiveTimeViewController()
-        viewModel.startSessionOfLength(1)
-        present(productiveTimeVC, animated: true, completion: nil)
-    }
-    
+
     func setupLineDividerView() {
         lineDividerView.backgroundColor = Palette.lightGrey.color
         lineDividerView.layer.cornerRadius = 2.0
@@ -172,5 +174,4 @@ class SessionEndedViewController: UIViewController {
             self.view.layoutIfNeeded()
         }
     }
-
 }

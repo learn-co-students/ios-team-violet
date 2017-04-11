@@ -1,44 +1,34 @@
 
 import UIKit
 
-protocol InstantiateViewControllerDelegate: class {
-    func instantiateBreakTimeVC()
-    func instantiateProductiveTimeVC()
-    func instantiateSessionEndedVC()
-    func instantiateBreakEntertainmentVC()
-}
-
 class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDelegate {
 
     lazy var viewWidth: CGFloat = self.view.frame.width
     lazy var viewHeight: CGFloat = self.view.frame.height
     
     var viewModel: ProductiveTimeViewModel!
-    var progressBarWidthAnchor: NSLayoutConstraint!
 
     var productiveTimeLabel = UILabel()
     
     let coachWindowView = UIView()
-    let pepTalkLabel = UILabel()
     let coachIcon = UIImageView()
     let cancelSessionButton = UIButton()
-    let progressBar = UIView()
     var propsLabel = UILabel()
     var coachBottomAnchorConstraint: NSLayoutConstraint!
+    
+    let progressBar = UIView()
+    var progressBarWidthAnchor: NSLayoutConstraint! {
+        didSet {
+            self.view.layoutIfNeeded()
+        }
+    }
     
     let characterMessageHeader = UILabel()
     let characterMessageBody = UILabel()
     let lockIconImageView = UIImageView()
     let lockLabel = UILabel()
-        
-    var progress = 0.0 {
-        didSet {
-            self.progressBarWidthAnchor.constant = CGFloat(self.view.frame.width * CGFloat(self.progress) )
-            self.view.layoutIfNeeded()
-        }
-    }
     
-    override func viewDidLoad() { //remember to call the setup function here!
+    override func viewDidLoad() {
         super.viewDidLoad()
         viewModel = ProductiveTimeViewModel(vc: self)
         view.backgroundColor = Palette.darkHeader.color
@@ -56,20 +46,58 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
         setupCoachIcon()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        animateCoachPopup()
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)        
-        animateCoachPopup()
+        
         viewModel.startTimer()
-        if viewModel.defaults.value(forKey: "sessionActive") as? Bool == false {
+        if viewModel.dataStore.defaults.value(forKey: "sessionActive") as? Bool == false {
             viewModel.dataStore.user.currentSession?.startSessionTimer()
-            viewModel.defaults.set(true, forKey: "sessionActive")
+            viewModel.dataStore.defaults.set(true, forKey: "sessionActive")
         }
     }
  
+    func cancelSession() {
+        viewModel.productivityTimer.invalidate()
+        viewModel.dataStore.user.currentSession?.sessionTimer.invalidate()
+        viewModel.dataStore.defaults.set(false, forKey: "sessionActive")
+        
+        UIView.animate(withDuration: 0.7, animations: {
+            self.coachBottomAnchorConstraint.constant = 100
+            self.view.layoutIfNeeded()
+        }) { _ in self.dismiss(animated: true, completion: nil)
+        }
+    }
+    
+    func moveToBreak() {
+        UIView.animate(withDuration: 0.7, animations: {
+            self.coachBottomAnchorConstraint.constant = 100
+            self.view.layoutIfNeeded()
+        }) { _ in self.present(BreakTimeViewController(), animated: true, completion: nil)
+        }
+    }
+    
+    func skipToBreak() {
+        viewModel.skipToBreak()
+        
+        self.view.layoutIfNeeded()
+        
+        UIView.animate(withDuration: 0.7, animations: {
+            self.coachBottomAnchorConstraint.constant = 100
+            self.view.layoutIfNeeded()
+        }) { _ in self.present(BreakTimeViewController(), animated: true, completion: nil)
+        }
+    }
+    
     override var prefersStatusBarHidden: Bool {
         return true
     }
 }
+
 
 extension ProductiveTimeViewController {
     
@@ -88,7 +116,6 @@ extension ProductiveTimeViewController {
     func setupPropsLabel() {
         view.addSubview(propsLabel)
         self.propsLabel.isHidden = true
-        propsLabel.text = viewModel.props.description
         propsLabel.font = UIFont(name: "Avenir-Heavy", size: 14)
         propsLabel.textColor = UIColor.white
         
@@ -203,38 +230,6 @@ extension ProductiveTimeViewController {
         coachIcon.heightAnchor.constraint(equalToConstant: 80).isActive = true
         coachIcon.widthAnchor.constraint(equalToConstant: 52).isActive = true
         coachIcon.layer.masksToBounds = true
-    }
-    
-    func cancelSession() {
-        viewModel.productivityTimer.invalidate()
-        viewModel.dataStore.user.currentSession?.sessionTimer.invalidate()
-        viewModel.defaults.set(false, forKey: "sessionActive")
-        
-        UIView.animate(withDuration: 0.7, animations: {
-            self.coachBottomAnchorConstraint.constant = 100
-            self.view.layoutIfNeeded()
-        }) { _ in self.dismiss(animated: true, completion: nil)
-        }
-    }
-    
-    func moveToBreak() {
-        UIView.animate(withDuration: 0.7, animations: {
-            self.coachBottomAnchorConstraint.constant = 100
-            self.view.layoutIfNeeded()
-        }) { _ in self.present(BreakTimeViewController(), animated: true, completion: nil)
-        }
-    }
-    
-    func skipToBreak() {
-        viewModel.skipToBreak()
-        
-        self.view.layoutIfNeeded()
-        
-        UIView.animate(withDuration: 0.7, animations: {
-            self.coachBottomAnchorConstraint.constant = 100
-            self.view.layoutIfNeeded()
-        }) { _ in self.present(BreakTimeViewController(), animated: true, completion: nil)
-        }
     }
     
     func animateCoachPopup() {

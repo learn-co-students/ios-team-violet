@@ -3,7 +3,6 @@ import UIKit
 
 class BreakEntertainmentViewController: UIViewController, BreakTimeViewModelDelegate {
 
-    weak var delegate: InstantiateViewControllerDelegate!
 
     var breakView = UIView()
     var backButton = UIButton()
@@ -45,5 +44,4 @@ class BreakEntertainmentViewController: UIViewController, BreakTimeViewModelDele
     func dismissCoachBreakView() {
         self.dismiss(animated: true, completion: nil)
     }
-    
 }

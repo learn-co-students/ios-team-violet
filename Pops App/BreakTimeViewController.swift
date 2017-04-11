@@ -1,11 +1,10 @@
 
 import UIKit
 
-class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate {
+class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate, BreakTimeViewModelProgressBarDelegate {
 
     var viewModel: BreakTimeViewModel!
-    weak var delegate: InstantiateViewControllerDelegate?
-
+    
     lazy var viewWidth: CGFloat = self.view.frame.width
     lazy var viewHeight: CGFloat = self.view.frame.height
     lazy var itemWidth: CGFloat = self.view.frame.width * (269/self.view.frame.width)
@@ -16,10 +15,16 @@ class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate {
     let characterMessageHeader = UILabel()
     let characterMessageBody = UILabel()
     let circleBackgroundForCharacterImageView = UIImageView()
-    let headerView = UIView()
     let userAppsBackgroundView = UIView()
     let settingsButton = UIButton()
     let leaderBoardButton = UIButton()
+    
+    let progressBar = UIView()
+    var progressBarWidthAnchor: NSLayoutConstraint! {
+        didSet {
+            self.view.layoutIfNeeded()
+        }
+    }
     
     let coachWindowView = UIView()
     let coachIcon = UIImageView()
@@ -28,10 +33,11 @@ class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewModel = BreakTimeViewModel(vc: self)
+        viewModel = BreakTimeViewModel(delegate: self, progressBarDelegate: self)
         
         view.backgroundColor = UIColor.white
         leaderBoardButton.alpha = 0
+        
         setupUserAppsBackground()
         setupUserApps()
         setupEntertainMeButton()
@@ -40,7 +46,7 @@ class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate {
         setupCharacterMessageHeader()
         setupCoachWindow()
         setupCoachIcon()
-        setupHeaderView()
+        setupProgressBar()
         setupSettingsButton()
         setupLeaderBoardButton()
     }
@@ -50,27 +56,24 @@ class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate {
         if viewModel.breakIsOn == false {
             viewModel.startTimer()
         }
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
         animateCoachPopup()
-    }
-    
-    override var prefersStatusBarHidden: Bool {
-        return true
     }
     
     func presentBreakEntertainmentVC() {
         UIView.animate(withDuration: 0.7, animations: {
-        self.coachBottomAnchorConstraint.constant = 100
-        self.view.layoutIfNeeded()
-    }) {_ in
-        let breakEntertainmentVC = BreakEntertainmentViewController()
-        breakEntertainmentVC.breakView = self.viewModel.dataStore.user.currentCoach.breakView
-        self.viewModel.delegate = breakEntertainmentVC
-        self.present(breakEntertainmentVC, animated: true, completion: nil)
+            self.coachBottomAnchorConstraint.constant = 100
+            self.view.layoutIfNeeded()
+        })      {_ in
+            let breakEntertainmentVC = BreakEntertainmentViewController()
+            breakEntertainmentVC.breakView = self.viewModel.dataStore.user.currentCoach.breakView
+            self.viewModel.delegate = breakEntertainmentVC
+            self.present(breakEntertainmentVC, animated: true, completion: nil)
         }
+    }
+    
+    func presentSettingsVC() {
+        let settingsVC = SettingsViewController()
+        present(settingsVC, animated: true, completion: nil)
     }
     
     func moveToProductivity() {
@@ -89,6 +92,59 @@ class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate {
         }) { _ in
             self.present(SessionEndedViewController(), animated: true, completion: nil)
         }
+    }
+    
+    func openMessagesApp() {
+        print("opening messages")
+        
+        let messagesURL =  NSURL(string: "sms:")!
+        
+        if UIApplication.shared.canOpenURL(messagesURL as URL) {
+            UIApplication.shared.open(messagesURL as URL)
+        }
+    }
+    
+    func openEmailApp() {
+        print("opening email")
+        
+        let mailURL = NSURL(string: "message://")!
+        
+        if UIApplication.shared.canOpenURL(mailURL as URL) {
+            UIApplication.shared.open(mailURL as URL)
+        }
+    }
+    
+    func openFacebookApp() {
+        print("opening facebook")
+        
+        let appURL = NSURL(string: "facebook://user?username=")!
+        let webURL = NSURL(string: "https://facebook.com")!
+        
+        let app = UIApplication.shared
+        
+        if app.canOpenURL(appURL as URL) {
+            app.open(appURL as URL)
+        } else {
+            app.open(webURL as URL)
+        }
+    }
+    
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
+}
+
+extension BreakTimeViewController {
+    func setupProgressBar() {
+        view.addSubview(progressBar)
+        progressBar.backgroundColor = Palette.salmon.color
+        
+        progressBar.translatesAutoresizingMaskIntoConstraints = false
+        progressBar.topAnchor.constraint(equalTo: view.topAnchor, constant: 0).isActive = true
+        progressBar.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0).isActive = true
+        progressBar.heightAnchor.constraint(equalToConstant: 5).isActive = true
+        progressBarWidthAnchor = progressBar.widthAnchor.constraint(equalToConstant: 0.0)
+        progressBarWidthAnchor.isActive = true
     }
     
     func setupEntertainMeButton() {
@@ -176,17 +232,6 @@ class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate {
         coachIcon.layer.masksToBounds = true
     }
     
-    func setupHeaderView() {
-        headerView.backgroundColor = Palette.salmon.color
-        
-        view.addSubview(headerView)
-        headerView.translatesAutoresizingMaskIntoConstraints = false
-        headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        headerView.heightAnchor.constraint(equalToConstant: viewHeight * (5/viewHeight)).isActive = true
-        headerView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-    }
-    
     func setupUserAppsBackground() {
         userAppsBackgroundView.backgroundColor = Palette.lightGrey.color
         view.addSubview(userAppsBackgroundView)
@@ -258,48 +303,11 @@ class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate {
         stackView.distribution = .fillEqually
         stackView.alignment = .fill
         stackView.spacing = 20
-    
+        
         userAppsBackgroundView.addSubview(stackView)
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.centerXAnchor.constraint(equalTo: userAppsBackgroundView.centerXAnchor).isActive = true
         stackView.centerYAnchor.constraint(equalTo: userAppsBackgroundView.centerYAnchor).isActive = true
-    }
-    
-    func openMessagesApp() {
-        print("opening messages")
-        
-        let messagesURL =  NSURL(string: "sms:")!
-        
-        if UIApplication.shared.canOpenURL(messagesURL as URL) {
-            UIApplication.shared.open(messagesURL as URL)
-        }
-        
-    }
-    
-    func openEmailApp() {
-        print("opening email")
-        
-        let mailURL = NSURL(string: "message://")!
-        
-        if UIApplication.shared.canOpenURL(mailURL as URL) {
-            UIApplication.shared.open(mailURL as URL)
-        }
-        
-    }
-    
-    func openFacebookApp() {
-          print("opening facebook")
-        
-        let appURL = NSURL(string: "facebook://user?username=")!
-        let webURL = NSURL(string: "https://facebook.com")!
-        
-        let app = UIApplication.shared
-        
-        if app.canOpenURL(appURL as URL) {
-            app.open(appURL as URL)
-        } else {
-            app.open(webURL as URL)
-        }
     }
     
     func setupSettingsButton() {
@@ -308,7 +316,7 @@ class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate {
         view.addSubview(settingsButton)
         settingsButton.translatesAutoresizingMaskIntoConstraints = false
         settingsButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 25.0).isActive = true
-        settingsButton.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 21.0).isActive = true
+        settingsButton.topAnchor.constraint(equalTo: progressBar.bottomAnchor, constant: 21.0).isActive = true
         settingsButton.heightAnchor.constraint(equalToConstant: 21.0).isActive = true
         settingsButton.widthAnchor.constraint(equalToConstant: 21.0).isActive = true
         
@@ -318,10 +326,10 @@ class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate {
     func setupLeaderBoardButton() {
         leaderBoardButton.setBackgroundImage(#imageLiteral(resourceName: "IC_Leaderboard"), for: .normal)
         
-        headerView.addSubview(leaderBoardButton)
+        view.addSubview(leaderBoardButton)
         leaderBoardButton.translatesAutoresizingMaskIntoConstraints = false
         leaderBoardButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -25.0).isActive = true
-        leaderBoardButton.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 21.0).isActive = true
+        leaderBoardButton.topAnchor.constraint(equalTo: progressBar.bottomAnchor, constant: 21.0).isActive = true
         leaderBoardButton.heightAnchor.constraint(equalToConstant: 21.0).isActive = true
         leaderBoardButton.widthAnchor.constraint(equalToConstant: 23.0).isActive = true
     }
@@ -333,11 +341,4 @@ class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate {
             self.view.layoutIfNeeded()
         }
     }
-    
-    func presentSettingsVC() {
-        let settingsVC = SettingsViewController()
-        present(settingsVC, animated: true, completion: nil)
-    }
-    
-
 }

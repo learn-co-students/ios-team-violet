@@ -33,6 +33,42 @@ class PopsBreakView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func likeButtonTapped() {
+        UIView.animate(withDuration: 0.1) {
+            self.likeButton.backgroundColor = Palette.navy.color
+        }
+        viewModel.userLikedVideo()
+    }
+    
+    func dislikeButtonTapped() {
+        UIView.animate(withDuration: 0.1) {
+            self.dislikeButton.backgroundColor = Palette.grey.color
+        }
+        viewModel.userDislikedVideo()
+        nextButtonTapped()
+    }
+    
+    func nextButtonTapped() {
+        let newVideoIndex = viewModel.letPopsGetYouADifferentVideo()
+        let newVideo = viewModel.manager.popsVideos[newVideoIndex]
+        self.player.load(withVideoId: newVideo.id)
+        
+        UIView.animate(withDuration: 0.2) {
+            self.likeButton.backgroundColor = Palette.lightBlue.color
+            self.dislikeButton.backgroundColor = Palette.lightGrey.color
+            self.header.alpha = 0
+            self.body.alpha = 0
+        }
+        
+        self.header.text = newVideo.title
+        self.body.text = newVideo.description
+        
+        UIView.animate(withDuration: 0.2) {
+            self.header.alpha = 1
+            self.body.alpha = 1
+        }
+    }
+    
     func setUpYouTubePlayerView(){
         let playerWidth = UIScreen.main.bounds.width
         let playerHeight = UIScreen.main.bounds.height / 3
@@ -47,10 +83,11 @@ class PopsBreakView: UIView {
                 self.body.text = self.viewModel.manager.popsVideos[currentVideoIndex].description
             }
         }
-        
         self.addSubview(self.player)
     }
-    
+}
+
+extension PopsBreakView {
     func setUpHeader(){
         header.numberOfLines = 0
         header.textColor = UIColor.black
@@ -76,7 +113,7 @@ class PopsBreakView: UIView {
         lineDividerView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 269/viewWidth).isActive = true
         lineDividerView.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 3/viewHeight).isActive = true
     }
-   
+    
     func setUpLikeButton() {
         likeButton.backgroundColor = Palette.lightBlue.color
         likeButton.alpha = 1
@@ -114,7 +151,7 @@ class PopsBreakView: UIView {
         dislikeButton.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 45/667).isActive = true
         dislikeButton.topAnchor.constraint(equalTo: likeButton.bottomAnchor, constant: viewHeight * (15/667)).isActive = true
     }
-
+    
     func setUpNextButton() {
         nextButton.backgroundColor = Palette.aqua.color
         nextButton.alpha = 1
@@ -129,44 +166,5 @@ class PopsBreakView: UIView {
         nextButton.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
         nextButton.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.097).isActive = true
         nextButton.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
-    }
-    
-    
-    func likeButtonTapped() {
-        
-        UIView.animate(withDuration: 0.1) {
-            self.likeButton.backgroundColor = Palette.navy.color
-        }
-        
-        viewModel.userLikedVideo()
-    }
-    
-    func dislikeButtonTapped() {
-        UIView.animate(withDuration: 0.1) {
-            self.dislikeButton.backgroundColor = Palette.grey.color
-        }
-        viewModel.userDislikedVideo()
-        nextButtonTapped()
-    }
-    
-    func nextButtonTapped() {
-        let newVideoIndex = viewModel.letPopsGetYouADifferentVideo()
-        let newVideo = viewModel.manager.popsVideos[newVideoIndex]
-        self.player.load(withVideoId: newVideo.id)
-        
-        UIView.animate(withDuration: 0.2) {
-            self.likeButton.backgroundColor = Palette.lightBlue.color
-            self.dislikeButton.backgroundColor = Palette.lightGrey.color
-            self.header.alpha = 0
-            self.body.alpha = 0
-        }
-        
-        self.header.text = newVideo.title
-        self.body.text = newVideo.description
-        
-        UIView.animate(withDuration: 0.2) { 
-            self.header.alpha = 1
-            self.body.alpha = 1
-        }
     }
 }
