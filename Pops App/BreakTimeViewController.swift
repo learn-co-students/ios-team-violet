@@ -18,6 +18,10 @@ class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate, Bre
     let userAppsBackgroundView = UIView()
     let settingsButton = UIButton()
     let leaderBoardButton = UIButton()
+    let dismissIcon = UIButton()
+    
+    let contentView = UIView()
+    let settingsVC = SettingsViewController()
     
     let progressBar = UIView()
     var progressBarWidthAnchor: NSLayoutConstraint! {
@@ -49,6 +53,7 @@ class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate, Bre
         setupProgressBar()
         setupSettingsButton()
         setupLeaderBoardButton()
+        setupCancelSettingsButton()
         
         NotificationCenter.default.addObserver(self, selector: #selector(appEnteredForeground), name: NSNotification.Name(rawValue: "appEnteredForeground"), object: nil)
     }
@@ -78,11 +83,6 @@ class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate, Bre
             self.viewModel.delegate = breakEntertainmentVC
             self.present(breakEntertainmentVC, animated: true, completion: nil)
         }
-    }
-    
-    func presentSettingsVC() {
-        let settingsVC = SettingsViewController()
-        present(settingsVC, animated: true, completion: nil)
     }
     
     func moveToProductivity() {
@@ -350,4 +350,51 @@ extension BreakTimeViewController {
             self.view.layoutIfNeeded()
         }
     }
+}
+
+extension BreakTimeViewController {
+    
+    func setupCancelSettingsButton() {
+        self.dismissIcon.setBackgroundImage(#imageLiteral(resourceName: "IC_Quit"), for: .normal)
+        self.dismissIcon.alpha = 0
+        self.view.addSubview(self.dismissIcon)
+        self.dismissIcon.translatesAutoresizingMaskIntoConstraints = false
+        self.dismissIcon.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 26).isActive = true
+        self.dismissIcon.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -26).isActive = true
+        self.dismissIcon.widthAnchor.constraint(equalToConstant: 15).isActive = true
+        self.dismissIcon.heightAnchor.constraint(equalToConstant: 15).isActive = true
+        self.dismissIcon.addTarget(self, action: #selector(self.dismissSettingVC), for: .touchUpInside)
+    }
+    
+    func presentSettingsVC() {
+        
+        view.insertSubview(self.contentView, aboveSubview: coachIcon)
+        self.contentView.backgroundColor = UIColor.red
+        
+        self.contentView.translatesAutoresizingMaskIntoConstraints = false
+        self.contentView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+        self.contentView.topAnchor.constraint(equalTo: settingsButton.bottomAnchor, constant: 20).isActive = true
+        self.contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        self.contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        
+        UIView.animate(withDuration: 0.2, animations: {
+            self.settingsButton.alpha = 0
+            self.dismissIcon.alpha = 1
+            
+            self.addChildViewController(self.settingsVC)
+            self.settingsVC.view.frame = self.contentView.bounds
+            self.contentView.addSubview(self.settingsVC.view)
+            self.settingsVC.didMove(toParentViewController: self)
+        })
+        
+    }
+    
+    func dismissSettingVC() {
+        self.contentView.removeFromSuperview()
+        UIView.animate(withDuration: 0.2, animations: {
+            self.dismissIcon.alpha = 0
+            self.settingsButton.alpha = 1
+        })
+    }
+
 }
