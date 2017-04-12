@@ -22,6 +22,8 @@ final class SettingsViewModel {
         
     }
     
+    init() {}
+    
     //timers and counters
     
     //var settingsTotalTimer = Timer()
