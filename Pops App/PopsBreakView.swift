@@ -17,16 +17,18 @@ class PopsBreakView: UIView {
     var likeButton = UIButton()
     var dislikeButton = UIButton()
     var nextButton = UIButton()
+    let blackOpaqueHeader = UIView()
         
     init(){
         super.init(frame: UIScreen.main.bounds)
         self.backgroundColor = .white
         setUpYouTubePlayerView()
-        setUpHeader()
-        setUpLineDividerView()
-        setUpLikeButton()
-        setUpDislikeButton()
+        setupBlackOpaqueHeader()
         setUpNextButton()
+        setUpDislikeButton()
+        setUpLikeButton()
+        setUpLineDividerView()
+        setUpHeader()
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -88,6 +90,19 @@ class PopsBreakView: UIView {
 }
 
 extension PopsBreakView {
+    
+    func setupBlackOpaqueHeader() {
+        blackOpaqueHeader.backgroundColor = UIColor.black
+        blackOpaqueHeader.alpha = 0.3
+        
+        self.insertSubview(blackOpaqueHeader, aboveSubview: player)
+        blackOpaqueHeader.translatesAutoresizingMaskIntoConstraints = false
+        blackOpaqueHeader.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
+        blackOpaqueHeader.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
+        blackOpaqueHeader.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
+        blackOpaqueHeader.heightAnchor.constraint(equalToConstant: 59).isActive = true
+    }
+    
     func setUpHeader(){
         header.numberOfLines = 0
         header.textColor = UIColor.black
@@ -96,7 +111,7 @@ extension PopsBreakView {
         
         self.addSubview(header)
         header.translatesAutoresizingMaskIntoConstraints = false
-        header.topAnchor.constraint(equalTo: player.bottomAnchor, constant: viewHeight * (92/667)).isActive = true
+        header.bottomAnchor.constraint(equalTo: lineDividerView.topAnchor, constant: -viewHeight * (30/667)).isActive = true
         header.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: headerLeadingContraint()).isActive = true
         header.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -headerLeadingContraint()).isActive = true
     }
@@ -109,7 +124,7 @@ extension PopsBreakView {
         self.addSubview(lineDividerView)
         lineDividerView.translatesAutoresizingMaskIntoConstraints = false
         lineDividerView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        lineDividerView.topAnchor.constraint(equalTo: header.bottomAnchor, constant: viewHeight * (30/667)).isActive = true
+        lineDividerView.bottomAnchor.constraint(equalTo: likeButton.topAnchor, constant: -viewHeight * (33/667)).isActive = true
         lineDividerView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 269/viewWidth).isActive = true
         lineDividerView.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 3/viewHeight).isActive = true
     }
@@ -129,7 +144,7 @@ extension PopsBreakView {
         likeButton.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
         likeButton.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 269/viewWidth).isActive = true
         likeButton.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 45/viewHeight).isActive = true
-        likeButton.topAnchor.constraint(equalTo: lineDividerView.bottomAnchor, constant: viewHeight * (33/viewHeight)).isActive = true
+        likeButton.bottomAnchor.constraint(equalTo: dislikeButton.topAnchor, constant: -viewHeight * (15/viewHeight)).isActive = true
     }
     
     func setUpDislikeButton() {
@@ -149,7 +164,7 @@ extension PopsBreakView {
         dislikeButton.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
         dislikeButton.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 269/viewWidth).isActive = true
         dislikeButton.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 45/viewHeight).isActive = true
-        dislikeButton.topAnchor.constraint(equalTo: likeButton.bottomAnchor, constant: viewHeight * (15/667)).isActive = true
+        dislikeButton.bottomAnchor.constraint(equalTo: nextButton.topAnchor, constant: -viewHeight * (100/667)).isActive = true
     }
     
     func setUpNextButton() {

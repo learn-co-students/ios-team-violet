@@ -7,6 +7,7 @@ class CustomSettingsView: UIView {
     let iconImgView = UIImageView()
     let textLabel = UILabel()
     let arrowImgView = UIImageView()
+    
     var settings: SettingsObj! {
         didSet {
             setupView()
@@ -41,8 +42,8 @@ class CustomSettingsView: UIView {
         textLabel.font = UIFont(name: "Avenir-Heavy", size: 13)
         textLabel.textAlignment = .left
         
-        textLabel.heightAnchor.constraint(equalToConstant: 15).isActive = true
-        textLabel.widthAnchor.constraint(greaterThanOrEqualToConstant: 50).isActive = true
+        //textLabel.heightAnchor.constraint(equalToConstant: 15).isActive = true
+        //textLabel.widthAnchor.constraint(greaterThanOrEqualToConstant: 50).isActive = true
         textLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 35).isActive = true
         textLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: 0).isActive = true
     }
@@ -50,12 +51,21 @@ class CustomSettingsView: UIView {
     func setupIcon() {
         self.addSubview(iconImgView)
         iconImgView.translatesAutoresizingMaskIntoConstraints = false
-        iconImgView.contentMode = .scaleAspectFit
+        iconImgView.contentMode = .scaleAspectFill
         
-        iconImgView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10).isActive = true
-        iconImgView.heightAnchor.constraint(equalTo: textLabel.heightAnchor, constant: 0).isActive = true
-        iconImgView.widthAnchor.constraint(equalTo: iconImgView.heightAnchor, constant: 0).isActive = true
-        iconImgView.centerYAnchor.constraint(equalTo: textLabel.centerYAnchor, constant: 0).isActive = true
+        if settings.icon == #imageLiteral(resourceName: "IC_ContactUs") {
+            iconImgView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 0).isActive = true
+            iconImgView.heightAnchor.constraint(equalToConstant: 11).isActive = true
+            iconImgView.widthAnchor.constraint(equalToConstant: 11).isActive = true
+            iconImgView.centerYAnchor.constraint(equalTo: textLabel.centerYAnchor, constant: 0).isActive = true
+        }
+        
+        if settings.icon == #imageLiteral(resourceName: "IC_SharePops") {
+            iconImgView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 0).isActive = true
+            iconImgView.heightAnchor.constraint(equalToConstant: 11).isActive = true
+            iconImgView.widthAnchor.constraint(equalToConstant: 13).isActive = true
+            iconImgView.centerYAnchor.constraint(equalTo: textLabel.centerYAnchor, constant: 0).isActive = true
+        }
         
     }
     
@@ -63,11 +73,11 @@ class CustomSettingsView: UIView {
         self.addSubview(arrowImgView)
         arrowImgView.translatesAutoresizingMaskIntoConstraints = false
         arrowImgView.contentMode = .scaleAspectFit
-        arrowImgView.image = #imageLiteral(resourceName: "IC_ContactUs")
+        arrowImgView.image = #imageLiteral(resourceName: "IC_SettingsArrow")
         
-        arrowImgView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10).isActive = true
-        arrowImgView.heightAnchor.constraint(equalToConstant: 15).isActive = true
-        arrowImgView.widthAnchor.constraint(equalTo: arrowImgView.heightAnchor, multiplier: 1).isActive = true
+        arrowImgView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 0).isActive = true
+        arrowImgView.heightAnchor.constraint(equalToConstant: 10).isActive = true
+        arrowImgView.widthAnchor.constraint(equalToConstant: 6).isActive = true
         arrowImgView.centerYAnchor.constraint(equalTo: textLabel.centerYAnchor).isActive = true
     }
 }
