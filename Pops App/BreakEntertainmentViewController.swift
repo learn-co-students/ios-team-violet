@@ -16,6 +16,10 @@ class BreakEntertainmentViewController: UIViewController, BreakTimeViewModelDele
         setUpBackButton()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "coachBreakViewIsBeingDismissed"), object: self)
+    }
+    
     override var prefersStatusBarHidden: Bool {
         return true
     }
@@ -42,6 +46,6 @@ class BreakEntertainmentViewController: UIViewController, BreakTimeViewModelDele
     }
     
     func dismissCoachBreakView() {
-        self.dismiss(animated: true, completion: nil)
+        self.dismiss(animated: true)
     }
 }
