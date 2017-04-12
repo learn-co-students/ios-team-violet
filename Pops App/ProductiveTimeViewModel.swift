@@ -48,7 +48,8 @@ final class ProductiveTimeViewModel {
     }
     
     func startTimer() {
-        self.productivityTimerCounter = dataStore.user.currentCoach.difficulty.baseProductivityLength
+        self.productivityTimerCounter = 10
+            //dataStore.user.currentCoach.difficulty.baseProductivityLength
 
         productivityTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { (timer) in
            self.productivityTimerAction()
@@ -104,4 +105,5 @@ final class ProductiveTimeViewModel {
         dataStore.defaults.set(dataStore.user.totalProps, forKey: "totalProps")
     }
 }
+
 

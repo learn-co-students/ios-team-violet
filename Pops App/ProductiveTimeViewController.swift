@@ -209,6 +209,7 @@ extension ProductiveTimeViewController {
         coachWindowView.translatesAutoresizingMaskIntoConstraints = false
         coachWindowView.backgroundColor = Palette.salmon.color
         coachWindowView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        
         coachWindowView.bottomAnchor.constraint(equalTo: characterMessageHeader.topAnchor, constant: -viewHeight * (35/667)).isActive = true
         coachWindowView.heightAnchor.constraint(equalToConstant: 100).isActive = true
         coachWindowView.widthAnchor.constraint(equalToConstant: 100).isActive = true

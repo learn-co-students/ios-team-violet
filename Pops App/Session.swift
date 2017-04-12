@@ -1,5 +1,7 @@
 
 import Foundation
+import UIKit
+
 
 final class Session {
     let sessionHours: Int
@@ -22,7 +24,11 @@ final class Session {
     var breakTimer = Timer()
    
     var sessionTimer = Timer()
-    var sessionTimerCounter = 0
+    var sessionTimerCounter = 0 {
+        didSet {
+            
+        }
+    }
     var sessionTimerStartCounter: Int {
             return cycles * cycleLength
     }
@@ -46,5 +52,6 @@ final class Session {
         if sessionTimerCounter == 0 {
             sessionTimer.invalidate()
         }
+        
     }
 }
