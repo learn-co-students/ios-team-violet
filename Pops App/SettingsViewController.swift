@@ -77,13 +77,13 @@ extension SettingsViewController {
         propsHoursView.addSubview(totalHoursLabel)
         propsHoursView.addSubview(hoursProductiveLabel)
         
-        propsHoursView.heightAnchor.constraint(equalToConstant: viewHeight * (30/667)).isActive = true
+        propsHoursView.heightAnchor.constraint(equalToConstant: viewHeight * (40/667)).isActive = true
         propsHoursView.widthAnchor.constraint(equalToConstant: viewWidth * (300/375)).isActive = true
         
         totalPropsLabel.text = String(viewModel.dataStore.user.totalProps)
         totalPropsLabel.font = UIFont(name: "Avenir-Heavy", size: 13)
         totalPropsLabel.translatesAutoresizingMaskIntoConstraints = false
-        totalPropsLabel.topAnchor.constraint(equalTo: propsHoursView.topAnchor, constant: 0).isActive = true
+        totalPropsLabel.topAnchor.constraint(equalTo: propsHoursView.topAnchor, constant: -2).isActive = true
         totalPropsLabel.leadingAnchor.constraint(equalTo: propsHoursView.leadingAnchor, constant: 0).isActive = true
         
         propsLabel.text = "props"
@@ -133,7 +133,7 @@ extension SettingsViewController {
         stackView.axis = .vertical
         stackView.distribution = .equalSpacing
         stackView.alignment = .fill
-        stackView.spacing = viewHeight * (32 / 667)
+        stackView.spacing = viewHeight * (26 / 667)
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.widthAnchor.constraint(equalToConstant: viewWidth * (300 / 375)).isActive = true
         stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
@@ -166,7 +166,7 @@ extension SettingsViewController {
         settingsTotalTimerLabel.textColor = Palette.darkText.color
         settingsTotalTimerLabel.textAlignment = .right
         
-        settingsTotalTimerLabel.trailingAnchor.constraint(equalTo: endSessionView.trailingAnchor, constant: -viewWidth * (15 / 667)).isActive = true
+        settingsTotalTimerLabel.trailingAnchor.constraint(equalTo: endSessionView.trailingAnchor, constant: -viewWidth * (15 / 375)).isActive = true
         settingsTotalTimerLabel.centerYAnchor.constraint(equalTo: endSessionView.centerYAnchor, constant: 0).isActive = true
     }
     
@@ -174,8 +174,8 @@ extension SettingsViewController {
         view.addSubview(endBreakView)
         endBreakView.backgroundColor = Palette.purple.color
         endBreakView.translatesAutoresizingMaskIntoConstraints = false
-        endBreakView.widthAnchor.constraint(equalToConstant: viewWidth * (300 / 667)).isActive = true
-        endBreakView.heightAnchor.constraint(equalToConstant: viewHeight * (50 / 375)).isActive = true
+        endBreakView.widthAnchor.constraint(equalToConstant: viewWidth * (300 / 375)).isActive = true
+        endBreakView.heightAnchor.constraint(equalToConstant: viewHeight * (50 / 667)).isActive = true
         endBreakView.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0).isActive = true
         endBreakView.bottomAnchor.constraint(equalTo: endSessionView.topAnchor, constant: -viewHeight * (20 / 667)).isActive = true
         endBreakView.layer.cornerRadius = 2
