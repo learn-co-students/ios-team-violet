@@ -85,14 +85,12 @@ extension SettingsViewController {
         totalPropsLabel.translatesAutoresizingMaskIntoConstraints = false
         totalPropsLabel.topAnchor.constraint(equalTo: propsHoursView.topAnchor, constant: 0).isActive = true
         totalPropsLabel.leadingAnchor.constraint(equalTo: propsHoursView.leadingAnchor, constant: 0).isActive = true
-        //totalPropsLabel.widthAnchor.constraint(equalToConstant: 100).isActive = true
         
         propsLabel.text = "props"
         propsLabel.font = UIFont(name: "Avenir-Heavy", size: 13)
         propsLabel.textColor = Palette.aqua.color
         propsLabel.translatesAutoresizingMaskIntoConstraints = false
         propsLabel.topAnchor.constraint(equalTo: totalPropsLabel.bottomAnchor, constant: 0).isActive = true
-        //propsLabel.widthAnchor.constraint(equalTo: totalPropsLabel.widthAnchor, constant: 0).isActive = true
         propsLabel.leadingAnchor.constraint(equalTo: propsHoursView.leadingAnchor, constant: 0).isActive = true
         
         totalHoursLabel.text = "200"
@@ -100,8 +98,6 @@ extension SettingsViewController {
         totalHoursLabel.translatesAutoresizingMaskIntoConstraints = false
         totalHoursLabel.centerYAnchor.constraint(equalTo: totalPropsLabel.centerYAnchor, constant: 0).isActive = true
         totalHoursLabel.leadingAnchor.constraint(equalTo: totalPropsLabel.trailingAnchor, constant: 25).isActive = true
-        //totalHoursLabel.widthAnchor.constraint(equalToConstant: viewWidth * (50 / )).isActive = true
-        //totalHoursLabel.heightAnchor.constraint(equalTo: totalPropsLabel.heightAnchor, constant: 0).isActive = true
         
         hoursProductiveLabel.text = "hours being productive"
         hoursProductiveLabel.font = UIFont(name: "Avenir-Heavy", size: 13)
@@ -109,8 +105,6 @@ extension SettingsViewController {
         hoursProductiveLabel.translatesAutoresizingMaskIntoConstraints = false
         hoursProductiveLabel.centerYAnchor.constraint(equalTo: propsLabel.centerYAnchor, constant: 0).isActive = true
         hoursProductiveLabel.leadingAnchor.constraint(equalTo: totalHoursLabel.leadingAnchor, constant: 0).isActive = true
-        //hoursProductiveLabel.heightAnchor.constraint(equalTo: propsLabel.heightAnchor, constant: 0).isActive = true
-        //hoursProductiveLabel.widthAnchor.constraint(greaterThanOrEqualToConstant: 150).isActive = true
     }
     
     func setupStackView() {
@@ -130,8 +124,8 @@ extension SettingsViewController {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
-        customView.heightAnchor.constraint(equalToConstant: 25).isActive = true
-        secondView.heightAnchor.constraint(equalToConstant: 25).isActive = true
+        customView.heightAnchor.constraint(equalToConstant: viewHeight * (25 / 667)).isActive = true
+        secondView.heightAnchor.constraint(equalToConstant: viewHeight * (25 / 667)).isActive = true
         
         stackView = UIStackView(arrangedSubviews: stackedViews)
         
@@ -150,9 +144,9 @@ extension SettingsViewController {
         view.addSubview(endSessionView)
         endSessionView.backgroundColor = Palette.lightGrey.color
         endSessionView.translatesAutoresizingMaskIntoConstraints = false
-        endSessionView.widthAnchor.constraint(equalToConstant: 300).isActive = true
-        endSessionView.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        endSessionView.bottomAnchor.constraint(equalTo: stackView.topAnchor, constant: -20).isActive = true
+        endSessionView.widthAnchor.constraint(equalToConstant: viewWidth * (300 / 375)).isActive = true
+        endSessionView.heightAnchor.constraint(equalToConstant: viewHeight * (50/667)).isActive = true
+        endSessionView.bottomAnchor.constraint(equalTo: stackView.topAnchor, constant: -viewHeight * (20 / 667)).isActive = true
         endSessionView.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0).isActive = true
         endSessionView.layer.cornerRadius = 2
         
@@ -162,9 +156,7 @@ extension SettingsViewController {
         endSessionLabelLeft.text = "end my session"
         endSessionLabelLeft.textColor = Palette.darkText.color
         
-        endSessionLabelLeft.leadingAnchor.constraint(equalTo: endSessionView.leadingAnchor, constant: 15).isActive = true
-        //endSessionLabelLeft.heightAnchor.constraint(equalToConstant: 17).isActive = true
-        //endSessionLabelLeft.widthAnchor.constraint(equalTo: endSessionView.widthAnchor, multiplier: 0.4).isActive = true
+        endSessionLabelLeft.leadingAnchor.constraint(equalTo: endSessionView.leadingAnchor, constant: viewWidth * (15 / 375)).isActive = true
         endSessionLabelLeft.centerYAnchor.constraint(equalTo: endSessionView.centerYAnchor, constant: 0).isActive = true
         
         endSessionView.addSubview(settingsTotalTimerLabel)
@@ -174,9 +166,7 @@ extension SettingsViewController {
         settingsTotalTimerLabel.textColor = Palette.darkText.color
         settingsTotalTimerLabel.textAlignment = .right
         
-        settingsTotalTimerLabel.trailingAnchor.constraint(equalTo: endSessionView.trailingAnchor, constant: -15).isActive = true
-        //settingsTotalTimerLabel.heightAnchor.constraint(equalToConstant: 17).isActive = true
-        //settingsTotalTimerLabel.widthAnchor.constraint(equalTo: endSessionView.widthAnchor, multiplier: 0.4).isActive = true
+        settingsTotalTimerLabel.trailingAnchor.constraint(equalTo: endSessionView.trailingAnchor, constant: -viewWidth * (15 / 667)).isActive = true
         settingsTotalTimerLabel.centerYAnchor.constraint(equalTo: endSessionView.centerYAnchor, constant: 0).isActive = true
     }
     
@@ -184,10 +174,10 @@ extension SettingsViewController {
         view.addSubview(endBreakView)
         endBreakView.backgroundColor = Palette.purple.color
         endBreakView.translatesAutoresizingMaskIntoConstraints = false
-        endBreakView.widthAnchor.constraint(equalToConstant: 300).isActive = true
-        endBreakView.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        endBreakView.widthAnchor.constraint(equalToConstant: viewWidth * (300 / 667)).isActive = true
+        endBreakView.heightAnchor.constraint(equalToConstant: viewHeight * (50 / 375)).isActive = true
         endBreakView.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0).isActive = true
-        endBreakView.bottomAnchor.constraint(equalTo: endSessionView.topAnchor, constant: -20).isActive = true
+        endBreakView.bottomAnchor.constraint(equalTo: endSessionView.topAnchor, constant: -viewHeight * (20 / 667)).isActive = true
         endBreakView.layer.cornerRadius = 2
         
         endBreakView.addSubview(endBreakViewLabelLeft)
@@ -196,9 +186,7 @@ extension SettingsViewController {
         endBreakViewLabelLeft.text = "end my break"
         endBreakViewLabelLeft.textColor = UIColor.white
         
-        endBreakViewLabelLeft.leadingAnchor.constraint(equalTo: endBreakView.leadingAnchor, constant: 15).isActive = true
-        //endBreakViewLabelLeft.heightAnchor.constraint(equalToConstant: 17).isActive = true
-        //endBreakViewLabelLeft.widthAnchor.constraint(equalTo: endBreakView.widthAnchor, multiplier: 0.4).isActive = true
+        endBreakViewLabelLeft.leadingAnchor.constraint(equalTo: endBreakView.leadingAnchor, constant: viewWidth * (15 / 375)).isActive = true
         endBreakViewLabelLeft.centerYAnchor.constraint(equalTo: endBreakView.centerYAnchor, constant: 0).isActive = true
         
         endBreakView.addSubview(breakTimerLabel)
@@ -208,9 +196,7 @@ extension SettingsViewController {
         breakTimerLabel.textColor = UIColor.white
         breakTimerLabel.textAlignment = .right
         
-        breakTimerLabel.trailingAnchor.constraint(equalTo: endBreakView.trailingAnchor, constant: -15).isActive = true
-        //breakTimerLabel.heightAnchor.constraint(equalToConstant: 17).isActive = true
-        //breakTimerLabel.widthAnchor.constraint(equalTo: endBreakView.widthAnchor, multiplier: 0.4).isActive = true
+        breakTimerLabel.trailingAnchor.constraint(equalTo: endBreakView.trailingAnchor, constant: -viewWidth * (15 / 375)).isActive = true
         breakTimerLabel.centerYAnchor.constraint(equalTo: endBreakView.centerYAnchor, constant: 0).isActive = true
     }
 }
