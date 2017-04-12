@@ -20,7 +20,7 @@ final class ProductiveTimeViewModel {
 
     //timers and counters
     var productivityTimer: Timer
-    var productivityTimerCounter: Int = 0 {
+    var productivityTimerCounter: Int {
         didSet {
             delegate.productiveTimeLabel.text = formatTime(time: Int(productivityTimerCounter))
         }
@@ -31,6 +31,8 @@ final class ProductiveTimeViewModel {
             delegate.propsLabel.text = "Props: \(props)"
         }
     }
+    var currentCyclePropsToScore = 0
+    var currentCyclePropsScored = 0
     
     var cancelCountdown = 5
     
@@ -43,13 +45,22 @@ final class ProductiveTimeViewModel {
     init(vc: ProductiveTimeViewController){
         self.delegate = vc
         self.productivityTimer = dataStore.user.currentSession?.productivityTimer ?? Timer()
-        self.props = dataStore.user.totalProps
-        delegate.propsLabel.text = "Props: \(props)"
+        self.productivityTimerCounter = 0
+        self.props = 0
     }
     
     func startTimer() {
+        currentCyclePropsScored = 0
+        currentCyclePropsToScore = 0
+        
+        delegate.productiveTimeLabel.isHidden = false
+        delegate.propsLabel.isHidden = false
+        
         self.productivityTimerCounter = dataStore.user.currentCoach.difficulty.baseProductivityLength
-
+        dataStore.defaults.set(Date(), forKey: "productivityTimerStartedAt")
+        
+        self.props = dataStore.user.totalProps
+        
         productivityTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { (timer) in
            self.productivityTimerAction()
         })
@@ -59,8 +70,7 @@ final class ProductiveTimeViewModel {
         print("productivity timer: \(productivityTimerCounter)")
         productivityTimerCounter -= 1
         props += 1
-        dataStore.user.totalProps += 1
-        dataStore.defaults.set(dataStore.user.totalProps, forKey: "totalProps")
+        currentCyclePropsToScore += 1
         
         if cancelCountdown > 0 {
             cancelCountdown -= 1
@@ -71,7 +81,7 @@ final class ProductiveTimeViewModel {
         
         progressBarCounter += 1.0 / Double(dataStore.user.currentCoach.difficulty.baseProductivityLength)
         
-        if productivityTimerCounter == 0 {
+        if productivityTimerCounter <= 0 {
             productivityTimer.invalidate()
             delegate.moveToBreak()
         }
@@ -102,6 +112,20 @@ final class ProductiveTimeViewModel {
         dataStore.user.currentSession?.sessionTimerCounter -= productivityTimerCounter
         dataStore.user.totalProps -= dataStore.user.currentCoach.difficulty.basePenaltyForLeavingProductivityScreen
         dataStore.defaults.set(dataStore.user.totalProps, forKey: "totalProps")
+    }
+    
+    func updateTimers() {        
+        let timeTimerStarted = dataStore.defaults.value(forKey: "productivityTimerStartedAt") as! Date
+        let timeSinceTimerStarted = Date().timeIntervalSince(timeTimerStarted)
+        
+        productivityTimerCounter = dataStore.user.currentCoach.difficulty.baseProductivityLength - Int(timeSinceTimerStarted)
+        dataStore.user.currentSession?.sessionTimerCounter = dataStore.user.currentSession!.sessionTimerStartCounter - Int(timeSinceTimerStarted)
+        
+        currentCyclePropsToScore = Int(timeSinceTimerStarted) - currentCyclePropsScored
+        props = dataStore.user.totalProps + currentCyclePropsToScore
+        print(props)
+        
+        progressBarCounter = timeSinceTimerStarted / Double(dataStore.user.currentCoach.difficulty.baseProductivityLength)
     }
 }
 

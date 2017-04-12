@@ -49,14 +49,23 @@ class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate, Bre
         setupProgressBar()
         setupSettingsButton()
         setupLeaderBoardButton()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(appEnteredForeground), name: NSNotification.Name(rawValue: "appEnteredForeground"), object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         viewModel.delegate = self
+        animateCoachPopup()
+    }
+    
+    func appEnteredForeground() {
+        viewModel.updateTimers()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
         if viewModel.breakIsOn == false {
             viewModel.startTimer()
         }
-        animateCoachPopup()
     }
     
     func presentBreakEntertainmentVC() {
