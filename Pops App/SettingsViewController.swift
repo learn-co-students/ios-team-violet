@@ -38,6 +38,23 @@ class HomeSettingsViewController: UIViewController {
         setupStackView()
         
     }
+    
+    func shareBttnPressed() {
+        
+        let activityViewController = UIActivityViewController(
+            activityItems: ["Check out this beer I liked using Beer Tracker."],
+            applicationActivities: nil)
+        //        if let popoverPresentationController = activityViewController.popoverPresentationController {
+        //            //popoverPresentationController.barButtonItem = (sender as! UIBarButtonItem)
+        //            popoverPresentationController.barButtonItem = ()
+        //        }
+        present(activityViewController, animated: true, completion: nil)
+    }
+    
+    func contactUsBttnPressed() {
+        
+    }
+
 
     
     func setupPropsHoursView() {
@@ -67,7 +84,7 @@ class HomeSettingsViewController: UIViewController {
         totalHoursLabel.font = UIFont(name: "Avenir-Heavy", size: 13)
         totalHoursLabel.translatesAutoresizingMaskIntoConstraints = false
         totalHoursLabel.centerYAnchor.constraint(equalTo: totalPropsLabel.centerYAnchor, constant: 0).isActive = true
-        totalHoursLabel.leadingAnchor.constraint(equalTo: totalPropsLabel.trailingAnchor, constant: 25).isActive = true
+        totalHoursLabel.leadingAnchor.constraint(equalTo: propsHoursView.centerXAnchor, constant: -viewWidth * (100/667)).isActive = true
         
         hoursProductiveLabel.text = "hours being productive"
         hoursProductiveLabel.font = UIFont(name: "Avenir-Heavy", size: 13)
@@ -78,11 +95,11 @@ class HomeSettingsViewController: UIViewController {
     }
     
     func setupStackView() {
-        let customView = CustomSettingsView(settings: settingsOne)
-        let secondView = CustomSettingsView(settings: settingsTwo)
+        let contactUsBttn = CustomSettingsView(settings: settingsOne)
+        let shareBttn = CustomSettingsView(settings: settingsTwo)
         
         let dividers = [divider1, divider2, divider3, divider4]
-        let stackedViews = [divider1, propsHoursView, divider2, customView, divider3, secondView, divider4]
+        let stackedViews = [divider1, propsHoursView, divider2, contactUsBttn, divider3, shareBttn, divider4]
         
         dividers.forEach {
             $0.backgroundColor = Palette.lightGrey.color
@@ -94,8 +111,10 @@ class HomeSettingsViewController: UIViewController {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
-        customView.heightAnchor.constraint(equalToConstant: viewHeight * (25 / 667)).isActive = true
-        secondView.heightAnchor.constraint(equalToConstant: viewHeight * (25 / 667)).isActive = true
+        contactUsBttn.heightAnchor.constraint(equalToConstant: viewHeight * (25 / 667)).isActive = true
+        contactUsBttn.addTarget(self, action: #selector(contactUsBttnPressed), for: .touchUpInside)
+        shareBttn.heightAnchor.constraint(equalToConstant: viewHeight * (25 / 667)).isActive = true
+        shareBttn.addTarget(self, action: #selector(shareBttnPressed), for: .touchUpInside)
         
         stackView = UIStackView(arrangedSubviews: stackedViews)
         
@@ -188,6 +207,24 @@ class SettingsViewController: UIViewController, DisplayBreakTimerDelegate, Setti
         //self.dismiss(animated: true, completion: nil)
     }
     
+    func shareBttnPressed() {
+        
+        let activityViewController = UIActivityViewController(
+            activityItems: ["Check out this beer I liked using Beer Tracker."],
+            applicationActivities: nil)
+//        if let popoverPresentationController = activityViewController.popoverPresentationController {
+//            //popoverPresentationController.barButtonItem = (sender as! UIBarButtonItem)
+//            popoverPresentationController.barButtonItem = ()
+//        }
+        present(activityViewController, animated: true, completion: nil)
+        
+        
+    }
+    
+    func contactUsBttnPressed() {
+        
+    }
+    
 }
 
 
@@ -223,7 +260,7 @@ extension SettingsViewController {
         totalHoursLabel.font = UIFont(name: "Avenir-Heavy", size: 13)
         totalHoursLabel.translatesAutoresizingMaskIntoConstraints = false
         totalHoursLabel.centerYAnchor.constraint(equalTo: totalPropsLabel.centerYAnchor, constant: 0).isActive = true
-        totalHoursLabel.leadingAnchor.constraint(equalTo: totalPropsLabel.trailingAnchor, constant: 25).isActive = true
+        totalHoursLabel.leadingAnchor.constraint(equalTo: propsHoursView.centerXAnchor, constant: -viewWidth * (100/667)).isActive = true
         
         hoursProductiveLabel.text = "hours being productive"
         hoursProductiveLabel.font = UIFont(name: "Avenir-Heavy", size: 13)
@@ -234,11 +271,11 @@ extension SettingsViewController {
     }
     
     func setupStackView() {
-        let customView = CustomSettingsView(settings: settingsOne)
-        let secondView = CustomSettingsView(settings: settingsTwo)
+        let contactUsBttn = CustomSettingsView(settings: settingsOne)
+        let shareBttn = CustomSettingsView(settings: settingsTwo)
         
         let dividers = [divider1, divider2, divider3, divider4]
-        let stackedViews = [divider1, propsHoursView, divider2, customView, divider3, secondView, divider4]
+        let stackedViews = [divider1, propsHoursView, divider2, contactUsBttn, divider3, shareBttn, divider4]
         
         dividers.forEach {
             $0.backgroundColor = Palette.lightGrey.color
@@ -250,8 +287,10 @@ extension SettingsViewController {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
-        customView.heightAnchor.constraint(equalToConstant: viewHeight * (25 / 667)).isActive = true
-        secondView.heightAnchor.constraint(equalToConstant: viewHeight * (25 / 667)).isActive = true
+        contactUsBttn.heightAnchor.constraint(equalToConstant: viewHeight * (25 / 667)).isActive = true
+        contactUsBttn.addTarget(self, action: #selector(contactUsBttnPressed), for: .touchUpInside)
+        shareBttn.heightAnchor.constraint(equalToConstant: viewHeight * (25 / 667)).isActive = true
+        shareBttn.addTarget(self, action: #selector(shareBttnPressed), for: .touchUpInside)
         
         stackView = UIStackView(arrangedSubviews: stackedViews)
         
