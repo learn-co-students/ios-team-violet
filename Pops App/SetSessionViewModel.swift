@@ -15,6 +15,7 @@ final class SetSessionViewModel {
         let currentSession = Session(sessionHours: hours, sessionDifficulty: dataStore.user.currentCoach.difficulty)
         dataStore.user.currentSession = currentSession
     }
+    
  
 }
 

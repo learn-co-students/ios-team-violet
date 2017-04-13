@@ -1,5 +1,6 @@
 
 import UIKit
+import UserNotifications
 
 class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDelegate {
 
@@ -7,6 +8,8 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
     lazy var viewHeight: CGFloat = self.view.frame.height
     
     var viewModel: ProductiveTimeViewModel!
+    
+    let center = UNUserNotificationCenter.current()
 
     var productiveTimeLabel = UILabel()
     
@@ -49,8 +52,10 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         animateCoachPopup()
+        productiveTimeEndedUserNotificationRequest()
     }
     
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)        
         
@@ -249,4 +254,29 @@ extension ProductiveTimeViewController {
         self.cancelSessionButton.removeTarget(self, action: #selector(self.cancelSession), for: .touchUpInside)
         self.cancelSessionButton.addTarget(self, action: #selector(self.skipToBreak), for: .touchUpInside)
     }
+}
+
+extension ProductiveTimeViewController {
+    
+    func productiveTimeEndedUserNotificationRequest() {
+        
+        let content = UNMutableNotificationContent()
+        content.title = "Break Time!"
+        content.body = "You are free to use your phone and be unproductive for the next 5 mintues!"
+        content.sound = UNNotificationSound.default()
+        
+        let productivityTimerLength = viewModel.dataStore.user.currentCoach.difficulty.baseProductivityLength
+        
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: TimeInterval(productivityTimerLength), repeats: false)
+        
+        let identifier = "UYLLocalNotification"
+        let request = UNNotificationRequest(identifier: identifier,
+                                            content: content, trigger: trigger)
+        center.add(request, withCompletionHandler: { (error) in
+            if let error = error {
+                print(error)
+            }
+        })
+    }
+    
 }
