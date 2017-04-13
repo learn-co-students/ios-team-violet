@@ -1,9 +1,11 @@
 
 import UIKit
+import UserNotifications
 
 class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate, BreakTimeViewModelProgressBarDelegate {
 
     var viewModel: BreakTimeViewModel!
+    let center = UNUserNotificationCenter.current()
     
     lazy var viewWidth: CGFloat = self.view.frame.width
     lazy var viewHeight: CGFloat = self.view.frame.height
@@ -72,6 +74,8 @@ class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate, Bre
     override func viewDidAppear(_ animated: Bool) {
         if viewModel.breakIsOn == false {
             viewModel.startTimer()
+            userDidNotComeBackNotification()
+            breakTimeEndedUserNotificationRequest()
         }
     }
     
@@ -401,4 +405,52 @@ extension BreakTimeViewController {
         })
     }
 
+}
+
+extension BreakTimeViewController {
+    
+    func breakTimeEndedUserNotificationRequest() {
+        
+        let content = UNMutableNotificationContent()
+        content.title = "Break ends in 30 seconds!"
+        content.body = "Pops will start yelling at you if you don't come back to the app in 30 seconds. Don't stress out pops. Don't make him yell at you."
+        
+        content.sound = UNNotificationSound.default()
+        
+        let breakTimerLength = (viewModel.dataStore.user.currentCoach.difficulty.baseBreakLength - 30)
+        
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: TimeInterval(breakTimerLength), repeats: false)
+        
+        let identifier = "UYLLocalNotification"
+        let request = UNNotificationRequest(identifier: identifier,
+                                            content: content, trigger: trigger)
+        center.add(request, withCompletionHandler: { (error) in
+            if let error = error {
+                print(error)
+            }
+        })
+    }
+    
+    func userDidNotComeBackNotification() {
+       
+        let content = UNMutableNotificationContent()
+        content.title = "Come back now."
+        content.body = "Pops is getting impatient. He sees you still have not come back to the app yet."
+        
+        content.sound = UNNotificationSound.default()
+        
+        let breakTimerLength = (viewModel.dataStore.user.currentCoach.difficulty.baseBreakLength + 30)
+        
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: TimeInterval(breakTimerLength), repeats: false)
+        
+        let identifier = "UYLLocalNotification2"
+        let request = UNNotificationRequest(identifier: identifier,
+                                            content: content, trigger: trigger)
+        center.add(request, withCompletionHandler: { (error) in
+            if let error = error {
+                print(error)
+            }
+        })
+        
+    }
 }

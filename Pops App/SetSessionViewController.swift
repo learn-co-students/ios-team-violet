@@ -1,9 +1,12 @@
 
 import UIKit
+import UserNotifications
 
 class SetSessionViewController: UIViewController {
     
     let viewModel = SetSessionViewModel()
+    let center = UNUserNotificationCenter.current()
+    let options: UNAuthorizationOptions = [.alert, .sound]
     
     //Selected time for collection view
     var selectedTime: Time!
@@ -98,6 +101,7 @@ class SetSessionViewController: UIViewController {
         presentProductiveTimeVC()
         if let indexPath = selectHourCollectionView.indexPathsForSelectedItems?[0] {
             viewModel.startSessionOfLength((indexPath.row) + 1)
+            
         }
     }
     
@@ -402,7 +406,7 @@ extension SetSessionViewController {
         allowNotificationsButton.layer.masksToBounds = true
         allowNotificationsButton.setTitle("notify me", for: .normal)
         allowNotificationsButton.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 14.0)
-        allowNotificationsButton.addTarget(self, action: #selector(animateReadyButtons), for: .touchUpInside)
+        allowNotificationsButton.addTarget(self, action: #selector(notifyMeButtonPressed), for: .touchUpInside)
         
         let disallowNotificationsButton = UIButton()
         disallowNotificationsButton.backgroundColor = Palette.lightGrey.color
@@ -527,6 +531,21 @@ extension SetSessionViewController {
             
         }
 
+    }
+    
+    func notifyMeButtonPressed() {
+        
+        self.center.requestAuthorization(options: options) { (granted, error) in
+            
+            DispatchQueue.main.async {
+                if granted {
+                    self.animateReadyButtons()
+                } else {
+                    //what happens if user doesn't allow notifications
+                }
+            }
+            
+        }
     }
     
     func animateReadyButtons() {
