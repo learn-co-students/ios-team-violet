@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1F58A2171E9E72AC0008C2A8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1F58A2161E9E72AC0008C2A8 /* GoogleService-Info.plist */; };
 		1F7C447F1E9408E80067ECCF /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7C447E1E9408E80067ECCF /* SettingsViewController.swift */; };
 		1F7C44811E9409050067ECCF /* ScoreboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7C44801E9409050067ECCF /* ScoreboardViewController.swift */; };
 		1F7C44831E9409700067ECCF /* BreakTimeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7C44821E9409700067ECCF /* BreakTimeViewController.swift */; };
@@ -48,7 +47,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		1F58A2161E9E72AC0008C2A8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../GoogleService-Info.plist"; sourceTree = "<group>"; };
 		1F7C447E1E9408E80067ECCF /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		1F7C44801E9409050067ECCF /* ScoreboardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScoreboardViewController.swift; sourceTree = "<group>"; };
 		1F7C44821E9409700067ECCF /* BreakTimeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BreakTimeViewController.swift; sourceTree = "<group>"; };
@@ -79,7 +77,7 @@
 		1FBEEC7C1E9588130099F413 /* BreakEntertainmentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BreakEntertainmentViewController.swift; sourceTree = "<group>"; };
 		1FBEEC801E9591250099F413 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		1FBEEC821E9692370099F413 /* Session.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
-		98E05D301E9E7F630096BCE9 /* Pops App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = "Pops App.entitlements"; path = "Pops App/Pops App.entitlements"; sourceTree = "<group>"; };
+		98E05D301E9E7F630096BCE9 /* Pops App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Pops App.entitlements"; sourceTree = "<group>"; };
 		98E682741E931E4F00BAEFE8 /* Pops App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pops App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		98E682771E931E4F00BAEFE8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		98E6827E1E931E4F00BAEFE8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -173,7 +171,6 @@
 		98E6826B1E931E4F00BAEFE8 = {
 			isa = PBXGroup;
 			children = (
-				98E05D301E9E7F630096BCE9 /* Pops App.entitlements */,
 				98E682761E931E4F00BAEFE8 /* Pops */,
 				98E682751E931E4F00BAEFE8 /* Products */,
 				1FBEEC791E9564330099F413 /* Frameworks */,
@@ -198,7 +195,7 @@
 				1F7C447D1E93FC200067ECCF /* Model */,
 				98E6827E1E931E4F00BAEFE8 /* Assets.xcassets */,
 				98E682831E931E4F00BAEFE8 /* Info.plist */,
-				1F58A2161E9E72AC0008C2A8 /* GoogleService-Info.plist */,
+				98E05D301E9E7F630096BCE9 /* Pops App.entitlements */,
 			);
 			name = Pops;
 			path = "Pops App";
@@ -299,7 +296,6 @@
 			files = (
 				98E682821E931E4F00BAEFE8 /* LaunchScreen.storyboard in Resources */,
 				98E6827F1E931E4F00BAEFE8 /* Assets.xcassets in Resources */,
-				1F58A2171E9E72AC0008C2A8 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
