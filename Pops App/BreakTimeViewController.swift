@@ -149,7 +149,7 @@ class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate, Bre
         return true
     }
     
-    func endSessionBttnPressed() {
+    func endBreakBttnPressed() {
         viewModel.breakTimerCounter = 1
     }
 }

@@ -67,14 +67,14 @@ class HomeSettingsViewController: UIViewController {
         totalHoursLabel.font = UIFont(name: "Avenir-Heavy", size: 13)
         totalHoursLabel.translatesAutoresizingMaskIntoConstraints = false
         totalHoursLabel.centerYAnchor.constraint(equalTo: totalPropsLabel.centerYAnchor, constant: 0).isActive = true
-        totalHoursLabel.leadingAnchor.constraint(equalTo: totalPropsLabel.trailingAnchor, constant: 25).isActive = true
+        totalHoursLabel.leadingAnchor.constraint(equalTo: hoursProductiveLabel.leadingAnchor, constant: 25).isActive = true
         
         hoursProductiveLabel.text = "hours being productive"
         hoursProductiveLabel.font = UIFont(name: "Avenir-Heavy", size: 13)
         hoursProductiveLabel.textColor = Palette.aqua.color
         hoursProductiveLabel.translatesAutoresizingMaskIntoConstraints = false
         hoursProductiveLabel.centerYAnchor.constraint(equalTo: propsLabel.centerYAnchor, constant: 0).isActive = true
-        hoursProductiveLabel.leadingAnchor.constraint(equalTo: totalHoursLabel.leadingAnchor, constant: 0).isActive = true
+        hoursProductiveLabel.leadingAnchor.constraint(equalTo: totalPropsLabel.trailingAnchor, constant: 10).isActive = true
     }
     
     func setupStackView() {
@@ -115,7 +115,7 @@ class HomeSettingsViewController: UIViewController {
 }
 //protocol to enable end break.
 protocol BreakButtonDelegate: class {
-    func endSessionBttnPressed()
+    func endBreakBttnPressed()
 }
 
 class SettingsViewController: UIViewController, DisplayBreakTimerDelegate, SettingsViewModelDelegate {
@@ -184,8 +184,7 @@ class SettingsViewController: UIViewController, DisplayBreakTimerDelegate, Setti
     
     func endBreakBttnPressed() {
         print("end break now!")
-        delegate.endSessionBttnPressed()
-        //self.dismiss(animated: true, completion: nil)
+        delegate.endBreakBttnPressed()
     }
     
 }

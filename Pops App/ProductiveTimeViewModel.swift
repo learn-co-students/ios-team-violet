@@ -52,7 +52,7 @@ final class ProductiveTimeViewModel {
         self.productivityTimerCounter = 0
         self.props = 0
         
-        motionManager.accelerometerUpdateInterval = 5
+        motionManager.accelerometerUpdateInterval = 0.5
     }
     
     func startTimer() {
@@ -60,8 +60,6 @@ final class ProductiveTimeViewModel {
         currentCyclePropsToScore = 0
         
         motionManager.startAccelerometerUpdates()
-        
-        //motionManager.accelerometerData?.acceleration.z
         
         delegate.productiveTimeLabel.isHidden = false
         delegate.propsLabel.isHidden = false
