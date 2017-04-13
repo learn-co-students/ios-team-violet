@@ -53,15 +53,24 @@ class SessionEndedViewController: UIViewController {
         present(productiveTimeVC, animated: true, completion: nil)
     }
     
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
+
 }
 
 extension SessionEndedViewController {
+    
     func setupDoneButton() {
-        doneButton.backgroundColor = Palette.lightBlue.color
+        doneButton.backgroundColor = Palette.lightGrey.color
+        doneButton.setTitleColor(.black, for: .normal)
+        doneButton.alpha = 1
+        doneButton.isEnabled = true
         doneButton.layer.cornerRadius = 2.0
         doneButton.layer.masksToBounds = true
         doneButton.setTitle("let me go", for: .normal)
         doneButton.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 14.0)
+        doneButton.setTitleColor(Palette.darkText.color, for: .normal)
         doneButton.addTarget(self, action: #selector(presentSetSessionVC), for: .touchUpInside)
         
         view.addSubview(doneButton)

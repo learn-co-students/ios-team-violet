@@ -45,7 +45,7 @@ private extension DataStore {
             ("Hey!", "Hands off, buddy!")
         ]
         let introStatements = [
-            ("Hey there, I'm Pops!", "I’ll make sure you are super productive today. How long would you like to stay productive for?")
+            ("Ready to make me proud today?", "How long are you looking to stay productive for?")
         ]
         let setSessionStatements = [
             [("Only an hour?", "Seems like you could do better.")],
@@ -58,7 +58,7 @@ private extension DataStore {
             [("Dear lord!", "Don't hurt yourself, sonny!")],
             ]
         let productivityStatements = [
-            ("Lock your phone now.", "I’ll tell you to take a break when the timer hits 0. Don’t even think about touching your phone before then.")
+            ("Place your phone FACE DOWN on a FLAT SURFACE (like a table).", "I’ll tell you to take a break when the timer hits 0. Don’t even think about touching your phone before then.")
         ]
         let productivityReprimands = [
             ("Get back to work!", "You just lost 100 Props!")
@@ -67,14 +67,13 @@ private extension DataStore {
             ("Notification Title", "Notification Body")
         ]
         let breakStatements = [
-            ("Congrats on your first 5 minute break!", "Do whatever! I thought you may want to catch up on texts, email, and Facebook, so I gave you easy access to those apps below. If you have nothing else to do, I can entertain you."),
             ("Congrats!", "Enjoy your break!")
         ]
         let breakNotificationStatements = [
             ("Notification Title", "Notification Body")
         ]
         let endSessionStatements = [
-            ("Congrats!", "See you soon!")
+            ("2 hours already went by!", "I'd be super proud if you stayed productive for at least one more hour.")
         ]
         let pops = Coach(
             name: name,
@@ -92,7 +91,6 @@ private extension DataStore {
             breakView: PopsBreakView())
         return pops
     }
-    
     
     func generateBaba() -> Coach {
         let name = "Baba"
