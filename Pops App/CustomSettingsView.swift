@@ -2,7 +2,7 @@
 import Foundation
 import UIKit
 
-class CustomSettingsView: UIView {
+class CustomSettingsView: UIButton {
     
     let iconImgView = UIImageView()
     let textLabel = UILabel()

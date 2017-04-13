@@ -15,29 +15,11 @@ final class SettingsViewModel {
     
     init(vc: SettingsViewController){
         self.delegate = vc
-        if let settingsCounter = dataStore.user.currentSession?.sessionTimerCounter {
-            print("current session time is ", formatTime(time: settingsCounter) )
-            settingsTotalCounter = settingsCounter
-        }
         
     }
     
     init() {}
     
-    //timers and counters
-    
-    //var settingsTotalTimer = Timer()
-    var settingsTotalCounter : Int = 0 {
-        didSet {
-            print("yeaa")
-            delegate.settingsTotalTimerLabel.text = "\(formatTime(time: settingsTotalCounter)) left"
-        }
-    }
-    
-    func settingsTimerAction() {
-        settingsTotalCounter -= 1
-        //delegate.settingsTotalTimerLabel.text = "\(formatTime(time: settingsTotalCounter)) left"
-    }
     
 }
 
