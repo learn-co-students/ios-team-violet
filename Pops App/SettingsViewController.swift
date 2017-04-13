@@ -38,6 +38,19 @@ class HomeSettingsViewController: UIViewController {
         setupStackView()
         
     }
+    
+    func shareBttnPressed() {
+        
+        let activityViewController = UIActivityViewController(
+            activityItems: ["Check out this beer I liked using Beer Tracker."],
+            applicationActivities: nil)
+        present(activityViewController, animated: true, completion: nil)
+    }
+    
+    func contactUsBttnPressed() {
+        
+    }
+
 
     
     func setupPropsHoursView() {
@@ -67,22 +80,22 @@ class HomeSettingsViewController: UIViewController {
         totalHoursLabel.font = UIFont(name: "Avenir-Heavy", size: 13)
         totalHoursLabel.translatesAutoresizingMaskIntoConstraints = false
         totalHoursLabel.centerYAnchor.constraint(equalTo: totalPropsLabel.centerYAnchor, constant: 0).isActive = true
-        totalHoursLabel.leadingAnchor.constraint(equalTo: totalPropsLabel.trailingAnchor, constant: 25).isActive = true
+        totalHoursLabel.leadingAnchor.constraint(equalTo: propsHoursView.centerXAnchor, constant: -viewWidth * (100/667)).isActive = true
         
         hoursProductiveLabel.text = "hours being productive"
         hoursProductiveLabel.font = UIFont(name: "Avenir-Heavy", size: 13)
         hoursProductiveLabel.textColor = Palette.aqua.color
         hoursProductiveLabel.translatesAutoresizingMaskIntoConstraints = false
         hoursProductiveLabel.centerYAnchor.constraint(equalTo: propsLabel.centerYAnchor, constant: 0).isActive = true
-        hoursProductiveLabel.leadingAnchor.constraint(equalTo: totalHoursLabel.leadingAnchor, constant: 0).isActive = true
+        hoursProductiveLabel.leadingAnchor.constraint(equalTo: totalPropsLabel.trailingAnchor, constant: 10).isActive = true
     }
     
     func setupStackView() {
-        let customView = CustomSettingsView(settings: settingsOne)
-        let secondView = CustomSettingsView(settings: settingsTwo)
+        let contactUsBttn = CustomSettingsView(settings: settingsOne)
+        let shareBttn = CustomSettingsView(settings: settingsTwo)
         
         let dividers = [divider1, divider2, divider3, divider4]
-        let stackedViews = [divider1, propsHoursView, divider2, customView, divider3, secondView, divider4]
+        let stackedViews = [divider1, propsHoursView, divider2, contactUsBttn, divider3, shareBttn, divider4]
         
         dividers.forEach {
             $0.backgroundColor = Palette.lightGrey.color
@@ -94,8 +107,10 @@ class HomeSettingsViewController: UIViewController {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
-        customView.heightAnchor.constraint(equalToConstant: viewHeight * (25 / 667)).isActive = true
-        secondView.heightAnchor.constraint(equalToConstant: viewHeight * (25 / 667)).isActive = true
+        contactUsBttn.heightAnchor.constraint(equalToConstant: viewHeight * (25 / 667)).isActive = true
+        contactUsBttn.addTarget(self, action: #selector(contactUsBttnPressed), for: .touchUpInside)
+        shareBttn.heightAnchor.constraint(equalToConstant: viewHeight * (25 / 667)).isActive = true
+        shareBttn.addTarget(self, action: #selector(shareBttnPressed), for: .touchUpInside)
         
         stackView = UIStackView(arrangedSubviews: stackedViews)
         
@@ -113,6 +128,10 @@ class HomeSettingsViewController: UIViewController {
 
 
 }
+//protocol to enable end break.
+protocol BreakButtonDelegate: class {
+    func endBreakBttnPressed()
+}
 
 class SettingsViewController: UIViewController, DisplayBreakTimerDelegate, SettingsViewModelDelegate {
 
@@ -128,12 +147,13 @@ class SettingsViewController: UIViewController, DisplayBreakTimerDelegate, Setti
             settingsTotalTimerLabel.text = "\(formatTime(time: settingsTimerCounter)) left"
         }
     }
+    weak var delegate: BreakButtonDelegate!
     
     //view properties
-    let endBreakView = UIView()
+    let endBreakView = UIButton()
     let endBreakViewLabelLeft = UILabel()
     var breakTimerLabel = UILabel()
-    let endSessionView = UIView()
+    let endSessionView = UIButton()
     let endSessionLabelLeft = UILabel()
     var settingsTotalTimerLabel = UILabel()
 
@@ -173,7 +193,33 @@ class SettingsViewController: UIViewController, DisplayBreakTimerDelegate, Setti
         return true
     }
     
+    func endSessionBttnPressed() {
+        viewModel.dataStore.user.currentSession?.sessionTimerCounter = 0
+    }
+    
+    func endBreakBttnPressed() {
+        print("end break now!")
+        delegate.endBreakBttnPressed()
+    }
+    
+    func shareBttnPressed() {
+        
+        let activityViewController = UIActivityViewController(
+            activityItems: ["Check out this beer I liked using Beer Tracker."],
+            applicationActivities: nil)
+        present(activityViewController, animated: true, completion: nil)
+        
+        
+    }
+    
+    func contactUsBttnPressed() {
+        
+    }
+    
 }
+
+
+
 
 //view setups
 extension SettingsViewController {
@@ -205,7 +251,7 @@ extension SettingsViewController {
         totalHoursLabel.font = UIFont(name: "Avenir-Heavy", size: 13)
         totalHoursLabel.translatesAutoresizingMaskIntoConstraints = false
         totalHoursLabel.centerYAnchor.constraint(equalTo: totalPropsLabel.centerYAnchor, constant: 0).isActive = true
-        totalHoursLabel.leadingAnchor.constraint(equalTo: totalPropsLabel.trailingAnchor, constant: 25).isActive = true
+        totalHoursLabel.leadingAnchor.constraint(equalTo: propsHoursView.centerXAnchor, constant: -viewWidth * (100/667)).isActive = true
         
         hoursProductiveLabel.text = "hours being productive"
         hoursProductiveLabel.font = UIFont(name: "Avenir-Heavy", size: 13)
@@ -216,11 +262,11 @@ extension SettingsViewController {
     }
     
     func setupStackView() {
-        let customView = CustomSettingsView(settings: settingsOne)
-        let secondView = CustomSettingsView(settings: settingsTwo)
+        let contactUsBttn = CustomSettingsView(settings: settingsOne)
+        let shareBttn = CustomSettingsView(settings: settingsTwo)
         
         let dividers = [divider1, divider2, divider3, divider4]
-        let stackedViews = [divider1, propsHoursView, divider2, customView, divider3, secondView, divider4]
+        let stackedViews = [divider1, propsHoursView, divider2, contactUsBttn, divider3, shareBttn, divider4]
         
         dividers.forEach {
             $0.backgroundColor = Palette.lightGrey.color
@@ -232,8 +278,10 @@ extension SettingsViewController {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
-        customView.heightAnchor.constraint(equalToConstant: viewHeight * (25 / 667)).isActive = true
-        secondView.heightAnchor.constraint(equalToConstant: viewHeight * (25 / 667)).isActive = true
+        contactUsBttn.heightAnchor.constraint(equalToConstant: viewHeight * (25 / 667)).isActive = true
+        contactUsBttn.addTarget(self, action: #selector(contactUsBttnPressed), for: .touchUpInside)
+        shareBttn.heightAnchor.constraint(equalToConstant: viewHeight * (25 / 667)).isActive = true
+        shareBttn.addTarget(self, action: #selector(shareBttnPressed), for: .touchUpInside)
         
         stackView = UIStackView(arrangedSubviews: stackedViews)
         
@@ -257,6 +305,7 @@ extension SettingsViewController {
         endSessionView.bottomAnchor.constraint(equalTo: stackView.topAnchor, constant: -viewHeight * (20 / 667)).isActive = true
         endSessionView.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0).isActive = true
         endSessionView.layer.cornerRadius = 2
+        endSessionView.addTarget(self, action: #selector(endSessionBttnPressed), for: .touchUpInside)
         
         endSessionView.addSubview(endSessionLabelLeft)
         endSessionLabelLeft.font = UIFont(name: "Avenir-Heavy", size: 13)
@@ -287,6 +336,8 @@ extension SettingsViewController {
         endBreakView.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0).isActive = true
         endBreakView.bottomAnchor.constraint(equalTo: endSessionView.topAnchor, constant: -viewHeight * (20 / 667)).isActive = true
         endBreakView.layer.cornerRadius = 2
+        endBreakView.addTarget(self, action: #selector(endBreakBttnPressed), for: .touchUpInside)
+    
         
         endBreakView.addSubview(endBreakViewLabelLeft)
         endBreakViewLabelLeft.font = UIFont(name: "Avenir-Heavy", size: 13)

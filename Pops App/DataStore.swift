@@ -60,8 +60,17 @@ private extension DataStore {
         let productivityStatements = [
             ("Place your phone FACE DOWN on a FLAT SURFACE (like a table).", "I’ll tell you to take a break when the timer hits 0. Don’t even think about touching your phone before then.")
         ]
+        let productivityReprimands = [
+            ("Get back to work!", "You just lost 100 Props!")
+        ]
+        let productivityNotificationStatements = [
+            ("Notification Title", "Notification Body")
+        ]
         let breakStatements = [
             ("Congrats!", "Enjoy your break!")
+        ]
+        let breakNotificationStatements = [
+            ("Notification Title", "Notification Body")
         ]
         let endSessionStatements = [
             ("2 hours already went by!", "I'd be super proud if you stayed productive for at least one more hour.")
@@ -74,7 +83,10 @@ private extension DataStore {
             introStatements: introStatements,
             setSessionStatements: setSessionStatements,
             productivityStatements: productivityStatements,
+            productivityReprimands: productivityReprimands,
+            productivityNotificationStatements: productivityNotificationStatements,
             breakStatements: breakStatements,
+            breakNotificationStatements: breakNotificationStatements,
             endSessionStatements: endSessionStatements,
             breakView: PopsBreakView())
         return pops
@@ -101,10 +113,20 @@ private extension DataStore {
             [("Dear lord!", "Don't hurt yourself, sonny!")],
             ]
         let productivityStatements = [
-            ("Lock your phone!", "Keep working, bubby!")
+            ("Lock your phone now.", "I’ll tell you to take a break when the timer hits 0. Don’t even think about touching your phone before then.")
+        ]
+        let productivityReprimands = [
+            ("You just lost 100 props", "Get back to work!")
+        ]
+        let productivityNotificationStatements = [
+            ("Notification Title", "Notification Body")
         ]
         let breakStatements = [
+            ("Congrats on your first 5 minute break!", "Do whatever! I thought you may want to catch up on texts, email, and Facebook, so I gave you easy access to those apps below. If you have nothing else to do, I can entertain you."),
             ("Congrats!", "Enjoy your break!")
+        ]
+        let breakNotificationStatements = [
+            ("Notification Title", "Notification Body")
         ]
         let endSessionStatements = [
             ("Congrats!", "See you soon!")
@@ -117,7 +139,10 @@ private extension DataStore {
             introStatements: introStatements,
             setSessionStatements: setSessionStatements,
             productivityStatements: productivityStatements,
+            productivityReprimands: productivityReprimands,
+            productivityNotificationStatements: productivityNotificationStatements,
             breakStatements: breakStatements,
+            breakNotificationStatements: breakNotificationStatements,
             endSessionStatements: endSessionStatements,
             breakView: BabaBreakView())
         return baba
@@ -145,10 +170,20 @@ private extension DataStore {
             [("Dear lord!", "Don't hurt yourself, sonny!")],
             ]
         let productivityStatements = [
-            ("Lock your phone!", "Keep working, bubby!")
+            ("Lock your phone now.", "I’ll tell you to take a break when the timer hits 0. Don’t even think about touching your phone before then.")
+        ]
+        let productivityReprimands = [
+            ("You just lost 100 props", "Get back to work!")
+        ]
+        let productivityNotificationStatements = [
+            ("Notification Title", "Notification Body")
         ]
         let breakStatements = [
+            ("Congrats on your first 5 minute break!", "Do whatever! I thought you may want to catch up on texts, email, and Facebook, so I gave you easy access to those apps below. If you have nothing else to do, I can entertain you."),
             ("Congrats!", "Enjoy your break!")
+        ]
+        let breakNotificationStatements = [
+            ("Notification Title", "Notification Body")
         ]
         let endSessionStatements = [
             ("Congrats!", "See you soon!")
@@ -161,7 +196,10 @@ private extension DataStore {
             introStatements: introStatements,
             setSessionStatements: setSessionStatements,
             productivityStatements: productivityStatements,
+            productivityReprimands: productivityReprimands,
+            productivityNotificationStatements: productivityNotificationStatements,
             breakStatements: breakStatements,
+            breakNotificationStatements: breakNotificationStatements,
             endSessionStatements: endSessionStatements,
             breakView: ChadBreakView())
         return chad

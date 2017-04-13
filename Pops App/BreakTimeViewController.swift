@@ -2,7 +2,7 @@
 import UIKit
 import UserNotifications
 
-class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate, BreakTimeViewModelProgressBarDelegate {
+class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate, BreakTimeViewModelProgressBarDelegate, BreakButtonDelegate {
 
     var viewModel: BreakTimeViewModel!
     let center = UNUserNotificationCenter.current()
@@ -58,6 +58,7 @@ class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate, Bre
         setupCancelSettingsButton()
         
         self.viewModel.breakTimerDelegate = settingsVC
+        settingsVC.delegate = self
         
         NotificationCenter.default.addObserver(self, selector: #selector(appEnteredForeground), name: NSNotification.Name(rawValue: "appEnteredForeground"), object: nil)
     }
@@ -147,6 +148,10 @@ class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate, Bre
     
     override var prefersStatusBarHidden: Bool {
         return true
+    }
+    
+    func endBreakBttnPressed() {
+        viewModel.breakTimerCounter = 1
     }
 }
 

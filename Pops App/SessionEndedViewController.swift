@@ -56,6 +56,7 @@ class SessionEndedViewController: UIViewController {
     override var prefersStatusBarHidden: Bool {
         return true
     }
+
 }
 
 extension SessionEndedViewController {
