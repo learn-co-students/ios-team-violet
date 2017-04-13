@@ -50,7 +50,7 @@ final class Session {
         print("total timer action: \(sessionTimerCounter)")
         sessionTimerCounter -= 1
         
-        if sessionTimerCounter == 0 {
+        if sessionTimerCounter <= 0 {
             sessionTimer.invalidate()
         }
         
