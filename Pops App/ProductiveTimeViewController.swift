@@ -26,8 +26,8 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
         }
     }
     
-    let characterMessageHeader = UILabel()
-    let characterMessageBody = UILabel()
+    var characterMessageHeader = UILabel()
+    var characterMessageBody = UILabel()
     let lockIconImageView = UIImageView()
     let lockLabel = UILabel()
     
@@ -179,7 +179,7 @@ extension ProductiveTimeViewController {
         view.addSubview(cancelSessionButton)
         cancelSessionButton.setTitle("cancel session", for: .normal)
         cancelSessionButton.titleLabel?.text = "cancel session"
-        cancelSessionButton.titleLabel?.textColor = Palette.grey.color
+        cancelSessionButton.titleLabel?.textColor = Palette.white.color
         cancelSessionButton.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 13.0)
         cancelSessionButton.addTarget(self, action: #selector(cancelSession), for: .touchUpInside)
         
@@ -272,8 +272,11 @@ extension ProductiveTimeViewController {
     }
     
     func animateCancelToSkip() {
-        self.cancelSessionButton.setTitle("early break plz", for: .normal)
-        self.cancelSessionButton.titleLabel?.text = "early break plz"
+        self.cancelSessionButton.setTitle("im weak", for: .normal)
+        self.cancelSessionButton.titleLabel?.text = "im weak"
+        self.cancelSessionButton.titleLabel?.textColor = Palette.lightGrey.color
+        
+        //TODO: replace skip to break functionality with cancellation alert
         self.cancelSessionButton.removeTarget(self, action: #selector(self.cancelSession), for: .touchUpInside)
         self.cancelSessionButton.addTarget(self, action: #selector(self.skipToBreak), for: .touchUpInside)
     }
