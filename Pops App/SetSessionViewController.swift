@@ -31,6 +31,9 @@ class SetSessionViewController: UIViewController {
     let headerView = UIView()
     let settingsButton = UIButton()
     let leaderBoardButton = UIButton()
+    let contentView = UIView()
+    let homeSettingsVC = HomeSettingsViewController()
+    let dismissIcon = UIButton()
     
     //Needed to animate pops
     var coachBottomAnchorConstraint: NSLayoutConstraint!
@@ -74,6 +77,7 @@ class SetSessionViewController: UIViewController {
         setupHeaderView()
         setupSettingsButton()
         setupLeaderBoardButton()
+        setupCancelSettingsButton()
         
         if viewModel.dataStore.defaults.value(forKey: "returningUser") == nil {
             setupAllowNotificationButtons()
@@ -316,13 +320,60 @@ extension SetSessionViewController {
     func setupSettingsButton() {
         settingsButton.setBackgroundImage(#imageLiteral(resourceName: "IC_Settings-1"), for: .normal)
         
-        headerView.addSubview(settingsButton)
+        view.addSubview(settingsButton)
         settingsButton.translatesAutoresizingMaskIntoConstraints = false
         settingsButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 25.0).isActive = true
         settingsButton.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 21.0).isActive = true
         settingsButton.heightAnchor.constraint(equalToConstant: 21.0).isActive = true
         settingsButton.widthAnchor.constraint(equalToConstant: 21.0).isActive = true
+        settingsButton.addTarget(self, action: #selector(presentHomeSettingsVC), for: .touchUpInside)
     }
+    
+    
+    func setupCancelSettingsButton() {
+        self.dismissIcon.setBackgroundImage(#imageLiteral(resourceName: "IC_Quit"), for: .normal)
+        self.dismissIcon.alpha = 0
+        self.view.addSubview(self.dismissIcon)
+        self.dismissIcon.translatesAutoresizingMaskIntoConstraints = false
+        self.dismissIcon.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 26).isActive = true
+        self.dismissIcon.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -26).isActive = true
+        self.dismissIcon.widthAnchor.constraint(equalToConstant: 15).isActive = true
+        self.dismissIcon.heightAnchor.constraint(equalToConstant: 15).isActive = true
+        self.dismissIcon.addTarget(self, action: #selector(self.dismissSettingVC), for: .touchUpInside)
+    }
+    
+    func presentHomeSettingsVC() {
+        print("settings tapped")
+        view.insertSubview(self.contentView, aboveSubview: coachIcon)
+        self.contentView.backgroundColor = UIColor.red
+        
+        self.contentView.translatesAutoresizingMaskIntoConstraints = false
+        self.contentView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+        // moe: changed constant below from 20 to 0, bug resolved.
+        self.contentView.topAnchor.constraint(equalTo: settingsButton.bottomAnchor, constant: 0).isActive = true
+        self.contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        self.contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        
+        UIView.animate(withDuration: 0.2, animations: {
+            self.settingsButton.alpha = 0
+            self.dismissIcon.alpha = 1
+            
+            self.addChildViewController(self.homeSettingsVC)
+            self.homeSettingsVC.view.frame = self.contentView.bounds
+            self.contentView.addSubview(self.homeSettingsVC.view)
+            self.homeSettingsVC.didMove(toParentViewController: self)
+        })
+        
+    }
+    
+    func dismissSettingVC() {
+        self.contentView.removeFromSuperview()
+        UIView.animate(withDuration: 0.2, animations: {
+            self.dismissIcon.alpha = 0
+            self.settingsButton.alpha = 1
+        })
+    }
+
     
     func setupLeaderBoardButton() {
         leaderBoardButton.setBackgroundImage(#imageLiteral(resourceName: "IC_Leaderboard"), for: .normal)

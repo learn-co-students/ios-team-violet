@@ -109,8 +109,12 @@ final class ProductiveTimeViewModel {
         
     func skipToBreak() {
         productivityTimer.invalidate()
+        
         dataStore.user.currentSession?.sessionTimerCounter -= productivityTimerCounter
+        
+        dataStore.user.totalProps += currentCyclePropsToScore
         dataStore.user.totalProps -= dataStore.user.currentCoach.difficulty.basePenaltyForLeavingProductivityScreen
+        
         dataStore.defaults.set(dataStore.user.totalProps, forKey: "totalProps")
     }
     
@@ -128,4 +132,5 @@ final class ProductiveTimeViewModel {
         progressBarCounter = timeSinceTimerStarted / Double(dataStore.user.currentCoach.difficulty.baseProductivityLength)
     }
 }
+
 

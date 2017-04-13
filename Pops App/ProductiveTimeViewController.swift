@@ -81,7 +81,6 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
     func appEnteredBackground() {
         viewModel.dataStore.user.totalProps += viewModel.currentCyclePropsToScore
         viewModel.dataStore.defaults.set(viewModel.dataStore.user.totalProps, forKey: "totalProps")
-        print(viewModel.dataStore.user.totalProps)
         viewModel.currentCyclePropsScored += viewModel.currentCyclePropsToScore
         viewModel.currentCyclePropsToScore = 0
     }
@@ -99,6 +98,9 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
     }
     
     func moveToBreak() {
+        viewModel.dataStore.user.totalProps += viewModel.currentCyclePropsToScore
+        viewModel.dataStore.defaults.set(viewModel.dataStore.user.totalProps, forKey: "totalProps")
+        
         UIView.animate(withDuration: 0.7, animations: {
             self.coachBottomAnchorConstraint.constant = 100
             self.view.layoutIfNeeded()
@@ -107,7 +109,7 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
     }
     
     func skipToBreak() {
-        viewModel.skipToBreak()
+       viewModel.skipToBreak()
         
         self.view.layoutIfNeeded()
         
@@ -234,6 +236,7 @@ extension ProductiveTimeViewController {
         coachWindowView.translatesAutoresizingMaskIntoConstraints = false
         coachWindowView.backgroundColor = Palette.salmon.color
         coachWindowView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        
         coachWindowView.bottomAnchor.constraint(equalTo: characterMessageHeader.topAnchor, constant: -viewHeight * (35/667)).isActive = true
         coachWindowView.heightAnchor.constraint(equalToConstant: 100).isActive = true
         coachWindowView.widthAnchor.constraint(equalToConstant: 100).isActive = true

@@ -11,11 +11,17 @@ protocol BreakTimeViewModelProgressBarDelegate: class {
     var progressBarWidthAnchor: NSLayoutConstraint! {get set}
 }
 
+protocol DisplayBreakTimerDelegate: class {
+    var breakTimerLabel: UILabel {get set}
+    var settingsTimerCounter: Int {get set}
+}
+
 final class BreakTimeViewModel {
     
     let dataStore = DataStore.singleton
     weak var delegate: BreakTimeViewModelDelegate!
     weak var progressBarDelegate: BreakTimeViewModelProgressBarDelegate!
+    weak var breakTimerDelegate: DisplayBreakTimerDelegate!
     
     var breakTimer: Timer
     var breakTimerCounter: Int = 0
@@ -59,6 +65,11 @@ final class BreakTimeViewModel {
             delegate.moveToSessionEnded()
         }
         
+        if breakTimerDelegate != nil {
+            breakTimerDelegate.breakTimerLabel.text = "\(formatTime(time: breakTimerCounter)) left"
+            breakTimerDelegate.settingsTimerCounter -= 1
+        }
+        
         progressBarCounter += 1.0 / Double(dataStore.user.currentCoach.difficulty.baseBreakLength)
     }
     
@@ -70,5 +81,28 @@ final class BreakTimeViewModel {
         dataStore.user.currentSession?.sessionTimerCounter = dataStore.user.currentSession!.sessionTimerStartCounter - Int(timeSinceTimerStarted)
         
         progressBarCounter = timeSinceTimerStarted / Double(dataStore.user.currentCoach.difficulty.baseBreakLength)
+    }
+}
+
+extension BreakTimeViewModel {
+    
+    //helper method
+    func formatTime(time: Int) -> String {
+        if time >= 3600 {
+            let hours = time / 3600
+            let minutes = time / 60 % 60
+            let seconds = time % 60
+            return String(format:"%02i:%02i:%02i", hours, minutes, seconds)
+            
+        } else if time >= 60 {
+            
+            let minutes = time / 60 % 60
+            let seconds = time % 60
+            return String(format:"%02i:%02i", minutes, seconds)
+            
+        } else {
+            let seconds = time % 60
+            return String(format:"%02i", seconds)
+        }
     }
 }

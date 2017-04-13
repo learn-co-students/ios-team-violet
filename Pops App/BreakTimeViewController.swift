@@ -57,6 +57,8 @@ class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate, Bre
         setupLeaderBoardButton()
         setupCancelSettingsButton()
         
+        self.viewModel.breakTimerDelegate = settingsVC
+        
         NotificationCenter.default.addObserver(self, selector: #selector(appEnteredForeground), name: NSNotification.Name(rawValue: "appEnteredForeground"), object: nil)
     }
     
@@ -268,6 +270,7 @@ extension BreakTimeViewController {
         messagesIconView.translatesAutoresizingMaskIntoConstraints = false
         messagesIconView.widthAnchor.constraint(equalToConstant: viewWidth * (22/375)).isActive = true
         messagesIconView.heightAnchor.constraint(equalToConstant: viewWidth * (22/375)).isActive = true
+        //messagesIconView.heightAnchor.constraint(equalToConstant: messagesIconView.bounds.width).isActive = true
         messagesIconView.centerYAnchor.constraint(equalTo: messagesApp.centerYAnchor).isActive = true
         messagesIconView.centerXAnchor.constraint(equalTo: messagesApp.centerXAnchor).isActive = true
         
@@ -377,7 +380,8 @@ extension BreakTimeViewController {
         
         self.contentView.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
-        self.contentView.topAnchor.constraint(equalTo: settingsButton.bottomAnchor, constant: 20).isActive = true
+        // moe: changed constant below from 20 to 0, bug resolved.
+        self.contentView.topAnchor.constraint(equalTo: settingsButton.bottomAnchor, constant: 0).isActive = true
         self.contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         self.contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         
