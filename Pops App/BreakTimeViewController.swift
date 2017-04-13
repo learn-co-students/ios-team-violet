@@ -65,6 +65,7 @@ class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate, Bre
     override func viewWillAppear(_ animated: Bool) {
         viewModel.delegate = self
         animateCoachPopup()
+        viewModel.dataStore.defaults.set(true, forKey: "returningUser")
     }
     
     func appEnteredForeground() {
@@ -74,7 +75,7 @@ class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate, Bre
     override func viewDidAppear(_ animated: Bool) {
         if viewModel.breakIsOn == false {
             viewModel.startTimer()
-            userDidNotComeBackNotification()
+            //userDidNotComeBackNotification()
             breakTimeEndedUserNotificationRequest()
         }
     }
@@ -132,8 +133,8 @@ class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate, Bre
     func openFacebookApp() {
         print("opening facebook")
         
-        let appURL = NSURL(string: "facebook://user?username=")!
-        let webURL = NSURL(string: "https://facebook.com")!
+        let appURL = URL(string: "facebook://user?username=")!
+        let webURL = URL(string: "https://facebook.com")!
         
         let app = UIApplication.shared
         
@@ -196,7 +197,14 @@ extension BreakTimeViewController {
         characterMessageBody.textColor = Palette.grey.color
         characterMessageBody.textAlignment = .left
         characterMessageBody.font = UIFont(name: "Avenir-Heavy", size: 14.0)
-        characterMessageBody.text = viewModel.dataStore.user.currentCoach.breakStatements[0].body
+        
+        if viewModel.dataStore.defaults.value(forKey: "returningUser") == nil {
+            characterMessageBody.text = "I thought you may want to catch up on texts, email, and Facebook, so I gave you easy access to those apps below. If you have nothing else to do, I can entertain you."
+        } else {
+            let introStatments = viewModel.dataStore.user.currentCoach.introStatements
+            let randomIndex = Int(arc4random_uniform(UInt32(introStatments.count)))
+            characterMessageBody.text = viewModel.dataStore.user.currentCoach.breakStatements[randomIndex].body
+        }
         
         view.addSubview(characterMessageBody)
         characterMessageBody.translatesAutoresizingMaskIntoConstraints = false
@@ -210,8 +218,15 @@ extension BreakTimeViewController {
         characterMessageHeader.textColor = UIColor.black
         characterMessageHeader.textAlignment = .left
         characterMessageHeader.font = UIFont(name: "Avenir-Black", size: 14.0)
-        characterMessageHeader.text = viewModel.dataStore.user.currentCoach.breakStatements[0].header
         
+        if viewModel.dataStore.defaults.value(forKey: "returningUser") == nil {
+            characterMessageHeader.text = "Time for a 5 minute break!"
+        } else {
+            let introStatments = viewModel.dataStore.user.currentCoach.introStatements
+            let randomIndex = Int(arc4random_uniform(UInt32(introStatments.count)))
+            characterMessageHeader.text = viewModel.dataStore.user.currentCoach.breakStatements[randomIndex].header
+        }
+            
         view.addSubview(characterMessageHeader)
         characterMessageHeader.translatesAutoresizingMaskIntoConstraints = false
         characterMessageHeader.bottomAnchor.constraint(equalTo: characterMessageBody.topAnchor, constant: -viewHeight * (5/viewHeight)).isActive = true
@@ -366,7 +381,7 @@ extension BreakTimeViewController {
         self.dismissIcon.alpha = 0
         self.view.addSubview(self.dismissIcon)
         self.dismissIcon.translatesAutoresizingMaskIntoConstraints = false
-        self.dismissIcon.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 26).isActive = true
+        self.dismissIcon.centerYAnchor.constraint(equalTo: self.settingsButton.centerYAnchor).isActive = true
         self.dismissIcon.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -26).isActive = true
         self.dismissIcon.widthAnchor.constraint(equalToConstant: 15).isActive = true
         self.dismissIcon.heightAnchor.constraint(equalToConstant: 15).isActive = true
@@ -412,12 +427,12 @@ extension BreakTimeViewController {
     func breakTimeEndedUserNotificationRequest() {
         
         let content = UNMutableNotificationContent()
-        content.title = "Break ends in 30 seconds!"
-        content.body = "Pops will start yelling at you if you don't come back to the app in 30 seconds. Don't stress out pops. Don't make him yell at you."
+        content.title = "Break time is over!"
+        content.body = "Head back to the app and get to work. Pops will start deducting props if you aren't back in 30 seconds."
         
         content.sound = UNNotificationSound.default()
         
-        let breakTimerLength = (viewModel.dataStore.user.currentCoach.difficulty.baseBreakLength - 30)
+        let breakTimerLength = (viewModel.dataStore.user.currentCoach.difficulty.baseBreakLength)
         
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: TimeInterval(breakTimerLength), repeats: false)
         

@@ -28,8 +28,6 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
     
     let characterMessageHeader = UILabel()
     let characterMessageBody = UILabel()
-    let lockIconImageView = UIImageView()
-    let lockLabel = UILabel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,8 +36,6 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
         
         setupProgressBar()
         setupPropsLabel()
-        setupLockImageView()
-        setupLockLabel()
         
         setupCancelSessionButton()
         setupProductiveTimeLabel()
@@ -153,28 +149,6 @@ extension ProductiveTimeViewController {
         propsLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
     }
     
-    func setupLockImageView() {
-        lockIconImageView.image = UIImage(named: "IC_Lock")
-        lockIconImageView.contentMode = .scaleAspectFill
-        view.addSubview(lockIconImageView)
-        lockIconImageView.translatesAutoresizingMaskIntoConstraints = false
-        lockIconImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -viewWidth * (30/375)).isActive = true
-        lockIconImageView.widthAnchor.constraint(equalToConstant: viewWidth * (20/375)).isActive = true
-        lockIconImageView.heightAnchor.constraint(equalToConstant: viewHeight * (16/667)).isActive = true
-        lockIconImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: viewHeight * (104/667)).isActive = true
-    }
-    
-    func setupLockLabel() {
-        view.addSubview(lockLabel)
-        lockLabel.text = "lock"
-        lockLabel.font = UIFont(name: "Avenir-Heavy", size: 14)
-        lockLabel.textColor = UIColor.white
-        
-        lockLabel.translatesAutoresizingMaskIntoConstraints = false
-        lockLabel.centerYAnchor.constraint(equalTo: lockIconImageView.centerYAnchor).isActive = true
-        lockLabel.trailingAnchor.constraint(equalTo: lockIconImageView.leadingAnchor, constant: -15).isActive = true
-    }
-    
     func setupCancelSessionButton() {
         view.addSubview(cancelSessionButton)
         cancelSessionButton.setTitle("cancel session", for: .normal)
@@ -208,7 +182,14 @@ extension ProductiveTimeViewController {
         characterMessageBody.textColor = Palette.grey.color
         characterMessageBody.textAlignment = .left
         characterMessageBody.font = UIFont(name: "Avenir-Heavy", size: 14.0)
-        characterMessageBody.text = viewModel.dataStore.user.currentCoach.productivityStatements[0].body
+        
+        if viewModel.dataStore.defaults.value(forKey: "returningUser") == nil {
+            characterMessageBody.text = "When the timer hits 0, your phone will vibrate 3 times. You will only earn props while your phone is face down."
+        } else {
+            let introStatments = viewModel.dataStore.user.currentCoach.introStatements
+            let randomIndex = Int(arc4random_uniform(UInt32(introStatments.count)))
+            characterMessageBody.text = viewModel.dataStore.user.currentCoach.productivityStatements[randomIndex].body
+        }
         
         view.addSubview(characterMessageBody)
         characterMessageBody.translatesAutoresizingMaskIntoConstraints = false
@@ -222,6 +203,15 @@ extension ProductiveTimeViewController {
         characterMessageHeader.textColor = UIColor.white
         characterMessageHeader.textAlignment = .left
         characterMessageHeader.font = UIFont(name: "Avenir-Black", size: 14.0)
+        
+        if viewModel.dataStore.defaults.value(forKey: "returningUser") == nil {
+            characterMessageHeader.text = "Place your phone FACE DOWN on a FLAT SURFACE (like a table)."
+        } else {
+            let introStatments = viewModel.dataStore.user.currentCoach.introStatements
+            let randomIndex = Int(arc4random_uniform(UInt32(introStatments.count)))
+            characterMessageHeader.text = viewModel.dataStore.user.currentCoach.productivityStatements[randomIndex].header
+        }
+        
         characterMessageHeader.text = viewModel.dataStore.user.currentCoach.productivityStatements[0].header
         
         view.addSubview(characterMessageHeader)
@@ -284,8 +274,8 @@ extension ProductiveTimeViewController {
     func productiveTimeEndedUserNotificationRequest() {
         
         let content = UNMutableNotificationContent()
-        content.title = "Break Time!"
-        content.body = "You are free to use your phone and be unproductive for the next 5 mintues!"
+        content.title = "Time for a quick break!"
+        content.body = "Wrap up your final thoughts and take a 5 minute 'phone break' when ready."
         content.sound = UNNotificationSound.default()
         
         let productivityTimerLength = viewModel.dataStore.user.currentCoach.difficulty.baseProductivityLength

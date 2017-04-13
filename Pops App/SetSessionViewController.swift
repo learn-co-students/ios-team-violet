@@ -59,8 +59,6 @@ class SetSessionViewController: UIViewController {
         
         view.backgroundColor = UIColor.white
         
-        
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -96,12 +94,9 @@ class SetSessionViewController: UIViewController {
     
     
     func startButtonTapped() {
-        viewModel.dataStore.defaults.set(true, forKey: "returningUser")
-        
         presentProductiveTimeVC()
         if let indexPath = selectHourCollectionView.indexPathsForSelectedItems?[0] {
             viewModel.startSessionOfLength((indexPath.row) + 1)
-            
         }
     }
     
@@ -193,7 +188,6 @@ extension SetSessionViewController {
         startButton.setTitle("start", for: .normal)
         startButton.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 14.0)
         
-
         if viewModel.dataStore.defaults.value(forKey: "returningUser") == nil {
             startButton.addTarget(self, action: #selector(animateAllowNotifications), for: .touchUpInside)
         } else {
@@ -255,7 +249,14 @@ extension SetSessionViewController {
         characterMessageBody.textColor = Palette.grey.color
         characterMessageBody.textAlignment = .left
         characterMessageBody.font = UIFont(name: "Avenir-Heavy", size: 14.0)
-        characterMessageBody.text = viewModel.dataStore.user.currentCoach.introStatements[0].body
+        
+        if viewModel.dataStore.defaults.value(forKey: "returningUser") == nil {
+            characterMessageBody.text = "I'll make sure you are super productive today. How long would you like to stay productive for?"
+        } else {
+            let introStatments = viewModel.dataStore.user.currentCoach.introStatements
+            let randomIndex = Int(arc4random_uniform(UInt32(introStatments.count)))
+            characterMessageBody.text = viewModel.dataStore.user.currentCoach.introStatements[randomIndex].body
+        }
         
         view.addSubview(characterMessageBody)
         characterMessageBody.translatesAutoresizingMaskIntoConstraints = false
@@ -269,8 +270,15 @@ extension SetSessionViewController {
         characterMessageHeader.textColor = UIColor.black
         characterMessageHeader.textAlignment = .left
         characterMessageHeader.font = UIFont(name: "Avenir-Black", size: 14.0)
-        characterMessageHeader.text = viewModel.dataStore.user.currentCoach.introStatements[0].header
         
+        if viewModel.dataStore.defaults.value(forKey: "returningUser") == nil {
+            characterMessageHeader.text = "Hey there, I'm Pops!"
+        } else {
+            let introStatments = viewModel.dataStore.user.currentCoach.introStatements
+            let randomIndex = Int(arc4random_uniform(UInt32(introStatments.count)))
+            characterMessageHeader.text = viewModel.dataStore.user.currentCoach.introStatements[randomIndex].header
+        }
+    
         view.addSubview(characterMessageHeader)
         characterMessageHeader.translatesAutoresizingMaskIntoConstraints = false
         characterMessageHeader.bottomAnchor.constraint(equalTo: characterMessageBody.topAnchor, constant: -viewHeight * (5/viewHeight)).isActive = true
@@ -335,7 +343,7 @@ extension SetSessionViewController {
         self.dismissIcon.alpha = 0
         self.view.addSubview(self.dismissIcon)
         self.dismissIcon.translatesAutoresizingMaskIntoConstraints = false
-        self.dismissIcon.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 26).isActive = true
+        self.dismissIcon.centerYAnchor.constraint(equalTo: self.settingsButton.centerYAnchor).isActive = true
         self.dismissIcon.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -26).isActive = true
         self.dismissIcon.widthAnchor.constraint(equalToConstant: 15).isActive = true
         self.dismissIcon.heightAnchor.constraint(equalToConstant: 15).isActive = true
@@ -401,6 +409,7 @@ extension SetSessionViewController {
     
     func setupAllowNotificationButtons() {
         let allowNotificationsButton = UIButton()
+        allowNotificationsButton.tag = 1
         allowNotificationsButton.backgroundColor = Palette.aqua.color
         allowNotificationsButton.layer.cornerRadius = 2.0
         allowNotificationsButton.layer.masksToBounds = true
@@ -409,12 +418,14 @@ extension SetSessionViewController {
         allowNotificationsButton.addTarget(self, action: #selector(notifyMeButtonPressed), for: .touchUpInside)
         
         let disallowNotificationsButton = UIButton()
+        disallowNotificationsButton.tag = 2
         disallowNotificationsButton.backgroundColor = Palette.lightGrey.color
         disallowNotificationsButton.layer.cornerRadius = 2.0
         disallowNotificationsButton.layer.masksToBounds = true
         disallowNotificationsButton.setTitle("mute pops", for: .normal)
         disallowNotificationsButton.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 14.0)
         disallowNotificationsButton.setTitleColor(Palette.darkText.color, for: .normal)
+        disallowNotificationsButton.addTarget(self, action: #selector(notifyMeButtonPressed), for: .touchUpInside)
         
         let buttons = [allowNotificationsButton, disallowNotificationsButton]
         
@@ -446,7 +457,6 @@ extension SetSessionViewController {
         readyButton.layer.masksToBounds = true
         readyButton.setTitle("ready", for: .normal)
         readyButton.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 14.0)
-        readyButton.addTarget(self, action: #selector(animateBackToSetSession), for: .touchUpInside)
         readyButton.addTarget(self, action: #selector(startButtonTapped), for: .touchUpInside)
         
         let notReadyButton = UIButton()
@@ -507,8 +517,6 @@ extension SetSessionViewController {
    
     func animateBackToSetSession() {
         
-        viewModel.dataStore.defaults.set(true, forKey: "returningUser")
-        
         UIView.animate(withDuration: 0.8, animations: {
             self.readyButtonsStackViewTopAnchor.constant += self.stackViewContraint()
             self.characterMessageBody.alpha = 0
@@ -517,7 +525,7 @@ extension SetSessionViewController {
             
         }) { _ in
             
-            UIView.animate(withDuration: 0.6, delay: 0, options: [.curveEaseOut], animations: {
+            UIView.animate(withDuration: 0.6, delay: 0, options: [.curveEaseOut], animations: { 
                 self.characterMessageBody.text = "Just press start back whenever you are ready to start being productive."
                 self.characterMessageHeader.text = "No worries!"
                 self.characterMessageBody.alpha = 1
@@ -527,25 +535,33 @@ extension SetSessionViewController {
                 self.setupCollectionViewLayout()
                 self.setupCollectionView()
                 self.view.layoutIfNeeded()
-            }, completion: nil)
+            }, completion: { _ in
+                let visibleCells = self.selectHourCollectionView.visibleCells as! [HourCollectionViewCell]
+                visibleCells.forEach { $0.deselectCell() }
+                self.selectHourCollectionView.deselectItem(at: self.selectedIndexPath!, animated: false)
+            })
             
         }
 
     }
     
-    func notifyMeButtonPressed() {
-        
-        self.center.requestAuthorization(options: options) { (granted, error) in
+    func notifyMeButtonPressed(_ sender: UIButton) {
+    
+            print("pressed notify me")
             
-            DispatchQueue.main.async {
-                if granted {
-                    self.animateReadyButtons()
-                } else {
-                    //what happens if user doesn't allow notifications
+            self.center.requestAuthorization(options: options) { (granted, error) in
+                
+                DispatchQueue.main.async {
+                    if granted {
+                        self.animateReadyButtons()
+                    } else {
+                        self.animateReadyButtons()
+                        //what happens if user doesn't allow notifications
+                    }
                 }
+                
             }
-            
-        }
+
     }
     
     func animateReadyButtons() {
