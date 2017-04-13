@@ -130,6 +130,11 @@ final class ProductiveTimeViewModel {
         
         if dataStore.user.totalProps < 0 {
             dataStore.user.totalProps = 0
+            dataStore.defaults.set(dataStore.user.totalProps, forKey: "totalProps")
+        }
+        
+        if dataStore.user.totalProps < 0 {
+            dataStore.user.totalProps = 0
         }
         
         dataStore.defaults.set(dataStore.user.totalProps, forKey: "totalProps")
@@ -160,6 +165,8 @@ final class ProductiveTimeViewModel {
         
         if props < 0 {
             props = 0
+            dataStore.user.totalProps = 0
+            dataStore.defaults.set(dataStore.user.totalProps, forKey: "totalProps")
         }
         
         progressBarCounter = timeSinceTimerStarted / Double(dataStore.user.currentCoach.difficulty.baseProductivityLength)
