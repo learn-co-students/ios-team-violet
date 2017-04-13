@@ -7,8 +7,7 @@ class SetSessionViewController: UIViewController {
     
     //Selected time for collection view
     var selectedTime: Time!
-    var collViewIndexPath: IndexPath?
-    var isCellSelected = false
+    var selectedIndexPath: IndexPath?
     
     //Helper properties
     lazy var viewWidth: CGFloat = self.view.frame.width
@@ -86,8 +85,16 @@ class SetSessionViewController: UIViewController {
 
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        let visibleCells = selectHourCollectionView.visibleCells as! [HourCollectionViewCell]
+        visibleCells.forEach { $0.deselectCell() }
+        selectHourCollectionView.deselectItem(at: selectedIndexPath!, animated: false)
+    }
+    
+    
     func startButtonTapped() {
         viewModel.dataStore.defaults.set(true, forKey: "returningUser")
+        
         presentProductiveTimeVC()
         if let indexPath = selectHourCollectionView.indexPathsForSelectedItems?[0] {
             viewModel.startSessionOfLength((indexPath.row) + 1)
@@ -138,6 +145,11 @@ extension SetSessionViewController: UICollectionViewDataSource, UICollectionView
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         let currentCell = cell as! HourCollectionViewCell
         currentCell.time = viewModel.timesForCollectionView[indexPath.row]
+        
+        if currentCell.isSelected == false {
+            currentCell.deselectCell()
+        }
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -151,6 +163,7 @@ extension SetSessionViewController: UICollectionViewDataSource, UICollectionView
         visibleCells.forEach { $0.deselectCell() }
 
         selectedTime = cell.time
+        selectedIndexPath = indexPath
         
         cell.timeIsSelected = !cell.timeIsSelected
         UIView.animate(withDuration: 0.3, animations: {
@@ -159,6 +172,7 @@ extension SetSessionViewController: UICollectionViewDataSource, UICollectionView
         })
 
     }
+    
 }
 
 //View Setups

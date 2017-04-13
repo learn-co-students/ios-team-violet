@@ -29,6 +29,8 @@ class PopsBreakView: UIView {
         setUpLikeButton()
         setUpLineDividerView()
         setUpHeader()
+            
+        NotificationCenter.default.addObserver(self, selector: #selector(viewIsBeingDismissed), name: NSNotification.Name(rawValue: "coachBreakViewIsBeingDismissed"), object: nil)
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -70,6 +72,13 @@ class PopsBreakView: UIView {
             self.body.alpha = 1
         }
     }
+    
+    func viewIsBeingDismissed() {
+        player.pauseVideo()
+    }
+}
+
+extension PopsBreakView {
     
     func setUpYouTubePlayerView(){
         let playerWidth = UIScreen.main.bounds.width
