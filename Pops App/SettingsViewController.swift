@@ -113,6 +113,10 @@ class HomeSettingsViewController: UIViewController {
 
 
 }
+//protocol to enable end break.
+protocol BreakButtonDelegate: class {
+    func endSessionBttnPressed()
+}
 
 class SettingsViewController: UIViewController, DisplayBreakTimerDelegate, SettingsViewModelDelegate {
 
@@ -128,12 +132,13 @@ class SettingsViewController: UIViewController, DisplayBreakTimerDelegate, Setti
             settingsTotalTimerLabel.text = "\(formatTime(time: settingsTimerCounter)) left"
         }
     }
+    weak var delegate: BreakButtonDelegate!
     
     //view properties
-    let endBreakView = UIView()
+    let endBreakView = UIButton()
     let endBreakViewLabelLeft = UILabel()
     var breakTimerLabel = UILabel()
-    let endSessionView = UIView()
+    let endSessionView = UIButton()
     let endSessionLabelLeft = UILabel()
     var settingsTotalTimerLabel = UILabel()
 
@@ -173,7 +178,20 @@ class SettingsViewController: UIViewController, DisplayBreakTimerDelegate, Setti
         return true
     }
     
+    func endSessionBttnPressed() {
+        viewModel.dataStore.user.currentSession?.sessionTimerCounter = 0
+    }
+    
+    func endBreakBttnPressed() {
+        print("end break now!")
+        delegate.endSessionBttnPressed()
+        //self.dismiss(animated: true, completion: nil)
+    }
+    
 }
+
+
+
 
 //view setups
 extension SettingsViewController {
@@ -257,6 +275,7 @@ extension SettingsViewController {
         endSessionView.bottomAnchor.constraint(equalTo: stackView.topAnchor, constant: -viewHeight * (20 / 667)).isActive = true
         endSessionView.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0).isActive = true
         endSessionView.layer.cornerRadius = 2
+        endSessionView.addTarget(self, action: #selector(endSessionBttnPressed), for: .touchUpInside)
         
         endSessionView.addSubview(endSessionLabelLeft)
         endSessionLabelLeft.font = UIFont(name: "Avenir-Heavy", size: 13)
@@ -287,6 +306,8 @@ extension SettingsViewController {
         endBreakView.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0).isActive = true
         endBreakView.bottomAnchor.constraint(equalTo: endSessionView.topAnchor, constant: -viewHeight * (20 / 667)).isActive = true
         endBreakView.layer.cornerRadius = 2
+        endBreakView.addTarget(self, action: #selector(endBreakBttnPressed), for: .touchUpInside)
+    
         
         endBreakView.addSubview(endBreakViewLabelLeft)
         endBreakViewLabelLeft.font = UIFont(name: "Avenir-Heavy", size: 13)

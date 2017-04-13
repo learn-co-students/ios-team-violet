@@ -52,6 +52,7 @@ class SessionEndedViewController: UIViewController {
         viewModel.startSessionOfLength(1)
         present(productiveTimeVC, animated: true, completion: nil)
     }
+    
 }
 
 extension SessionEndedViewController {
