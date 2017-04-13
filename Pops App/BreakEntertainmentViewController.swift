@@ -16,7 +16,7 @@ class BreakEntertainmentViewController: UIViewController, BreakTimeViewModelDele
         
         setUpBackButton()
     }
-    
+
     override var prefersStatusBarHidden: Bool {
         return true
     }
@@ -34,14 +34,17 @@ class BreakEntertainmentViewController: UIViewController, BreakTimeViewModelDele
     }
     
     func moveToProductivity() {
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "coachBreakViewIsBeingDismissed"), object: self)
         self.present(ProductiveTimeViewController(), animated: true, completion: nil)
     }
     
     func moveToSessionEnded() {
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "coachBreakViewIsBeingDismissed"), object: self)
         self.present(SessionEndedViewController(), animated: true, completion: nil)
     }
     
     func dismissCoachBreakView() {
-        self.dismiss(animated: true, completion: nil)
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "coachBreakViewIsBeingDismissed"), object: self)
+        self.dismiss(animated: true)
     }
 }

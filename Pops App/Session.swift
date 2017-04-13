@@ -34,6 +34,7 @@ final class Session {
     
     func startSessionTimer() {
         sessionTimerCounter = sessionTimerStartCounter
+
         sessionTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { (timer) in
         self.sessionTimerAction()
         })

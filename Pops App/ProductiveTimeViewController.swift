@@ -47,25 +47,45 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
         setupCharacterMessageHeader()
         setupCoachWindow()
         setupCoachIcon()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(appEnteredForeground), name: NSNotification.Name(rawValue: "appEnteredForeground"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appEnteredBackground), name: NSNotification.Name(rawValue: "appEnteredBackground"), object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        productiveTimeLabel.isHidden = true
+        propsLabel.isHidden = true
+        
         animateCoachPopup()
         productiveTimeEndedUserNotificationRequest()
     }
     
-
+    func appEnteredForeground() {
+        viewModel.updateTimers()
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)        
         
         viewModel.startTimer()
+        
         if viewModel.dataStore.defaults.value(forKey: "sessionActive") as? Bool == false {
             viewModel.dataStore.user.currentSession?.startSessionTimer()
+            viewModel.dataStore.defaults.set(Date(), forKey: "sessionTimerStartedAt")
             viewModel.dataStore.defaults.set(true, forKey: "sessionActive")
         }
     }
- 
+    
+    func appEnteredBackground() {
+        viewModel.dataStore.user.totalProps += viewModel.currentCyclePropsToScore
+        viewModel.dataStore.defaults.set(viewModel.dataStore.user.totalProps, forKey: "totalProps")
+        print(viewModel.dataStore.user.totalProps)
+        viewModel.currentCyclePropsScored += viewModel.currentCyclePropsToScore
+        viewModel.currentCyclePropsToScore = 0
+    }
+    
     func cancelSession() {
         viewModel.productivityTimer.invalidate()
         viewModel.dataStore.user.currentSession?.sessionTimer.invalidate()

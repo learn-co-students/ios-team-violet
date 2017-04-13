@@ -10,14 +10,14 @@ class HourCollectionViewCell: UICollectionViewCell {
         didSet {
             hourLabel.text = time.text
             timeIsSelected = time.isSelected
-            contentView.backgroundColor = time.isSelected ?  Palette.darkHeader.color : Palette.lightBlue.color
+            contentView.backgroundColor = timeIsSelected ?  Palette.darkHeader.color : Palette.lightBlue.color
         }
     }
     
     var timeIsSelected = false {
         didSet {
             time.isSelected = timeIsSelected
-            contentView.backgroundColor = time.isSelected ?  Palette.darkHeader.color : Palette.lightBlue.color
+            contentView.backgroundColor = timeIsSelected ?  Palette.darkHeader.color : Palette.lightBlue.color
         }
     }
     
