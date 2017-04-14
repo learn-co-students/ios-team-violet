@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1F3231E21EA12C4600917F4A /* HomeSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3231E11EA12C4600917F4A /* HomeSettingsViewController.swift */; };
 		1F7C447F1E9408E80067ECCF /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7C447E1E9408E80067ECCF /* SettingsViewController.swift */; };
 		1F7C44811E9409050067ECCF /* ScoreboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7C44801E9409050067ECCF /* ScoreboardViewController.swift */; };
 		1F7C44831E9409700067ECCF /* BreakTimeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7C44821E9409700067ECCF /* BreakTimeViewController.swift */; };
@@ -47,6 +48,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1F3231E11EA12C4600917F4A /* HomeSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeSettingsViewController.swift; sourceTree = "<group>"; };
 		1F7C447E1E9408E80067ECCF /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		1F7C44801E9409050067ECCF /* ScoreboardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScoreboardViewController.swift; sourceTree = "<group>"; };
 		1F7C44821E9409700067ECCF /* BreakTimeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BreakTimeViewController.swift; sourceTree = "<group>"; };
@@ -205,6 +207,7 @@
 			isa = PBXGroup;
 			children = (
 				98E682891E931E9500BAEFE8 /* SetSessionViewController.swift */,
+				1F3231E11EA12C4600917F4A /* HomeSettingsViewController.swift */,
 				1FAC0F171E9D5EE000F9D0B6 /* HourCollectionViewCell.swift */,
 				98E6828D1E931EAF00BAEFE8 /* ProductiveTimeViewController.swift */,
 				1F7C44821E9409700067ECCF /* BreakTimeViewController.swift */,
@@ -346,6 +349,7 @@
 				1FBEEC831E9692370099F413 /* Session.swift in Sources */,
 				1F7C44A01E940B7E0067ECCF /* BabaBreakManager.swift in Sources */,
 				1FAC0F161E9D5E9B00F9D0B6 /* Time.swift in Sources */,
+				1F3231E21EA12C4600917F4A /* HomeSettingsViewController.swift in Sources */,
 				1F7C448E1E940A9B0067ECCF /* SettingsViewModel.swift in Sources */,
 				1F7C44991E940B400067ECCF /* ChadBreakViewModel.swift in Sources */,
 				1F7C448C1E940A900067ECCF /* SetSessionViewModel.swift in Sources */,

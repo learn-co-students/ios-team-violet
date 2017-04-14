@@ -37,32 +37,39 @@ final class BreakTimeViewModel {
         self.delegate = delegate
         self.progressBarDelegate = progressBarDelegate
         self.breakTimer = dataStore.user.currentSession?.productivityTimer ?? Timer()
-            }
+    }
     
     func startTimer() {
         self.breakTimerCounter = dataStore.user.currentCoach.difficulty.baseBreakLength
         dataStore.defaults.set(Date(), forKey: "breakTimerStartedAt")
-
+    
+        dataStore.user.currentSession?.sessionTimer.invalidate()
+        dataStore.user.currentSession?.sessionTimerCounter = (dataStore.user.currentSession!.cycleLength * dataStore.user.currentSession!.cyclesRemaining) - dataStore.user.currentSession!.sessionDifficulty.baseProductivityLength
+        
         breakIsOn = true
+        
         breakTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { (timer) in
             self.breakTimerAction()
         })
-    }
+        dataStore.user.currentSession?.startSessionTimer()
+        }
     
     func breakTimerAction() {
         print("break timer: \(breakTimerCounter)")
         breakTimerCounter -= 1
       
-        if breakTimerCounter <= 0 {
-            breakIsOn = false
-            breakTimer.invalidate()
-            delegate.moveToProductivity()
-        }
-        
         if dataStore.user.currentSession!.sessionTimerCounter <= 0 {
+            breakIsOn = false
             breakTimer.invalidate()
             dataStore.user.currentSession = nil
             delegate.moveToSessionEnded()
+        }
+        
+        if breakTimerCounter <= 0 {
+            breakIsOn = false
+            breakTimer.invalidate()
+            dataStore.user.currentSession!.cyclesRemaining -= 1
+            delegate.moveToProductivity()
         }
         
         if breakTimerDelegate != nil {
@@ -80,7 +87,16 @@ final class BreakTimeViewModel {
         breakTimerCounter = dataStore.user.currentCoach.difficulty.baseBreakLength - Int(timeSinceTimerStarted)
         dataStore.user.currentSession?.sessionTimerCounter = dataStore.user.currentSession!.sessionTimerStartCounter - Int(timeSinceTimerStarted)
         
+        if dataStore.user.currentSession!.sessionTimerCounter < 0 {
+            dataStore.user.currentSession?.sessionTimerCounter = 1
+        }
+        
+        if breakTimerCounter < 0 {
+            breakTimerCounter = 1
+        }
+        
         progressBarCounter = timeSinceTimerStarted / Double(dataStore.user.currentCoach.difficulty.baseBreakLength)
+        
     }
 }
 

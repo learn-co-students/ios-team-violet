@@ -20,15 +20,13 @@ final class Session {
         return sessionDifficulty.baseProductivityLength + sessionDifficulty.baseBreakLength
     }
     
+    var cyclesRemaining = 0
+    
     var productivityTimer = Timer()
     var breakTimer = Timer()
    
     var sessionTimer = Timer()
-    var sessionTimerCounter = 0 {
-        didSet {
-            
-        }
-    }
+    var sessionTimerCounter = 0
     var sessionTimerStartCounter: Int {
             return cycles * cycleLength
     }
@@ -36,11 +34,11 @@ final class Session {
     init(sessionHours: Int, sessionDifficulty: DifficultySetting) {
         self.sessionHours = sessionHours
         self.sessionDifficulty = sessionDifficulty
+        self.cyclesRemaining = cycles
+        self.sessionTimerCounter = sessionTimerStartCounter
     }
     
     func startSessionTimer() {
-        sessionTimerCounter = sessionTimerStartCounter
-
         sessionTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { (timer) in
         self.sessionTimerAction()
         })

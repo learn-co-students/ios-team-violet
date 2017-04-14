@@ -69,8 +69,6 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
         viewModel.startTimer()
         
         if viewModel.dataStore.defaults.value(forKey: "sessionActive") as? Bool == false {
-            viewModel.dataStore.user.currentSession?.startSessionTimer()
-            viewModel.dataStore.defaults.set(Date(), forKey: "sessionTimerStartedAt")
             viewModel.dataStore.defaults.set(true, forKey: "sessionActive")
         }
     }
@@ -90,7 +88,7 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
         UIView.animate(withDuration: 0.7, animations: {
             self.coachBottomAnchorConstraint.constant = 100
             self.view.layoutIfNeeded()
-        }) { _ in self.dismiss(animated: true, completion: nil)
+        }) { _ in self.present(SetSessionViewController(), animated: true, completion: nil)
         }
     }
     
