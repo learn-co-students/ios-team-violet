@@ -194,22 +194,20 @@ class SettingsViewController: UIViewController, DisplayBreakTimerDelegate, Setti
     }
     
     func endSessionBttnPressed() {
+        endSessionView.backgroundColor = Palette.grey.color
         viewModel.dataStore.user.currentSession?.sessionTimerCounter = 0
     }
     
     func endBreakBttnPressed() {
-        print("end break now!")
+        endBreakView.backgroundColor = Palette.darkPurple.color
         delegate.endBreakBttnPressed()
     }
     
     func shareBttnPressed() {
-        
         let activityViewController = UIActivityViewController(
-            activityItems: ["Check out this beer I liked using Beer Tracker."],
+            activityItems: ["Checkout this new dope app called 'Pops'. It helps you get sh*t done."],
             applicationActivities: nil)
         present(activityViewController, animated: true, completion: nil)
-        
-        
     }
     
     func contactUsBttnPressed() {
@@ -237,7 +235,7 @@ extension SettingsViewController {
         totalPropsLabel.text = String(viewModel.dataStore.user.totalProps)
         totalPropsLabel.font = UIFont(name: "Avenir-Heavy", size: 13)
         totalPropsLabel.translatesAutoresizingMaskIntoConstraints = false
-        totalPropsLabel.topAnchor.constraint(equalTo: propsHoursView.topAnchor, constant: -2).isActive = true
+        totalPropsLabel.topAnchor.constraint(equalTo: propsHoursView.topAnchor, constant: 2).isActive = true
         totalPropsLabel.leadingAnchor.constraint(equalTo: propsHoursView.leadingAnchor, constant: 0).isActive = true
         
         propsLabel.text = "props"
@@ -251,7 +249,7 @@ extension SettingsViewController {
         totalHoursLabel.font = UIFont(name: "Avenir-Heavy", size: 13)
         totalHoursLabel.translatesAutoresizingMaskIntoConstraints = false
         totalHoursLabel.centerYAnchor.constraint(equalTo: totalPropsLabel.centerYAnchor, constant: 0).isActive = true
-        totalHoursLabel.leadingAnchor.constraint(equalTo: propsHoursView.centerXAnchor, constant: -viewWidth * (100/667)).isActive = true
+        totalHoursLabel.leadingAnchor.constraint(equalTo: propsHoursView.centerXAnchor, constant: -viewWidth * (125/667)).isActive = true
         
         hoursProductiveLabel.text = "hours being productive"
         hoursProductiveLabel.font = UIFont(name: "Avenir-Heavy", size: 13)
