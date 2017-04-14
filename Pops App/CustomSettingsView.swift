@@ -8,25 +8,18 @@ class CustomSettingsView: UIButton {
     let textLabel = UILabel()
     let arrowImgView = UIImageView()
     
-    var settings: SettingsObj! {
-        didSet {
-            setupView()
-        }
-    }
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
     
-    init(settings: SettingsObj) {
-        self.settings = settings
+    init(iconImage: UIImage, text: String) {
         super.init(frame: CGRect.zero)
+        self.iconImgView.image = iconImage
+        self.textLabel.text = text
         setupView()
     }
     
     func setupView() {
-        iconImgView.image = settings.icon
-        textLabel.text = settings.text
         setupTextLabel()
         setupIcon()
         setupArrowIcon()
@@ -42,8 +35,6 @@ class CustomSettingsView: UIButton {
         textLabel.font = UIFont(name: "Avenir-Heavy", size: 13)
         textLabel.textAlignment = .left
         
-        //textLabel.heightAnchor.constraint(equalToConstant: 15).isActive = true
-        //textLabel.widthAnchor.constraint(greaterThanOrEqualToConstant: 50).isActive = true
         textLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 35).isActive = true
         textLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: 0).isActive = true
     }
@@ -53,14 +44,14 @@ class CustomSettingsView: UIButton {
         iconImgView.translatesAutoresizingMaskIntoConstraints = false
         iconImgView.contentMode = .scaleAspectFill
         
-        if settings.icon == #imageLiteral(resourceName: "IC_ContactUs") {
+        if iconImgView.image == #imageLiteral(resourceName: "IC_ContactUs") {
             iconImgView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 0).isActive = true
             iconImgView.heightAnchor.constraint(equalToConstant: 11).isActive = true
             iconImgView.widthAnchor.constraint(equalToConstant: 11).isActive = true
             iconImgView.centerYAnchor.constraint(equalTo: textLabel.centerYAnchor, constant: 0).isActive = true
         }
         
-        if settings.icon == #imageLiteral(resourceName: "IC_SharePops") {
+        if iconImgView.image == #imageLiteral(resourceName: "IC_SharePops") {
             iconImgView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 0).isActive = true
             iconImgView.heightAnchor.constraint(equalToConstant: 11).isActive = true
             iconImgView.widthAnchor.constraint(equalToConstant: 13).isActive = true

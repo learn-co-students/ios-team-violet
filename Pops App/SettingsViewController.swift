@@ -1,10 +1,7 @@
 
 import UIKit
 
-struct SettingsObj {
-    let icon: UIImage
-    let text: String
-}
+
 
 //protocol to enable end break.
 protocol BreakButtonDelegate: class {
@@ -35,8 +32,6 @@ class SettingsViewController: UIViewController, DisplayBreakTimerDelegate {
     let endSessionLabelLeft = UILabel()
     var settingsTotalTimerLabel = UILabel()
 
-    let settingsOne = SettingsObj(icon: #imageLiteral(resourceName: "IC_ContactUs"), text: "contact us")
-    let settingsTwo = SettingsObj(icon: #imageLiteral(resourceName: "IC_SharePops"), text: "share pops")
     let divider1 = UIView()
     let divider2 = UIView()
     let divider3 = UIView()
@@ -107,8 +102,6 @@ class SettingsViewController: UIViewController, DisplayBreakTimerDelegate {
 }
 
 
-
-
 //view setups
 extension SettingsViewController {
     
@@ -151,8 +144,8 @@ extension SettingsViewController {
     }
     
     func setupStackView() {
-        let contactUsBttn = CustomSettingsView(settings: settingsOne)
-        let shareBttn = CustomSettingsView(settings: settingsTwo)
+        let contactUsBttn = CustomSettingsView(iconImage: #imageLiteral(resourceName: "IC_ContactUs"), text: "contact us")
+        let shareBttn = CustomSettingsView(iconImage: #imageLiteral(resourceName: "IC_SharePops"), text: "share us")
         
         let dividers = [divider1, divider2, divider3, divider4]
         let stackedViews = [divider1, propsHoursView, divider2, contactUsBttn, divider3, shareBttn, divider4]

@@ -7,9 +7,7 @@ class HomeSettingsViewController: UIViewController {
     lazy var viewHeight: CGFloat = self.view.frame.height  //667
     
     var viewModel: SettingsViewModel!
-    
-    let settingsOne = SettingsObj(icon: #imageLiteral(resourceName: "IC_ContactUs"), text: "contact us")
-    let settingsTwo = SettingsObj(icon: #imageLiteral(resourceName: "IC_SharePops"), text: "share pops")
+
     let divider1 = UIView()
     let divider2 = UIView()
     let divider3 = UIView()
@@ -26,16 +24,13 @@ class HomeSettingsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         viewModel = SettingsViewModel()
         view.backgroundColor = UIColor.white
         setupPropsHoursView()
         setupStackView()
-        
     }
     
     func shareBttnPressed() {
-        
         let activityViewController = UIActivityViewController(
             activityItems: ["Check out this beer I liked using Beer Tracker."],
             applicationActivities: nil)
@@ -88,8 +83,8 @@ class HomeSettingsViewController: UIViewController {
     }
     
     func setupStackView() {
-        let contactUsBttn = CustomSettingsView(settings: settingsOne)
-        let shareBttn = CustomSettingsView(settings: settingsTwo)
+        let contactUsBttn = CustomSettingsView(iconImage: #imageLiteral(resourceName: "IC_ContactUs"), text: "contact us")
+        let shareBttn = CustomSettingsView(iconImage: #imageLiteral(resourceName: "IC_SharePops"), text: "share us")
         
         let dividers = [divider1, divider2, divider3, divider4]
         let stackedViews = [divider1, propsHoursView, divider2, contactUsBttn, divider3, shareBttn, divider4]
