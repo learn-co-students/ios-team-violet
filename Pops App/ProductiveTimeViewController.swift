@@ -77,13 +77,14 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
     }
     
     func appEnteredBackground() {
-        viewModel.dataStore.user.totalProps += viewModel.currentCyclePropsToScore
         viewModel.dataStore.defaults.set(viewModel.dataStore.user.totalProps, forKey: "totalProps")
         viewModel.currentCyclePropsScored += viewModel.currentCyclePropsToScore
         viewModel.currentCyclePropsToScore = 0
     }
     
     func cancelSession() {
+        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+
         viewModel.productivityTimer.invalidate()
         viewModel.dataStore.user.currentSession?.sessionTimer.invalidate()
         viewModel.dataStore.defaults.set(false, forKey: "sessionActive")
@@ -263,7 +264,7 @@ extension ProductiveTimeViewController {
         }
     }
     
-    func animateCancelToSkip() {
+    func animateCancelToWeak() {
         self.cancelSessionButton.setTitle("im weak", for: .normal)
         self.cancelSessionButton.titleLabel?.text = "im weak"
         self.cancelSessionButton.titleLabel?.textColor = Palette.lightGrey.color

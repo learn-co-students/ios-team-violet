@@ -10,7 +10,7 @@ protocol ProductiveTimeViewModelDelegate: class {
     var characterMessageHeader: UILabel {get set}
     var characterMessageBody: UILabel {get set}
     
-    func animateCancelToSkip()
+    func animateCancelToWeak()
     func moveToBreak()
 }
 
@@ -86,11 +86,12 @@ final class ProductiveTimeViewModel {
         
         if motionManager.accelerometerData!.acceleration.z > 0.0 {
             props += 1
+            dataStore.user.totalProps += 1
             currentCyclePropsToScore += 1
             UIScreen.main.brightness = 0.01
         }
         
-        if motionManager.accelerometerData!.acceleration.z < 0.0 { //this checks if
+        if motionManager.accelerometerData!.acceleration.z < 0.0 {
             UIScreen.main.brightness = 0.75
         }
         
@@ -98,7 +99,7 @@ final class ProductiveTimeViewModel {
             cancelCountdown -= 1
         }
         if cancelCountdown <= 25 {
-            delegate.animateCancelToSkip()
+            delegate.animateCancelToWeak()
         }
         
         progressBarCounter += 1.0 / Double(dataStore.user.currentCoach.difficulty.baseProductivityLength)

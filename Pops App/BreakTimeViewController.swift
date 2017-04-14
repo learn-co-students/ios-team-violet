@@ -102,6 +102,8 @@ class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate, Bre
     }
     
     func moveToSessionEnded() {
+        viewModel.breakTimer.invalidate()
+        
         UIView.animate(withDuration: 0.7, animations: {
             self.coachBottomAnchorConstraint.constant = 100
             self.view.layoutIfNeeded()

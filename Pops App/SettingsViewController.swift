@@ -9,6 +9,7 @@ struct SettingsObj {
 //protocol to enable end break.
 protocol BreakButtonDelegate: class {
     func endBreakBttnPressed()
+    func moveToSessionEnded()
 }
 
 class SettingsViewController: UIViewController, DisplayBreakTimerDelegate {
@@ -80,7 +81,8 @@ class SettingsViewController: UIViewController, DisplayBreakTimerDelegate {
     
     func endSessionBttnPressed() {
         endSessionView.backgroundColor = Palette.grey.color
-        viewModel.dataStore.user.currentSession?.sessionTimerCounter = 0
+        viewModel.dataStore.user.currentSession?.sessionTimer.invalidate()
+        delegate.moveToSessionEnded()
     }
     
     func endBreakBttnPressed() {
