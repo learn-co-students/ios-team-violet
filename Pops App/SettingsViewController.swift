@@ -136,7 +136,8 @@ extension SettingsViewController {
         propsLabel.topAnchor.constraint(equalTo: totalPropsLabel.bottomAnchor, constant: 0).isActive = true
         propsLabel.leadingAnchor.constraint(equalTo: propsHoursView.leadingAnchor, constant: 0).isActive = true
         
-        totalHoursLabel.text = "200"
+        let totalHours = viewModel.dataStore.defaults.value(forKey: "totalHours") as? Int ?? 0
+        totalHoursLabel.text = totalHours.description
         totalHoursLabel.font = UIFont(name: "Avenir-Heavy", size: 13)
         totalHoursLabel.translatesAutoresizingMaskIntoConstraints = false
         totalHoursLabel.centerYAnchor.constraint(equalTo: totalPropsLabel.centerYAnchor, constant: 0).isActive = true
