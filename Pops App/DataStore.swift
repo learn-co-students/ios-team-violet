@@ -61,13 +61,13 @@ private extension DataStore {
             ("Place your phone FACE DOWN on a FLAT SURFACE (like a table).", "I’ll tell you to take a break when the timer hits 0. Don’t even think about touching your phone before then.")
         ]
         let productivityReprimands = [
-            ("Get back to work!", "You just lost 100 Props!")
+            ("Put your phone face down!", "You just lost 100 Props because you shouldn't be touching your phone right now!")
         ]
         let productivityNotificationStatements = [
             ("Notification Title", "Notification Body")
         ]
         let breakStatements = [
-            ("Congrats!", "Enjoy your break!")
+            ("Think about it...", "Success in almost any field depends more on energy and drive than it does on intelligence. This explains why we have so many stupid leaders.")
         ]
         let breakNotificationStatements = [
             ("Notification Title", "Notification Body")
@@ -180,7 +180,7 @@ private extension DataStore {
         ]
         let breakStatements = [
             ("Congrats on your first 5 minute break!", "Do whatever! I thought you may want to catch up on texts, email, and Facebook, so I gave you easy access to those apps below. If you have nothing else to do, I can entertain you."),
-            ("Congrats!", "Enjoy your break!")
+            ("Quote of the day...", "Success in almost any field depends more on energy and drive than it does on intelligence. This explains why we have so many stupid leaders. - Sloan Wilson")
         ]
         let breakNotificationStatements = [
             ("Notification Title", "Notification Body")

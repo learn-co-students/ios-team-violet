@@ -1,6 +1,7 @@
 
 import UIKit
 import UserNotifications
+import AudioToolbox
 
 class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDelegate {
 
@@ -18,6 +19,8 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
     let cancelSessionButton = UIButton()
     var propsLabel = UILabel()
     var coachBottomAnchorConstraint: NSLayoutConstraint!
+    
+    var vibrateTimer = Timer()
     
     let progressBar = UIView()
     var progressBarWidthAnchor: NSLayoutConstraint! {
@@ -287,9 +290,24 @@ extension ProductiveTimeViewController {
         let identifier = "UYLLocalNotification"
         let request = UNNotificationRequest(identifier: identifier,
                                             content: content, trigger: trigger)
+        
         center.add(request, withCompletionHandler: { (error) in
+            
+            self.vibrateUserDevice()
+            
             if let error = error {
                 print(error)
+            }
+        })
+    }
+    
+    func vibrateUserDevice() {
+        var timerCounter = 0
+        vibrateTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { (timer) in
+            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
+            timerCounter += 1
+            if timerCounter == 3 {
+                timer.invalidate()
             }
         })
     }
