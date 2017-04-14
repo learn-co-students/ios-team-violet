@@ -58,7 +58,7 @@ private extension DataStore {
             [("Dear lord!", "Don't hurt yourself, sonny!")],
             ]
         let productivityStatements = [
-            ("Place your phone FACE DOWN on a FLAT SURFACE (like a table).", "I’ll tell you to take a break when the timer hits 0. Don’t even think about touching your phone before then.")
+            ("Place your phone face down now.", "I’ll tell you to take a break when the timer hits 0. Don’t even think about touching your phone before then.")
         ]
         let productivityReprimands = [
             ("Put your phone face down!", "You just lost 100 Props because you shouldn't be touching your phone right now!")
