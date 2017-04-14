@@ -87,6 +87,11 @@ final class ProductiveTimeViewModel {
         if motionManager.accelerometerData!.acceleration.z > 0.0 {
             props += 1
             currentCyclePropsToScore += 1
+            UIScreen.main.brightness = 0.01
+        }
+        
+        if motionManager.accelerometerData!.acceleration.z < 0.0 { //this checks if
+            UIScreen.main.brightness = 0.75
         }
         
         if cancelCountdown > 0 {
