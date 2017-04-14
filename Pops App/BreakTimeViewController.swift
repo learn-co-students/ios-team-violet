@@ -76,7 +76,6 @@ class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate, Bre
     override func viewDidAppear(_ animated: Bool) {
         if viewModel.breakIsOn == false {
             viewModel.startTimer()
-            //userDidNotComeBackNotification()
             breakTimeEndedUserNotificationRequest()
         }
     }
@@ -151,7 +150,16 @@ class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate, Bre
     }
     
     func endBreakBttnPressed() {
-        viewModel.breakTimerCounter = 1
+        viewModel.breakIsOn = false
+        viewModel.breakTimer.invalidate()
+        viewModel.dataStore.user.currentSession?.cyclesRemaining -= 1
+        if viewModel.dataStore.user.currentSession!.cyclesRemaining == 0 {
+            viewModel.dataStore.user.currentSession?.sessionTimer.invalidate()
+            moveToSessionEnded()
+        }
+        else {
+            moveToProductivity()
+        }
     }
 }
 

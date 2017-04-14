@@ -64,6 +64,9 @@ final class ProductiveTimeViewModel {
         delegate.productiveTimeLabel.isHidden = false
         delegate.propsLabel.isHidden = false
         
+        dataStore.user.currentSession?.sessionTimer.invalidate()
+        dataStore.user.currentSession?.sessionTimerCounter = dataStore.user.currentSession!.cycleLength * dataStore.user.currentSession!.cyclesRemaining
+        
         self.productivityTimerCounter = dataStore.user.currentCoach.difficulty.baseProductivityLength
         dataStore.defaults.set(Date(), forKey: "productivityTimerStartedAt")
         
@@ -72,6 +75,8 @@ final class ProductiveTimeViewModel {
         productivityTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { (timer) in
            self.productivityTimerAction()
         })
+        dataStore.user.currentSession?.startSessionTimer()
+        
     }
     
     func productivityTimerAction() {
@@ -130,6 +135,11 @@ final class ProductiveTimeViewModel {
         
         if dataStore.user.totalProps < 0 {
             dataStore.user.totalProps = 0
+            dataStore.defaults.set(dataStore.user.totalProps, forKey: "totalProps")
+        }
+        
+        if dataStore.user.totalProps < 0 {
+            dataStore.user.totalProps = 0
         }
         
         dataStore.defaults.set(dataStore.user.totalProps, forKey: "totalProps")
@@ -160,6 +170,8 @@ final class ProductiveTimeViewModel {
         
         if props < 0 {
             props = 0
+            dataStore.user.totalProps = 0
+            dataStore.defaults.set(dataStore.user.totalProps, forKey: "totalProps")
         }
         
         progressBarCounter = timeSinceTimerStarted / Double(dataStore.user.currentCoach.difficulty.baseProductivityLength)

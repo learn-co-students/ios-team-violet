@@ -3,24 +3,11 @@
 import Foundation
 import UIKit
 
-protocol SettingsViewModelDelegate: class {
-    var settingsTotalTimerLabel: UILabel {get set}
-}
-
 final class SettingsViewModel {
     
     let dataStore = DataStore.singleton
     
-    weak var delegate: SettingsViewModelDelegate!
-    
-    init(vc: SettingsViewController){
-        self.delegate = vc
-        
-    }
-    
     init() {}
-    
-    
 }
 
 extension SettingsViewModel {
