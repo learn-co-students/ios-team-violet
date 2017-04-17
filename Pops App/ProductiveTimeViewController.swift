@@ -189,7 +189,7 @@ extension ProductiveTimeViewController {
         characterMessageBody.font = UIFont(name: "Avenir-Heavy", size: 14.0)
         
         if viewModel.dataStore.defaults.value(forKey: "returningUser") == nil {
-            characterMessageBody.text = "When the timer hits 0, your phone will vibrate 3 times. You will only earn props while your phone is face down."
+            characterMessageBody.text = "When the timer hits 0, your phone will vibrate. You will only earn props while your phone is face down."
         } else {
             let introStatments = viewModel.dataStore.user.currentCoach.introStatements
             let randomIndex = Int(arc4random_uniform(UInt32(introStatments.count)))
@@ -282,8 +282,8 @@ extension ProductiveTimeViewController {
     func productiveTimeEndedUserNotificationRequest() {
         
         let content = UNMutableNotificationContent()
-        content.title = "Time for a quick break!"
-        content.body = "Wrap up your final thoughts and take a 5 minute 'phone break' when ready."
+        content.title = viewModel.dataStore.user.currentCoach.productivityNotificationStatements[0].header
+        content.body = viewModel.dataStore.user.currentCoach.productivityNotificationStatements[0].body
         content.sound = UNNotificationSound.default()
         
         let productivityTimerLength = viewModel.dataStore.user.currentCoach.difficulty.baseProductivityLength

@@ -443,8 +443,8 @@ extension BreakTimeViewController {
     func breakTimeEndedUserNotificationRequest() {
         
         let content = UNMutableNotificationContent()
-        content.title = "Break time is over!"
-        content.body = "Head back to the app and get to work. Pops will start deducting props if you aren't back in 30 seconds."
+        content.title = viewModel.dataStore.user.currentCoach.breakNotificationStatements[0].header
+        content.body = viewModel.dataStore.user.currentCoach.breakNotificationStatements[0].body
         
         content.sound = UNNotificationSound.default()
         

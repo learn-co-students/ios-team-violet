@@ -22,9 +22,9 @@ enum DifficultySetting {
         case .easy:
             return 0
         case .standard:
-            return 1800
+            return 500
         case .hard:
-            return 28_800
+            return 5000
         }
     }
     
@@ -33,7 +33,7 @@ enum DifficultySetting {
         case .easy:
             return 1200
         case .standard:
-            return 10
+            return 1500
         case .hard:
             return 3300
         }
@@ -44,7 +44,7 @@ enum DifficultySetting {
         case .easy:
             return 600
         case .standard:
-            return 10
+            return 300
         case .hard:
             return 300
         }

@@ -88,6 +88,8 @@ final class ProductiveTimeViewModel {
             props += 1
             dataStore.user.totalProps += 1
             currentCyclePropsToScore += 1
+            delegate.characterMessageHeader.text = dataStore.user.currentCoach.productivityStatements[0].header
+            delegate.characterMessageBody.text = dataStore.user.currentCoach.productivityStatements[0].body
             UIScreen.main.brightness = 0.01
         }
         
@@ -164,8 +166,8 @@ final class ProductiveTimeViewModel {
         if productivityTimerCounter > 1 && motionManager.accelerometerData!.acceleration.z < 0.0 {
             delegate.characterMessageHeader.text = dataStore.user.currentCoach.productivityReprimands[0].header
             delegate.characterMessageBody.text = dataStore.user.currentCoach.productivityReprimands[0].body
-            props -= 100
-            dataStore.user.totalProps -= 100
+            props -= dataStore.user.currentCoach.difficulty.basePenaltyForLeavingProductivityScreen
+            dataStore.user.totalProps -= dataStore.user.currentCoach.difficulty.basePenaltyForLeavingProductivityScreen
             dataStore.defaults.set(dataStore.user.totalProps, forKey: "totalProps")
         }
         
