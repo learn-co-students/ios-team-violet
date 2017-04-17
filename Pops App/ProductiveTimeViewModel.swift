@@ -155,6 +155,7 @@ final class ProductiveTimeViewModel {
     
     func updateTimers() {        
         let timeTimerStarted = dataStore.defaults.value(forKey: "productivityTimerStartedAt") as! Date
+        dataStore.defaults.set(Date(), forKey: "productivityTimerStartedAt")
         let timeSinceTimerStarted = Date().timeIntervalSince(timeTimerStarted)
         
         productivityTimerCounter = dataStore.user.currentCoach.difficulty.baseProductivityLength - Int(timeSinceTimerStarted)

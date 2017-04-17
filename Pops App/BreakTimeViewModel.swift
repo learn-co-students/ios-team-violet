@@ -82,6 +82,7 @@ final class BreakTimeViewModel {
     
     func updateTimers() {
         let timeTimerStarted = dataStore.defaults.value(forKey: "breakTimerStartedAt") as! Date
+        dataStore.defaults.set(Date(), forKey: "breakTimerStartedAt")
         let timeSinceTimerStarted = Date().timeIntervalSince(timeTimerStarted)
         
         dataStore.user.currentSession?.sessionTimerCounter = dataStore.user.currentSession!.sessionTimerCounter - Int(timeSinceTimerStarted)
