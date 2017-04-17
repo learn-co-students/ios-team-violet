@@ -187,10 +187,7 @@ extension SetSessionViewController: UICollectionViewDataSource, UICollectionView
             
         }
     }
-    
 }
-    
-
 
 //View Setups
 extension SetSessionViewController {

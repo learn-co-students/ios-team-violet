@@ -122,7 +122,6 @@ private extension DataStore {
             ("Notification Title", "Notification Body")
         ]
         let breakStatements = [
-            ("Congrats on your first 5 minute break!", "Do whatever! I thought you may want to catch up on texts, email, and Facebook, so I gave you easy access to those apps below. If you have nothing else to do, I can entertain you."),
             ("Congrats!", "Enjoy your break!")
         ]
         let breakNotificationStatements = [
@@ -179,7 +178,6 @@ private extension DataStore {
             ("Notification Title", "Notification Body")
         ]
         let breakStatements = [
-            ("Congrats on your first 5 minute break!", "Do whatever! I thought you may want to catch up on texts, email, and Facebook, so I gave you easy access to those apps below. If you have nothing else to do, I can entertain you."),
             ("Quote of the day...", "Success in almost any field depends more on energy and drive than it does on intelligence. This explains why we have so many stupid leaders. - Sloan Wilson")
         ]
         let breakNotificationStatements = [
