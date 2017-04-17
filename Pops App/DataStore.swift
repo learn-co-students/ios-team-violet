@@ -67,6 +67,7 @@ private extension DataStore {
             ("Time for a quick break!", "Wrap up your final thoughts and take a 5 minute 'phone break' when ready.")
         ]
         let breakStatements = [
+            ("Take a breather", "If you're interested I dug up some of my favorite YouTube vids."),
             ("Think about it...", "Success in almost any field depends more on energy and drive than it does on intelligence. This explains why we have so many stupid leaders.")
         ]
         let breakNotificationStatements = [
@@ -86,6 +87,7 @@ private extension DataStore {
             productivityReprimands: productivityReprimands,
             productivityNotificationStatements: productivityNotificationStatements,
             breakStatements: breakStatements,
+            breakButtonText: "view pop's picks",
             breakNotificationStatements: breakNotificationStatements,
             endSessionStatements: endSessionStatements,
             breakView: PopsBreakView())
@@ -141,6 +143,7 @@ private extension DataStore {
             productivityReprimands: productivityReprimands,
             productivityNotificationStatements: productivityNotificationStatements,
             breakStatements: breakStatements,
+            breakButtonText: "check baba's email",
             breakNotificationStatements: breakNotificationStatements,
             endSessionStatements: endSessionStatements,
             breakView: BabaBreakView())
@@ -197,6 +200,7 @@ private extension DataStore {
             productivityReprimands: productivityReprimands,
             productivityNotificationStatements: productivityNotificationStatements,
             breakStatements: breakStatements,
+            breakButtonText: "burn some cals",
             breakNotificationStatements: breakNotificationStatements,
             endSessionStatements: endSessionStatements,
             breakView: ChadBreakView())

@@ -184,7 +184,7 @@ extension BreakTimeViewController {
         entertainMeButton.backgroundColor = Palette.lightBlue.color
         entertainMeButton.layer.cornerRadius = 2.0
         entertainMeButton.layer.masksToBounds = true
-        entertainMeButton.setTitle("entertain me", for: .normal)
+        entertainMeButton.setTitle(viewModel.dataStore.user.currentCoach.breakButtonText, for: .normal)
         entertainMeButton.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 14.0)
         entertainMeButton.addTarget(self, action: #selector(presentBreakEntertainmentVC), for: .touchUpInside)
         
