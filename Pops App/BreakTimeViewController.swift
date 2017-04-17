@@ -38,8 +38,9 @@ class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate, Bre
     var coachBottomAnchorConstraint: NSLayoutConstraint!
     
     override func viewDidLoad() {
-        super.viewDidLoad()
         viewModel = BreakTimeViewModel(delegate: self, progressBarDelegate: self)
+        
+        super.viewDidLoad()
         
         view.backgroundColor = UIColor.white
         leaderBoardButton.alpha = 0
@@ -70,7 +71,9 @@ class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate, Bre
     }
     
     func appEnteredForeground() {
-        viewModel.updateTimers()
+        if viewModel.dataStore.user.currentSession != nil {
+            viewModel.updateTimers()
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -156,7 +159,6 @@ class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate, Bre
         viewModel.breakTimer.invalidate()
         viewModel.dataStore.user.currentSession?.cyclesRemaining -= 1
         if viewModel.dataStore.user.currentSession!.cyclesRemaining == 0 {
-            viewModel.dataStore.user.currentSession?.sessionTimer.invalidate()
             moveToSessionEnded()
         }
         else {
@@ -300,7 +302,6 @@ extension BreakTimeViewController {
         messagesIconView.translatesAutoresizingMaskIntoConstraints = false
         messagesIconView.widthAnchor.constraint(equalToConstant: viewWidth * (22/375)).isActive = true
         messagesIconView.heightAnchor.constraint(equalToConstant: viewWidth * (22/375)).isActive = true
-        //messagesIconView.heightAnchor.constraint(equalToConstant: messagesIconView.bounds.width).isActive = true
         messagesIconView.centerYAnchor.constraint(equalTo: messagesApp.centerYAnchor).isActive = true
         messagesIconView.centerXAnchor.constraint(equalTo: messagesApp.centerXAnchor).isActive = true
         

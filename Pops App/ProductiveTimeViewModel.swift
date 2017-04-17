@@ -169,7 +169,7 @@ final class ProductiveTimeViewModel {
             dataStore.defaults.set(dataStore.user.totalProps, forKey: "totalProps")
         }
         
-        dataStore.user.currentSession?.sessionTimerCounter = dataStore.user.currentSession!.sessionTimerStartCounter - Int(timeSinceTimerStarted)
+        dataStore.user.currentSession?.sessionTimerCounter = dataStore.user.currentSession!.sessionTimerCounter - Int(timeSinceTimerStarted)
         
         currentCyclePropsToScore = Int(timeSinceTimerStarted) - currentCyclePropsScored
         props = dataStore.user.totalProps + currentCyclePropsToScore

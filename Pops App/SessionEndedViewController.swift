@@ -33,16 +33,21 @@ class SessionEndedViewController: UIViewController {
         setupCoachWindow()
         setupCoachIcon()
         setupHeaderView()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         animateCoachPopup()
         
-        let totalHours = viewModel.dataStore.defaults.value(forKey: "totalHours") as? Int ?? 0
-        let sessionHours = viewModel.dataStore.user.currentSession!.sessionHours
-        let newTotal = totalHours + sessionHours
-        viewModel.dataStore.defaults.set(newTotal, forKey: "totalHours")
+        if viewModel.dataStore.user.currentSession != nil {
+            viewModel.dataStore.user.currentSession?.sessionTimer.invalidate()
+            let totalHours = viewModel.dataStore.defaults.value(forKey: "totalHours") as? Int ?? 0
+            let sessionHours = viewModel.dataStore.user.currentSession!.sessionHours
+            let newTotal = totalHours + sessionHours
+            viewModel.dataStore.defaults.set(newTotal, forKey: "totalHours")
+            viewModel.dataStore.user.currentSession = nil
+        }
     }
     
     func presentSetSessionVC() {

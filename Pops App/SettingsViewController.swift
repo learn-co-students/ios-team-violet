@@ -87,7 +87,7 @@ class SettingsViewController: UIViewController, DisplayBreakTimerDelegate {
     
     func shareBttnPressed() {
         let activityViewController = UIActivityViewController(
-            activityItems: ["Checkout this new dope app called 'Pops'. It helps you get sh*t done."],
+            activityItems: ["Checkout this new dope app called 'Pops'. It helps you get stuff done."],
             applicationActivities: nil)
         present(activityViewController, animated: true, completion: nil)
     }

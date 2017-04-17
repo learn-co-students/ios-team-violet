@@ -63,7 +63,9 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
     }
     
     func appEnteredForeground() {
-        viewModel.updateTimers()
+        if viewModel.dataStore.user.currentSession != nil {
+            viewModel.updateTimers()
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
