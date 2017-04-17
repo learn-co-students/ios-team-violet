@@ -35,6 +35,8 @@ class SetSessionViewController: UIViewController {
     let homeSettingsVC = HomeSettingsViewController()
     let dismissIcon = UIButton()
     
+    let coachTap = UITapGestureRecognizer()
+    
     //Needed to animate pops
     var coachBottomAnchorConstraint: NSLayoutConstraint!
     
@@ -76,6 +78,7 @@ class SetSessionViewController: UIViewController {
         setupSettingsButton()
         setupLeaderBoardButton()
         setupCancelSettingsButton()
+        setupGestureRecognizer()
         
         if viewModel.dataStore.defaults.value(forKey: "returningUser") == nil {
             setupAllowNotificationButtons()
@@ -169,10 +172,25 @@ extension SetSessionViewController: UICollectionViewDataSource, UICollectionView
             self.startButton.alpha = cell.timeIsSelected ? 1.0 : 0.3
             self.startButton.isEnabled = cell.timeIsSelected ? true : false
         })
-
+        
+        UIView.animate(withDuration: 0.3, animations: {
+            self.characterMessageBody.alpha = 0
+            self.characterMessageHeader.alpha = 0
+            
+        }) { _ in
+            UIView.animate(withDuration: 0.2, delay: 0, options: [.curveEaseOut], animations: {
+                self.characterMessageHeader.text = self.viewModel.dataStore.user.currentCoach.setSessionStatements[indexPath.row][0].header
+                self.characterMessageBody.text = self.viewModel.dataStore.user.currentCoach.setSessionStatements[indexPath.row][0].body
+                self.characterMessageBody.alpha = 1
+                self.characterMessageHeader.alpha = 1
+            }, completion: nil)
+            
+        }
     }
     
 }
+    
+
 
 //View Setups
 extension SetSessionViewController {
@@ -392,6 +410,29 @@ extension SetSessionViewController {
         leaderBoardButton.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 21.0).isActive = true
         leaderBoardButton.heightAnchor.constraint(equalToConstant: 21.0).isActive = true
         leaderBoardButton.widthAnchor.constraint(equalToConstant: 23.0).isActive = true
+    }
+    
+    func setupGestureRecognizer() {
+        coachIcon.addGestureRecognizer(coachTap)
+        coachIcon.isUserInteractionEnabled = true
+        coachTap.numberOfTapsRequired = 1
+        coachTap.addTarget(self, action: #selector(coachTapped))
+    }
+    
+    func coachTapped() {
+        UIView.animate(withDuration: 0.3, animations: {
+            self.characterMessageBody.alpha = 0
+            self.characterMessageHeader.alpha = 0
+            
+        }) { _ in
+            UIView.animate(withDuration: 0.2, delay: 0, options: [.curveEaseOut], animations: {
+                self.characterMessageHeader.text = self.viewModel.dataStore.user.currentCoach.tapStatements[0].header
+                self.characterMessageBody.text = self.viewModel.dataStore.user.currentCoach.tapStatements[0].body
+                self.characterMessageBody.alpha = 1
+                self.characterMessageHeader.alpha = 1
+            }, completion: nil)
+            
+        }
     }
     
     func animateCoachPopup() {
