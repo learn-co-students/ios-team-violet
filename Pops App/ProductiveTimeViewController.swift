@@ -2,6 +2,7 @@
 import UIKit
 import UserNotifications
 import AudioToolbox
+import AVFoundation
 
 class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDelegate {
 
@@ -21,6 +22,7 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
     var coachBottomAnchorConstraint: NSLayoutConstraint!
     
     var vibrateTimer = Timer()
+    var flashlightTimer = Timer()
     
     let progressBar = UIView()
     var progressBarWidthAnchor: NSLayoutConstraint! {
@@ -60,6 +62,7 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
         
         animateCoachPopup()
         productiveTimeEndedUserNotificationRequest()
+        productiveTimeReminderUserNotificationRequest()
     }
     
     func appEnteredForeground() {
@@ -300,6 +303,56 @@ extension ProductiveTimeViewController {
             }
         })
     }
+    
+    func productiveTimeReminderUserNotificationRequest() {
+        
+        let content = UNMutableNotificationContent()
+        content.title = "Don't open your phone until I notify you!"
+        content.body = "Other apps may try to lure you away from being productive. Don't give in! Wait until I notify you for break time."
+        
+        let productivityTimerLength = 180
+        
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: TimeInterval(productivityTimerLength), repeats: false)
+        
+        let identifier = "UYLLocalNotificationReminder"
+        let request = UNNotificationRequest(identifier: identifier,
+                                            content: content, trigger: trigger)
+        
+        center.add(request, withCompletionHandler: { (error) in
+            
+            self.toggleTorch(on: true)
+           
+            self.vibrateUserDevice()
+            
+            if let error = error {
+                print(error)
+            }
+        })
+    }
+    
+    func toggleTorch(on: Bool) {
+        guard let device = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo) else { return }
+        
+        if device.hasTorch {
+            do {
+                try device.lockForConfiguration()
+                
+                if on == true {
+                    device.torchMode = .on
+                    device.torchMode = .off
+                } else {
+                    device.torchMode = .off
+                }
+                
+                device.unlockForConfiguration()
+            } catch {
+                print("Torch could not be used")
+            }
+        } else {
+            print("Torch is not available")
+        }
+    }
+
     
     func vibrateUserDevice() {
         var timerCounter = 0

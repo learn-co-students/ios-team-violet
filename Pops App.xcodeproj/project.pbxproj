@@ -38,6 +38,7 @@
 		1FBEEC7D1E9588130099F413 /* BreakEntertainmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FBEEC7C1E9588130099F413 /* BreakEntertainmentViewController.swift */; };
 		1FBEEC811E9591250099F413 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FBEEC801E9591250099F413 /* User.swift */; };
 		1FBEEC831E9692370099F413 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FBEEC821E9692370099F413 /* Session.swift */; };
+		98512E6C1EA547230051D123 /* CharacterDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98512E6B1EA547230051D123 /* CharacterDetailViewController.swift */; };
 		98E682781E931E4F00BAEFE8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E682771E931E4F00BAEFE8 /* AppDelegate.swift */; };
 		98E6827F1E931E4F00BAEFE8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 98E6827E1E931E4F00BAEFE8 /* Assets.xcassets */; };
 		98E682821E931E4F00BAEFE8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 98E682801E931E4F00BAEFE8 /* LaunchScreen.storyboard */; };
@@ -79,6 +80,7 @@
 		1FBEEC7C1E9588130099F413 /* BreakEntertainmentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BreakEntertainmentViewController.swift; sourceTree = "<group>"; };
 		1FBEEC801E9591250099F413 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		1FBEEC821E9692370099F413 /* Session.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
+		98512E6B1EA547230051D123 /* CharacterDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CharacterDetailViewController.swift; sourceTree = "<group>"; };
 		98E05D301E9E7F630096BCE9 /* Pops App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Pops App.entitlements"; sourceTree = "<group>"; };
 		98E682741E931E4F00BAEFE8 /* Pops App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pops App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		98E682771E931E4F00BAEFE8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -208,6 +210,7 @@
 			children = (
 				98E682891E931E9500BAEFE8 /* SetSessionViewController.swift */,
 				1F3231E11EA12C4600917F4A /* HomeSettingsViewController.swift */,
+				98512E6B1EA547230051D123 /* CharacterDetailViewController.swift */,
 				1FAC0F171E9D5EE000F9D0B6 /* HourCollectionViewCell.swift */,
 				98E6828D1E931EAF00BAEFE8 /* ProductiveTimeViewController.swift */,
 				1F7C44821E9409700067ECCF /* BreakTimeViewController.swift */,
@@ -351,6 +354,7 @@
 				1FAC0F161E9D5E9B00F9D0B6 /* Time.swift in Sources */,
 				1F3231E21EA12C4600917F4A /* HomeSettingsViewController.swift in Sources */,
 				1F7C448E1E940A9B0067ECCF /* SettingsViewModel.swift in Sources */,
+				98512E6C1EA547230051D123 /* CharacterDetailViewController.swift in Sources */,
 				1F7C44991E940B400067ECCF /* ChadBreakViewModel.swift in Sources */,
 				1F7C448C1E940A900067ECCF /* SetSessionViewModel.swift in Sources */,
 				1F7C44971E940B360067ECCF /* BabaBreakViewModel.swift in Sources */,

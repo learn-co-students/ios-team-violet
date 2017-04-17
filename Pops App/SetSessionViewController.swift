@@ -83,17 +83,24 @@ class SetSessionViewController: UIViewController {
         }
 
         animateCoachPopup()
+        
+        self.contentView.removeFromSuperview()
+        UIView.animate(withDuration: 0.2, animations: {
+            self.dismissIcon.alpha = 0
+            self.settingsButton.alpha = 1
+        })
 
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         let visibleCells = selectHourCollectionView.visibleCells as! [HourCollectionViewCell]
         visibleCells.forEach { $0.deselectCell() }
-        selectHourCollectionView.deselectItem(at: selectedIndexPath!, animated: false)
+        if let selectedIndexPath = selectedIndexPath {
+            selectHourCollectionView.deselectItem(at: selectedIndexPath, animated: false)
+        }
     }
     
-    
-    func startButtonTapped() {
+    func startButtonTapped()    {
         presentProductiveTimeVC()
         if let indexPath = selectHourCollectionView.indexPathsForSelectedItems?[0] {
             viewModel.startSessionOfLength((indexPath.row) + 1)
@@ -353,7 +360,7 @@ extension SetSessionViewController {
     func presentHomeSettingsVC() {
         print("settings tapped")
         view.insertSubview(self.contentView, aboveSubview: coachIcon)
-        self.contentView.backgroundColor = UIColor.red
+        //self.contentView.backgroundColor = UIColor.red
         
         self.contentView.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
@@ -587,11 +594,10 @@ extension SetSessionViewController {
         
     }
 
-
 }
 
 //Device Specific Constraints
-extension SetSessionViewController {
+extension UIViewController {
     
     func screenHeight() -> CGFloat {
         return UIScreen.main.bounds.height
