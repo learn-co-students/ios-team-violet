@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		1F3231E21EA12C4600917F4A /* HomeSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3231E11EA12C4600917F4A /* HomeSettingsViewController.swift */; };
-		1F3231E51EA14CBF00917F4A /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F3231E31EA14CBF00917F4A /* Realm.framework */; };
-		1F3231E61EA14CBF00917F4A /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F3231E41EA14CBF00917F4A /* RealmSwift.framework */; };
 		1F7C447F1E9408E80067ECCF /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7C447E1E9408E80067ECCF /* SettingsViewController.swift */; };
 		1F7C44811E9409050067ECCF /* ScoreboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7C44801E9409050067ECCF /* ScoreboardViewController.swift */; };
 		1F7C44831E9409700067ECCF /* BreakTimeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7C44821E9409700067ECCF /* BreakTimeViewController.swift */; };
@@ -101,8 +99,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				1FBEEC7B1E9564330099F413 /* YouTubeiOSPlayerHelper.framework in Frameworks */,
-				1F3231E51EA14CBF00917F4A /* Realm.framework in Frameworks */,
-				1F3231E61EA14CBF00917F4A /* RealmSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -320,8 +316,6 @@
 			);
 			inputPaths = (
 				"$(SRCROOT)/Carthage/Build/iOS/YouTubeiOSPlayerHelper.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/Realm.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/RealmSwift.framework",
 			);
 			outputPaths = (
 			);
