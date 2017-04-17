@@ -23,6 +23,7 @@ final class BreakTimeViewModel {
     weak var progressBarDelegate: BreakTimeViewModelProgressBarDelegate!
     weak var breakTimerDelegate: DisplayBreakTimerDelegate!
     
+    var sessionTimeRemaining: Int = 0
     var breakTimer: Timer
     var breakTimerCounter: Int = 0
     var breakIsOn: Bool = false
@@ -45,6 +46,7 @@ final class BreakTimeViewModel {
     
         dataStore.user.currentSession?.sessionTimer.invalidate()
         dataStore.user.currentSession?.sessionTimerCounter = (dataStore.user.currentSession!.cycleLength * dataStore.user.currentSession!.cyclesRemaining) - dataStore.user.currentSession!.sessionDifficulty.baseProductivityLength
+        sessionTimeRemaining = dataStore.user.currentSession!.sessionTimerCounter
         
         breakIsOn = true
         
@@ -56,16 +58,16 @@ final class BreakTimeViewModel {
     
     func breakTimerAction() {
         print("break timer: \(breakTimerCounter)")
-        breakTimerCounter -= 1
       
-        if dataStore.user.currentSession!.sessionTimerCounter <= 0 {
+        if dataStore.user.currentSession!.sessionTimerCounter <= 1 {
             breakIsOn = false
             breakTimer.invalidate()
-            dataStore.user.currentSession = nil
             delegate.moveToSessionEnded()
         }
         
-        if breakTimerCounter <= 0 {
+        breakTimerCounter -= 1
+        
+        if breakTimerCounter <= 0 && dataStore.user.currentSession!.sessionTimerCounter > 1 {
             breakIsOn = false
             breakTimer.invalidate()
             dataStore.user.currentSession!.cyclesRemaining -= 1
@@ -84,8 +86,8 @@ final class BreakTimeViewModel {
         let timeTimerStarted = dataStore.defaults.value(forKey: "breakTimerStartedAt") as! Date
         let timeSinceTimerStarted = Date().timeIntervalSince(timeTimerStarted)
         
+        dataStore.user.currentSession?.sessionTimerCounter = sessionTimeRemaining - Int(timeSinceTimerStarted)
         breakTimerCounter = dataStore.user.currentCoach.difficulty.baseBreakLength - Int(timeSinceTimerStarted)
-        dataStore.user.currentSession?.sessionTimerCounter = dataStore.user.currentSession!.sessionTimerStartCounter - Int(timeSinceTimerStarted)
         
         if dataStore.user.currentSession!.sessionTimerCounter < 0 {
             dataStore.user.currentSession?.sessionTimerCounter = 1

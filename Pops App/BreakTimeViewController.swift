@@ -38,8 +38,9 @@ class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate, Bre
     var coachBottomAnchorConstraint: NSLayoutConstraint!
     
     override func viewDidLoad() {
-        super.viewDidLoad()
         viewModel = BreakTimeViewModel(delegate: self, progressBarDelegate: self)
+        
+        super.viewDidLoad()
         
         view.backgroundColor = UIColor.white
         leaderBoardButton.alpha = 0
@@ -70,7 +71,9 @@ class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate, Bre
     }
     
     func appEnteredForeground() {
-        viewModel.updateTimers()
+        if viewModel.dataStore.user.currentSession != nil {
+            viewModel.updateTimers()
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -102,6 +105,8 @@ class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate, Bre
     }
     
     func moveToSessionEnded() {
+        viewModel.breakTimer.invalidate()
+        
         UIView.animate(withDuration: 0.7, animations: {
             self.coachBottomAnchorConstraint.constant = 100
             self.view.layoutIfNeeded()
@@ -154,7 +159,6 @@ class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate, Bre
         viewModel.breakTimer.invalidate()
         viewModel.dataStore.user.currentSession?.cyclesRemaining -= 1
         if viewModel.dataStore.user.currentSession!.cyclesRemaining == 0 {
-            viewModel.dataStore.user.currentSession?.sessionTimer.invalidate()
             moveToSessionEnded()
         }
         else {
@@ -180,7 +184,7 @@ extension BreakTimeViewController {
         entertainMeButton.backgroundColor = Palette.lightBlue.color
         entertainMeButton.layer.cornerRadius = 2.0
         entertainMeButton.layer.masksToBounds = true
-        entertainMeButton.setTitle("entertain me", for: .normal)
+        entertainMeButton.setTitle(viewModel.dataStore.user.currentCoach.breakButtonText, for: .normal)
         entertainMeButton.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 14.0)
         entertainMeButton.addTarget(self, action: #selector(presentBreakEntertainmentVC), for: .touchUpInside)
         
@@ -298,7 +302,6 @@ extension BreakTimeViewController {
         messagesIconView.translatesAutoresizingMaskIntoConstraints = false
         messagesIconView.widthAnchor.constraint(equalToConstant: viewWidth * (22/375)).isActive = true
         messagesIconView.heightAnchor.constraint(equalToConstant: viewWidth * (22/375)).isActive = true
-        //messagesIconView.heightAnchor.constraint(equalToConstant: messagesIconView.bounds.width).isActive = true
         messagesIconView.centerYAnchor.constraint(equalTo: messagesApp.centerYAnchor).isActive = true
         messagesIconView.centerXAnchor.constraint(equalTo: messagesApp.centerXAnchor).isActive = true
         
@@ -440,8 +443,8 @@ extension BreakTimeViewController {
     func breakTimeEndedUserNotificationRequest() {
         
         let content = UNMutableNotificationContent()
-        content.title = "Break time is over!"
-        content.body = "Head back to the app and get to work. Pops will start deducting props if you aren't back in 30 seconds."
+        content.title = viewModel.dataStore.user.currentCoach.breakNotificationStatements[0].header
+        content.body = viewModel.dataStore.user.currentCoach.breakNotificationStatements[0].body
         
         content.sound = UNNotificationSound.default()
         

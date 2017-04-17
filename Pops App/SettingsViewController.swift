@@ -6,6 +6,7 @@ import UIKit
 //protocol to enable end break.
 protocol BreakButtonDelegate: class {
     func endBreakBttnPressed()
+    func moveToSessionEnded()
 }
 
 class SettingsViewController: UIViewController, DisplayBreakTimerDelegate {
@@ -73,7 +74,8 @@ class SettingsViewController: UIViewController, DisplayBreakTimerDelegate {
     
     func endSessionBttnPressed() {
         endSessionView.backgroundColor = Palette.grey.color
-        viewModel.dataStore.user.currentSession?.sessionTimerCounter = 0
+        viewModel.dataStore.user.currentSession?.sessionTimer.invalidate()
+        delegate.moveToSessionEnded()
     }
     
     func endBreakBttnPressed() {
@@ -83,7 +85,7 @@ class SettingsViewController: UIViewController, DisplayBreakTimerDelegate {
     
     func shareBttnPressed() {
         let activityViewController = UIActivityViewController(
-            activityItems: ["Checkout this new dope app called 'Pops'. It helps you get sh*t done."],
+            activityItems: ["Checkout this new dope app called 'Pops'. It helps you get stuff done."],
             applicationActivities: nil)
         present(activityViewController, animated: true, completion: nil)
     }

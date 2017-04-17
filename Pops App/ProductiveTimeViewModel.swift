@@ -10,7 +10,7 @@ protocol ProductiveTimeViewModelDelegate: class {
     var characterMessageHeader: UILabel {get set}
     var characterMessageBody: UILabel {get set}
     
-    func animateCancelToSkip()
+    func animateCancelToWeak()
     func moveToBreak()
 }
 
@@ -23,6 +23,7 @@ final class ProductiveTimeViewModel {
     
 
     //timers and counters
+    var sessionTimeRemaining: Int = 0
     var productivityTimer: Timer
     var productivityTimerCounter: Int {
         didSet {
@@ -66,6 +67,7 @@ final class ProductiveTimeViewModel {
         
         dataStore.user.currentSession?.sessionTimer.invalidate()
         dataStore.user.currentSession?.sessionTimerCounter = dataStore.user.currentSession!.cycleLength * dataStore.user.currentSession!.cyclesRemaining
+        sessionTimeRemaining = dataStore.user.currentSession!.sessionTimerCounter
         
         self.productivityTimerCounter = dataStore.user.currentCoach.difficulty.baseProductivityLength
         dataStore.defaults.set(Date(), forKey: "productivityTimerStartedAt")
@@ -86,11 +88,14 @@ final class ProductiveTimeViewModel {
         
         if motionManager.accelerometerData!.acceleration.z > 0.0 {
             props += 1
+            dataStore.user.totalProps += 1
             currentCyclePropsToScore += 1
+            delegate.characterMessageHeader.text = dataStore.user.currentCoach.productivityStatements[0].header
+            delegate.characterMessageBody.text = dataStore.user.currentCoach.productivityStatements[0].body
             UIScreen.main.brightness = 0.01
         }
         
-        if motionManager.accelerometerData!.acceleration.z < 0.0 { //this checks if
+        if motionManager.accelerometerData!.acceleration.z < 0.0 {
             UIScreen.main.brightness = 0.75
         }
         
@@ -98,7 +103,7 @@ final class ProductiveTimeViewModel {
             cancelCountdown -= 1
         }
         if cancelCountdown <= 25 {
-            delegate.animateCancelToSkip()
+            delegate.animateCancelToWeak()
         }
         
         progressBarCounter += 1.0 / Double(dataStore.user.currentCoach.difficulty.baseProductivityLength)
@@ -163,12 +168,12 @@ final class ProductiveTimeViewModel {
         if productivityTimerCounter > 1 && motionManager.accelerometerData!.acceleration.z < 0.0 {
             delegate.characterMessageHeader.text = dataStore.user.currentCoach.productivityReprimands[0].header
             delegate.characterMessageBody.text = dataStore.user.currentCoach.productivityReprimands[0].body
-            props -= 100
-            dataStore.user.totalProps -= 100
+            props -= dataStore.user.currentCoach.difficulty.basePenaltyForLeavingProductivityScreen
+            dataStore.user.totalProps -= dataStore.user.currentCoach.difficulty.basePenaltyForLeavingProductivityScreen
             dataStore.defaults.set(dataStore.user.totalProps, forKey: "totalProps")
         }
         
-        dataStore.user.currentSession?.sessionTimerCounter = dataStore.user.currentSession!.sessionTimerStartCounter - Int(timeSinceTimerStarted)
+        dataStore.user.currentSession?.sessionTimerCounter = sessionTimeRemaining - Int(timeSinceTimerStarted)
         
         currentCyclePropsToScore = Int(timeSinceTimerStarted) - currentCyclePropsScored
         props = dataStore.user.totalProps + currentCyclePropsToScore

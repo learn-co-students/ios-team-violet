@@ -13,6 +13,7 @@ struct Coach {
     let productivityReprimands: [(header: String, body: String)]
     let productivityNotificationStatements: [(header: String, body: String)]
     let breakStatements: [(header: String, body: String)]
+    let breakButtonText: String
     let breakNotificationStatements: [(header: String, body: String)]
     let endSessionStatements: [(header:String, body: String)]
     let breakView: UIView

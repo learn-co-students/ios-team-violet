@@ -66,7 +66,9 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
     }
     
     func appEnteredForeground() {
-        viewModel.updateTimers()
+        if viewModel.dataStore.user.currentSession != nil {
+            viewModel.updateTimers()
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -80,13 +82,14 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
     }
     
     func appEnteredBackground() {
-        viewModel.dataStore.user.totalProps += viewModel.currentCyclePropsToScore
         viewModel.dataStore.defaults.set(viewModel.dataStore.user.totalProps, forKey: "totalProps")
         viewModel.currentCyclePropsScored += viewModel.currentCyclePropsToScore
         viewModel.currentCyclePropsToScore = 0
     }
     
     func cancelSession() {
+        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+
         viewModel.productivityTimer.invalidate()
         viewModel.dataStore.user.currentSession?.sessionTimer.invalidate()
         viewModel.dataStore.defaults.set(false, forKey: "sessionActive")
@@ -189,7 +192,7 @@ extension ProductiveTimeViewController {
         characterMessageBody.font = UIFont(name: "Avenir-Heavy", size: 14.0)
         
         if viewModel.dataStore.defaults.value(forKey: "returningUser") == nil {
-            characterMessageBody.text = "When the timer hits 0, your phone will vibrate 3 times. You will only earn props while your phone is face down."
+            characterMessageBody.text = "When the timer hits 0, your phone will vibrate. You will only earn props while your phone is face down."
         } else {
             let introStatments = viewModel.dataStore.user.currentCoach.introStatements
             let randomIndex = Int(arc4random_uniform(UInt32(introStatments.count)))
@@ -266,7 +269,7 @@ extension ProductiveTimeViewController {
         }
     }
     
-    func animateCancelToSkip() {
+    func animateCancelToWeak() {
         self.cancelSessionButton.setTitle("im weak", for: .normal)
         self.cancelSessionButton.titleLabel?.text = "im weak"
         self.cancelSessionButton.titleLabel?.textColor = Palette.lightGrey.color
@@ -282,8 +285,8 @@ extension ProductiveTimeViewController {
     func productiveTimeEndedUserNotificationRequest() {
         
         let content = UNMutableNotificationContent()
-        content.title = "Time for a quick break!"
-        content.body = "Wrap up your final thoughts and take a 5 minute 'phone break' when ready."
+        content.title = viewModel.dataStore.user.currentCoach.productivityNotificationStatements[0].header
+        content.body = viewModel.dataStore.user.currentCoach.productivityNotificationStatements[0].body
         content.sound = UNNotificationSound.default()
         
         let productivityTimerLength = viewModel.dataStore.user.currentCoach.difficulty.baseProductivityLength

@@ -42,38 +42,39 @@ private extension DataStore {
         let icon = UIImage(named: "IC_POPS")
         let difficulty = DifficultySetting.standard
         let tapStatements = [
-            ("Hey!", "Hands off, buddy!")
+            ("Hey!", "Get your sweaty finger off of me or you'll be sorry!")
         ]
         let introStatements = [
-            ("Ready to make me proud today?", "How long are you looking to stay productive for?")
+            ("Make me proud today, sonny.", "How long are you looking to stay productive for?")
         ]
         let setSessionStatements = [
-            [("Only an hour?", "Seems like you could do better.")],
-            [("Two hours.", "That's respectable.")],
-            [("Three hours!", "Good for you!")],
-            [("Four hours, huh?", "I'm Impressive!")],
-            [("Five hours?", "You're really going for it today!")],
-            [("Hmmmmm...", "As long as you take your breaks, this should be okay.")],
-            [("Seven hours!", "What an odd choice!")],
-            [("Dear lord!", "Don't hurt yourself, sonny!")],
+            [("Only an hour?", "Seems like you could do better.  That's really not a lot.")],
+            [("Two hours...", "In my day, two hours of work didn't amount to jack squat.")],
+            [("Hmmmmm...", "Three hours should be enough to get SOMETHING done at least.")],
+            [("Four hours, huh?", "I'm almost impressed!  But almost isn't everything.")],
+            [("Five hours!", "Maybe my friends at the bridge club were wrong about you...")],
+            [("Really?", "You might actually EARN your breaks today with that much work to be done.")],
+            [("Seven hours...", "Seems like a weird choice.  Why not six or eight?")],
+            [("My garsh!", "Don't hurt yourself!  Even in my heyday I didn't push myself like that.")],
             ]
         let productivityStatements = [
             ("Place your phone face down now.", "I’ll tell you to take a break when the timer hits 0. Don’t even think about touching your phone before then.")
         ]
         let productivityReprimands = [
-            ("Put your phone face down!", "You just lost 100 Props because you shouldn't be touching your phone right now!")
+            ("Put your phone back down!", "I'm taking away 500 Props because you shouldn't be touching your phone right now!")
         ]
         let productivityNotificationStatements = [
-            ("Notification Title", "Notification Body")
+            ("Time for a quick break!", "Wrap up your final thoughts and take a 5 minute 'phone break' when ready.")
         ]
         let breakStatements = [
+            ("Take a breather", "If you're interested I dug up some of my favorite YouTube vids."),
             ("Think about it...", "Success in almost any field depends more on energy and drive than it does on intelligence. This explains why we have so many stupid leaders.")
         ]
         let breakNotificationStatements = [
-            ("Notification Title", "Notification Body")
+            ("Break time is over!", "Head back to the app and get to work. Pops will start deducting props if you aren't back in 30 seconds.")
         ]
         let endSessionStatements = [
-            ("2 hours already went by!", "I'd be super proud if you stayed productive for at least one more hour.")
+            ("You reached the end, sonny.", "If you want to make me REALLY proud you should put in just one more hour...")
         ]
         let pops = Coach(
             name: name,
@@ -86,6 +87,7 @@ private extension DataStore {
             productivityReprimands: productivityReprimands,
             productivityNotificationStatements: productivityNotificationStatements,
             breakStatements: breakStatements,
+            breakButtonText: "view pop's picks",
             breakNotificationStatements: breakNotificationStatements,
             endSessionStatements: endSessionStatements,
             breakView: PopsBreakView())
@@ -94,42 +96,41 @@ private extension DataStore {
     
     func generateBaba() -> Coach {
         let name = "Baba"
-        let icon: UIImage? = nil
+        let icon = UIImage(named: "IC_BABA")
         let difficulty = DifficultySetting.easy
         let tapStatements = [
-            ("Hey!", "Hands off, buddy!")
+            ("Ouch!", "Please be respectful of your elders, your Baba is fragile.")
         ]
         let introStatements = [
-            ("Hey there, I'm Pops!", "Make me proud by putting in a hard day's work!")
+            ("I missed you, poopsik!", "Your Baba just knows you're going to do your best today.")
         ]
         let setSessionStatements = [
-            [("Only an hour?", "Seems like you could do better.")],
-            [("Two hours.", "That's respectable.")],
-            [("Three hours!", "Good for you!")],
-            [("Four hours, huh?", "I'm Impressive!")],
-            [("Five hours?", "You're really going for it today!")],
-            [("Hmmmmm...", "As long as you take your breaks, this should be okay.")],
-            [("Seven hours!", "What an odd choice!")],
-            [("Dear lord!", "Don't hurt yourself, sonny!")],
+            [("A whole hour!", "Remember, poopsik.  All that matters is that you try hard.")],
+            [("Two hours!!", "Your Baba is so proud of you already!")],
+            [("Three hours!", "Poopsik, you are really ambitious today.")],
+            [("Baba's so proud!!", "You can be anything you want if you put your mind to it!")],
+            [("My Poopsik!", "You're really going for it today!  Your Baba is so happy!")],
+            [("You are incredible!", "I'll make sure to give you plenty of breaks.")],
+            [("Seven hours!", "Poopsik, don't overwork yourself.  That is a long time.")],
+            [("Are you sure?", "Baba is so happy you're going to spend so long with her!")],
             ]
         let productivityStatements = [
-            ("Lock your phone now.", "I’ll tell you to take a break when the timer hits 0. Don’t even think about touching your phone before then.")
+            ("Poopsik, put your phone face down.", "Your Baba will make sure you get plenty of breaks, so don't worry!")
         ]
         let productivityReprimands = [
-            ("You just lost 100 props", "Get back to work!")
+            ("Oh, you're supposed to be working...", "But that's okay, your Baba's so happy to see you!")
         ]
         let productivityNotificationStatements = [
-            ("Notification Title", "Notification Body")
+            ("It's time for a break!", "Your Baba would be really happy if you spent some time with her.")
         ]
         let breakStatements = [
-            ("Congrats on your first 5 minute break!", "Do whatever! I thought you may want to catch up on texts, email, and Facebook, so I gave you easy access to those apps below. If you have nothing else to do, I can entertain you."),
-            ("Congrats!", "Enjoy your break!")
+            ("How are you, Poopsik?", "Would you like something to eat?  I can find you something sweet.")
         ]
         let breakNotificationStatements = [
-            ("Notification Title", "Notification Body")
+            ("Oh, I guess it's time to get back to work", "Baba will bring you some cookies soon.")
         ]
         let endSessionStatements = [
-            ("Congrats!", "See you soon!")
+            ("Baba's so proud of her Poopsik!", "If you did another hour we could spend even more time together...")
         ]
         let baba = Coach(
             name: name,
@@ -142,6 +143,7 @@ private extension DataStore {
             productivityReprimands: productivityReprimands,
             productivityNotificationStatements: productivityNotificationStatements,
             breakStatements: breakStatements,
+            breakButtonText: "get some snacks",
             breakNotificationStatements: breakNotificationStatements,
             endSessionStatements: endSessionStatements,
             breakView: BabaBreakView())
@@ -151,42 +153,41 @@ private extension DataStore {
     
     func generateChad() -> Coach {
         let name = "Chad"
-        let icon: UIImage? = nil
+        let icon = UIImage(named: "IC_CHAD")
         let difficulty = DifficultySetting.hard
         let tapStatements = [
-            ("Hey!", "Hands off, buddy!")
+            ("Yo, bro!", "If you value your health you'd better stop that right now.")
         ]
         let introStatements = [
-            ("Hey there, I'm Pops!", "Make me proud by putting in a hard day's work!")
+            ("Chad here.", "No chance in heck a wimp like you could impress me")
         ]
         let setSessionStatements = [
-            [("Only an hour?", "Seems like you could do better.")],
-            [("Two hours.", "That's respectable.")],
-            [("Three hours!", "Good for you!")],
-            [("Four hours, huh?", "I'm Impressive!")],
-            [("Five hours?", "You're really going for it today!")],
-            [("Hmmmmm...", "As long as you take your breaks, this should be okay.")],
-            [("Seven hours!", "What an odd choice!")],
-            [("Dear lord!", "Don't hurt yourself, sonny!")],
+            [("LOL", "Why even bother!?  Your gains will be mad weak, bro.")],
+            [("That's all?", "Bro, my kid sister works harder than that at her preschool.")],
+            [("Bro...", "If you're not gonna go hard, why go at all?!  Pathetic...")],
+            [("Wow.", "The bare minimum of respectable, you deserve a medal.")],
+            [("Five whole hours.", "But what can be done in five that couldn't be done better in six?")],
+            [("Yo.", "Six still isn't enough if you want to be like me, bro.  Like that's possible.")],
+            [("Seven, eh?", "At least you're trying.  Give it all you've got.")],
+            [("Eight Hours?", "Is that the limit?  Really?  This app is for weaklings.")],
             ]
         let productivityStatements = [
-            ("Lock your phone now.", "I’ll tell you to take a break when the timer hits 0. Don’t even think about touching your phone before then.")
+            ("Flip your phone over!", "Get to WORK!  Break is a long time away so don't even THINK about anything else.")
         ]
         let productivityReprimands = [
-            ("You just lost 100 props", "Get back to work!")
+            ("The heck you doing here!?", "I'm docking you 5000 props for being a WIMP!")
         ]
         let productivityNotificationStatements = [
-            ("Notification Title", "Notification Body")
+            ("Break!  Break!  Break!", "You only get five minutes so don't get comfortable.")
         ]
         let breakStatements = [
-            ("Congrats on your first 5 minute break!", "Do whatever! I thought you may want to catch up on texts, email, and Facebook, so I gave you easy access to those apps below. If you have nothing else to do, I can entertain you."),
-            ("Quote of the day...", "Success in almost any field depends more on energy and drive than it does on intelligence. This explains why we have so many stupid leaders. - Sloan Wilson")
+            ("Breaks are for wimps!", "Don't just sit there, hit that button and burn some calories!")
         ]
         let breakNotificationStatements = [
-            ("Notification Title", "Notification Body")
+            ("Stop slacking off!", "Your dreams aren't going to make themselves come true!")
         ]
         let endSessionStatements = [
-            ("Congrats!", "See you soon!")
+            ("So you actually made it.", "I could've gone twice as long.")
         ]
         let chad = Coach(
             name: name,
@@ -199,6 +200,7 @@ private extension DataStore {
             productivityReprimands: productivityReprimands,
             productivityNotificationStatements: productivityNotificationStatements,
             breakStatements: breakStatements,
+            breakButtonText: "burn some cals",
             breakNotificationStatements: breakNotificationStatements,
             endSessionStatements: endSessionStatements,
             breakView: ChadBreakView())
