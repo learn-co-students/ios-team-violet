@@ -23,6 +23,7 @@ final class ProductiveTimeViewModel {
     
 
     //timers and counters
+    var sessionTimeRemaining: Int = 0
     var productivityTimer: Timer
     var productivityTimerCounter: Int {
         didSet {
@@ -66,6 +67,7 @@ final class ProductiveTimeViewModel {
         
         dataStore.user.currentSession?.sessionTimer.invalidate()
         dataStore.user.currentSession?.sessionTimerCounter = dataStore.user.currentSession!.cycleLength * dataStore.user.currentSession!.cyclesRemaining
+        sessionTimeRemaining = dataStore.user.currentSession!.sessionTimerCounter
         
         self.productivityTimerCounter = dataStore.user.currentCoach.difficulty.baseProductivityLength
         dataStore.defaults.set(Date(), forKey: "productivityTimerStartedAt")
@@ -155,7 +157,6 @@ final class ProductiveTimeViewModel {
     
     func updateTimers() {        
         let timeTimerStarted = dataStore.defaults.value(forKey: "productivityTimerStartedAt") as! Date
-        dataStore.defaults.set(Date(), forKey: "productivityTimerStartedAt")
         let timeSinceTimerStarted = Date().timeIntervalSince(timeTimerStarted)
         
         productivityTimerCounter = dataStore.user.currentCoach.difficulty.baseProductivityLength - Int(timeSinceTimerStarted)
@@ -172,7 +173,7 @@ final class ProductiveTimeViewModel {
             dataStore.defaults.set(dataStore.user.totalProps, forKey: "totalProps")
         }
         
-        dataStore.user.currentSession?.sessionTimerCounter = dataStore.user.currentSession!.sessionTimerCounter - Int(timeSinceTimerStarted)
+        dataStore.user.currentSession?.sessionTimerCounter = sessionTimeRemaining - Int(timeSinceTimerStarted)
         
         currentCyclePropsToScore = Int(timeSinceTimerStarted) - currentCyclePropsScored
         props = dataStore.user.totalProps + currentCyclePropsToScore
