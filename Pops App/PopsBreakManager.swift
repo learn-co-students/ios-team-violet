@@ -64,12 +64,67 @@ final class PopsBreakManager {
         }
     }
     
-    func postLikeToCloudKit() {
+    func postLikeToCloudKit(for videoID: String, likedVids: [String]) {
+        let videoRecordID = CKRecordID(recordName: videoID)
+        database.fetch(withRecordID: videoRecordID) { (record, error) in
+            if error != nil {
+                print(error.debugDescription)
+            }
+            
+            if let record = record {
+                var currentLikes = record.value(forKey: "numLikes") as! Int
+                currentLikes += 1
+                record.setValue(currentLikes, forKey: "numLikes")
+                self.database.save(record) { (record, error) in
+                    if let error = error {
+                        print(error)
+                    }
+                }
+            }
+            else {
+                let video = CKRecord(recordType: "Video", recordID: videoRecordID)
+                video.setValue(videoID, forKey: "videoID")
+                video.setValue(1, forKey: "numLikes")
+                video.setValue(0, forKey: "numDislikes")
+                self.database.save(video) { (record, error) in
+                    if let error = error {
+                        print(error)
+                    }
+                }
+            }
+        }
     }
     
-    func postDislikeToCloudKit() {
+    func postDislikeToCloudKit(for videoID: String, dislikedVids: [String]) {
+        let videoRecordID = CKRecordID(recordName: videoID)
+        database.fetch(withRecordID: videoRecordID) { (record, error) in
+            if error != nil {
+                print(error.debugDescription)
+            }
+            
+            if let record = record {
+                var currentDislikes = record.value(forKey: "numDislikes") as! Int
+                currentDislikes += 1
+                record.setValue(currentDislikes, forKey: "numDislikes")
+                self.database.save(record) { (record, error) in
+                    if let error = error {
+                        print(error)
+                    }
+                }
+            }
+            else {
+                let video = CKRecord(recordType: "Video", recordID: videoRecordID)
+                video.setValue(videoID, forKey: "videoID")
+                video.setValue(1, forKey: "numDislikes")
+                video.setValue(0, forKey: "numLikes")
+                self.database.save(video) { (record, error) in
+                    if let error = error {
+                        print(error)
+                    }
+                }
+            }
+        }
     }
-
 }
 
 struct Video {

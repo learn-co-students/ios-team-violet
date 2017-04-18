@@ -75,6 +75,9 @@ class PopsBreakView: UIView {
         let newVideo = viewModel.manager.popsVideos[newVideoIndex]
         self.player.load(withVideoId: newVideo.id)
         
+        viewModel.userLiked = false
+        viewModel.userDisliked = false
+        
         UIView.animate(withDuration: 0.2) {
             self.likeButton.backgroundColor = Palette.lightBlue.color
             self.dislikeButton.backgroundColor = Palette.lightGrey.color
