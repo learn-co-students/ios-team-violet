@@ -165,6 +165,27 @@ class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate, Bre
             moveToProductivity()
         }
     }
+    
+    func getChadTip() {
+        weak var chadBreakViewModel = ChadBreakViewModel()
+        let randomIndex = Int(arc4random_uniform(UInt32(chadBreakViewModel!.chadBreakTasks.count)))
+        
+        UIView.animate(withDuration: 0.3, animations: {
+            self.characterMessageBody.alpha = 0
+            self.characterMessageHeader.alpha = 0
+            
+        }) { _ in
+            UIView.animate(withDuration: 0.2, delay: 0, options: [.curveEaseOut], animations: {
+                self.characterMessageHeader.text = chadBreakViewModel!.chadBreakTasks[randomIndex].header
+                self.characterMessageBody.text = chadBreakViewModel!.chadBreakTasks[randomIndex].body
+                self.characterMessageBody.alpha = 1
+                self.characterMessageHeader.alpha = 1
+            }, completion: nil)
+            
+        }
+        
+        chadBreakViewModel = nil
+    }
 }
 
 extension BreakTimeViewController {
@@ -186,7 +207,13 @@ extension BreakTimeViewController {
         entertainMeButton.layer.masksToBounds = true
         entertainMeButton.setTitle(viewModel.dataStore.user.currentCoach.breakButtonText, for: .normal)
         entertainMeButton.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 14.0)
-        entertainMeButton.addTarget(self, action: #selector(presentBreakEntertainmentVC), for: .touchUpInside)
+        
+        if viewModel.dataStore.user.currentCoach.name == "Chad" {
+            entertainMeButton.addTarget(self, action: #selector(getChadTip), for: .touchUpInside)
+        }
+        else {
+            entertainMeButton.addTarget(self, action: #selector(presentBreakEntertainmentVC), for: .touchUpInside)
+        }
         
         view.addSubview(entertainMeButton)
         entertainMeButton.translatesAutoresizingMaskIntoConstraints = false

@@ -87,7 +87,7 @@ private extension DataStore {
             productivityReprimands: productivityReprimands,
             productivityNotificationStatements: productivityNotificationStatements,
             breakStatements: breakStatements,
-            breakButtonText: "view pop's picks",
+            breakButtonText: "see pops picks",
             breakNotificationStatements: breakNotificationStatements,
             endSessionStatements: endSessionStatements,
             breakView: PopsBreakView())
@@ -181,7 +181,7 @@ private extension DataStore {
             ("Break!  Break!  Break!", "You only get five minutes so don't get comfortable.")
         ]
         let breakStatements = [
-            ("Breaks are for wimps!", "Don't just sit there, hit that button and burn some calories!")
+            ("Breaks are for wimps!", "Don't just sit there, hit that button for some tips on staying healthy!")
         ]
         let breakNotificationStatements = [
             ("Stop slacking off!", "Your dreams aren't going to make themselves come true!")
@@ -200,7 +200,7 @@ private extension DataStore {
             productivityReprimands: productivityReprimands,
             productivityNotificationStatements: productivityNotificationStatements,
             breakStatements: breakStatements,
-            breakButtonText: "burn some cals",
+            breakButtonText: "live healthily",
             breakNotificationStatements: breakNotificationStatements,
             endSessionStatements: endSessionStatements,
             breakView: ChadBreakView())
