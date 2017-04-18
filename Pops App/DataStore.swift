@@ -127,7 +127,7 @@ private extension DataStore {
             ("How are you, Poopsik?", "Would you like something to eat?  I can find you something sweet.")
         ]
         let breakNotificationStatements = [
-            ("Oh, I guess it's time to get back to work", "Baba will bring you some cookies soon.")
+            ("Oh, I guess it's time to get back to work", "Baba can find you some cookies if you'd like.")
         ]
         let endSessionStatements = [
             ("Baba's so proud of her Poopsik!", "If you did another hour we could spend even more time together...")
@@ -143,7 +143,7 @@ private extension DataStore {
             productivityReprimands: productivityReprimands,
             productivityNotificationStatements: productivityNotificationStatements,
             breakStatements: breakStatements,
-            breakButtonText: "get some snacks",
+            breakButtonText: "find snacks",
             breakNotificationStatements: breakNotificationStatements,
             endSessionStatements: endSessionStatements,
             breakView: BabaBreakView())
@@ -200,7 +200,7 @@ private extension DataStore {
             productivityReprimands: productivityReprimands,
             productivityNotificationStatements: productivityNotificationStatements,
             breakStatements: breakStatements,
-            breakButtonText: "live healthily",
+            breakButtonText: "get a tip",
             breakNotificationStatements: breakNotificationStatements,
             endSessionStatements: endSessionStatements,
             breakView: ChadBreakView())

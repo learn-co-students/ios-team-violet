@@ -167,8 +167,8 @@ class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate, Bre
     }
     
     func getChadTip() {
-        weak var chadBreakViewModel = ChadBreakViewModel()
-        let randomIndex = Int(arc4random_uniform(UInt32(chadBreakViewModel!.chadBreakTasks.count)))
+        let chadBreakViewModel = ChadBreakViewModel()
+        let randomIndex = Int(arc4random_uniform(UInt32(chadBreakViewModel.chadBreakTasks.count)))
         
         UIView.animate(withDuration: 0.3, animations: {
             self.characterMessageBody.alpha = 0
@@ -176,15 +176,12 @@ class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate, Bre
             
         }) { _ in
             UIView.animate(withDuration: 0.2, delay: 0, options: [.curveEaseOut], animations: {
-                self.characterMessageHeader.text = chadBreakViewModel!.chadBreakTasks[randomIndex].header
-                self.characterMessageBody.text = chadBreakViewModel!.chadBreakTasks[randomIndex].body
+                self.characterMessageHeader.text = chadBreakViewModel.chadBreakTasks[randomIndex].header
+                self.characterMessageBody.text = chadBreakViewModel.chadBreakTasks[randomIndex].body
                 self.characterMessageBody.alpha = 1
                 self.characterMessageHeader.alpha = 1
             }, completion: nil)
-            
         }
-        
-        chadBreakViewModel = nil
     }
 }
 
