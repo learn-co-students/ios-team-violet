@@ -45,8 +45,8 @@ final class Session {
     }
     
     func sessionTimerAction() {
-        print("total timer action: \(sessionTimerCounter)")
         sessionTimerCounter -= 1
+        print("total timer action: \(sessionTimerCounter)")
         
         if sessionTimerCounter <= 0 {
             sessionTimer.invalidate()

@@ -87,7 +87,7 @@ private extension DataStore {
             productivityReprimands: productivityReprimands,
             productivityNotificationStatements: productivityNotificationStatements,
             breakStatements: breakStatements,
-            breakButtonText: "view pop's picks",
+            breakButtonText: "see pops picks",
             breakNotificationStatements: breakNotificationStatements,
             endSessionStatements: endSessionStatements,
             breakView: PopsBreakView())
@@ -124,10 +124,10 @@ private extension DataStore {
             ("It's time for a break!", "Your Baba would be really happy if you spent some time with her.")
         ]
         let breakStatements = [
-            ("How are you, Poopsik?", "Would you like something to eat?  I can find you something sweet.")
+            ("How are you, Poopsik?", "I tried sending you some emails while you were working, let me know if you get them.")
         ]
         let breakNotificationStatements = [
-            ("Oh, I guess it's time to get back to work", "Baba will bring you some cookies soon.")
+            ("Oh, I guess it's time to get back to work", "Baba can find you some cookies if you'd like.")
         ]
         let endSessionStatements = [
             ("Baba's so proud of her Poopsik!", "If you did another hour we could spend even more time together...")
@@ -143,7 +143,7 @@ private extension DataStore {
             productivityReprimands: productivityReprimands,
             productivityNotificationStatements: productivityNotificationStatements,
             breakStatements: breakStatements,
-            breakButtonText: "get some snacks",
+            breakButtonText: "open email",
             breakNotificationStatements: breakNotificationStatements,
             endSessionStatements: endSessionStatements,
             breakView: BabaBreakView())
@@ -181,7 +181,7 @@ private extension DataStore {
             ("Break!  Break!  Break!", "You only get five minutes so don't get comfortable.")
         ]
         let breakStatements = [
-            ("Breaks are for wimps!", "Don't just sit there, hit that button and burn some calories!")
+            ("Breaks are for wimps!", "Don't just sit there, hit that button for some tips on staying healthy!")
         ]
         let breakNotificationStatements = [
             ("Stop slacking off!", "Your dreams aren't going to make themselves come true!")
@@ -200,7 +200,7 @@ private extension DataStore {
             productivityReprimands: productivityReprimands,
             productivityNotificationStatements: productivityNotificationStatements,
             breakStatements: breakStatements,
-            breakButtonText: "burn some cals",
+            breakButtonText: "get a tip",
             breakNotificationStatements: breakNotificationStatements,
             endSessionStatements: endSessionStatements,
             breakView: ChadBreakView())

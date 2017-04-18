@@ -38,24 +38,45 @@ class PopsBreakView: UIView {
     }
     
     func likeButtonTapped() {
-        UIView.animate(withDuration: 0.1) {
-            self.likeButton.backgroundColor = Palette.navy.color
-        }
-        viewModel.userLikedVideo()
+        viewModel.userLikedVideo(completion: { (isVerified) in
+            if isVerified{
+                DispatchQueue.main.async {
+                    UIView.animate(withDuration: 0.1) {
+                        self.likeButton.backgroundColor = Palette.navy.color
+                    }
+                }
+            }
+            else {
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "iCloudError"), object: self)
+            }
+        })
     }
     
+    
     func dislikeButtonTapped() {
-        UIView.animate(withDuration: 0.1) {
-            self.dislikeButton.backgroundColor = Palette.grey.color
-        }
-        viewModel.userDislikedVideo()
-        nextButtonTapped()
+        viewModel.userDislikedVideo(completion: { (isVerified) in
+            if isVerified {
+                DispatchQueue.main.async {
+                    UIView.animate(withDuration: 0.1) {
+                        self.dislikeButton.backgroundColor = Palette.grey.color
+                    }
+                    self.nextButtonTapped()
+                }
+            }
+            else {
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "iCloudError"), object: self)
+            }
+        })
     }
+    
     
     func nextButtonTapped() {
         let newVideoIndex = viewModel.letPopsGetYouADifferentVideo()
         let newVideo = viewModel.manager.popsVideos[newVideoIndex]
         self.player.load(withVideoId: newVideo.id)
+        
+        viewModel.userLiked = false
+        viewModel.userDisliked = false
         
         UIView.animate(withDuration: 0.2) {
             self.likeButton.backgroundColor = Palette.lightBlue.color

@@ -3,7 +3,8 @@ import UIKit
 
 class ChadBreakView: UIView {
 
-    let viewModel = ChadBreakViewModel()
+    //Not Being Used In Current Iteration Of Chad's Break
+    //let viewModel = ChadBreakViewModel()
 
     init() {
         super.init(frame: UIScreen.main.bounds)

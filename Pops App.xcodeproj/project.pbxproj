@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1F3231E21EA12C4600917F4A /* HomeSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3231E11EA12C4600917F4A /* HomeSettingsViewController.swift */; };
+		1F6F72571EA65A400085D034 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F6F72561EA65A400085D034 /* CloudKit.framework */; };
 		1F7C447F1E9408E80067ECCF /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7C447E1E9408E80067ECCF /* SettingsViewController.swift */; };
 		1F7C44811E9409050067ECCF /* ScoreboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7C44801E9409050067ECCF /* ScoreboardViewController.swift */; };
 		1F7C44831E9409700067ECCF /* BreakTimeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7C44821E9409700067ECCF /* BreakTimeViewController.swift */; };
@@ -53,6 +54,7 @@
 		1F3231E11EA12C4600917F4A /* HomeSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeSettingsViewController.swift; sourceTree = "<group>"; };
 		1F3231E31EA14CBF00917F4A /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Realm.framework; path = Carthage/Build/iOS/Realm.framework; sourceTree = "<group>"; };
 		1F3231E41EA14CBF00917F4A /* RealmSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RealmSwift.framework; path = Carthage/Build/iOS/RealmSwift.framework; sourceTree = "<group>"; };
+		1F6F72561EA65A400085D034 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		1F7C447E1E9408E80067ECCF /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		1F7C44801E9409050067ECCF /* ScoreboardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScoreboardViewController.swift; sourceTree = "<group>"; };
 		1F7C44821E9409700067ECCF /* BreakTimeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BreakTimeViewController.swift; sourceTree = "<group>"; };
@@ -103,6 +105,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1FBEEC7B1E9564330099F413 /* YouTubeiOSPlayerHelper.framework in Frameworks */,
+				1F6F72571EA65A400085D034 /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -171,6 +174,7 @@
 		1FBEEC791E9564330099F413 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1F6F72561EA65A400085D034 /* CloudKit.framework */,
 				1F3231E31EA14CBF00917F4A /* Realm.framework */,
 				1F3231E41EA14CBF00917F4A /* RealmSwift.framework */,
 				1FBEEC7A1E9564330099F413 /* YouTubeiOSPlayerHelper.framework */,
@@ -279,6 +283,9 @@
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 0;
+							};
+							com.apple.iCloud = {
+								enabled = 1;
 							};
 						};
 					};

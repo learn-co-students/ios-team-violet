@@ -101,6 +101,11 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
         }
     }
     
+    func cancelSessionWithPenalty() {
+        cancelSession()
+        viewModel.propsPenalty()
+    }
+    
     func moveToBreak() {
         viewModel.dataStore.user.totalProps += viewModel.currentCyclePropsToScore
         viewModel.dataStore.defaults.set(viewModel.dataStore.user.totalProps, forKey: "totalProps")
@@ -272,8 +277,9 @@ extension ProductiveTimeViewController {
         self.cancelSessionButton.titleLabel?.text = "im weak"
         self.cancelSessionButton.titleLabel?.textColor = Palette.lightGrey.color
         
-        //TODO: replace skip to break functionality with cancellation alert
         self.cancelSessionButton.removeTarget(self, action: #selector(self.cancelSession), for: .touchUpInside)
+        //Uncomment for production
+        //self.cancelSessionButton.addTarget(self, action: #selector(self.cancelSessionWithPenalty), for: .touchUpInside)
         self.cancelSessionButton.addTarget(self, action: #selector(self.skipToBreak), for: .touchUpInside)
     }
 }

@@ -170,18 +170,20 @@ extension SetSessionViewController: UICollectionViewDataSource, UICollectionView
             self.startButton.isEnabled = cell.timeIsSelected ? true : false
         })
         
-        UIView.animate(withDuration: 0.3, animations: {
-            self.characterMessageBody.alpha = 0
-            self.characterMessageHeader.alpha = 0
-            
-        }) { _ in
-            UIView.animate(withDuration: 0.2, delay: 0, options: [.curveEaseOut], animations: {
-                self.characterMessageHeader.text = self.viewModel.dataStore.user.currentCoach.setSessionStatements[indexPath.row][0].header
-                self.characterMessageBody.text = self.viewModel.dataStore.user.currentCoach.setSessionStatements[indexPath.row][0].body
-                self.characterMessageBody.alpha = 1
-                self.characterMessageHeader.alpha = 1
-            }, completion: nil)
-            
+        if viewModel.dataStore.defaults.value(forKey: "returningUser") != nil {
+            UIView.animate(withDuration: 0.3, animations: {
+                self.characterMessageBody.alpha = 0
+                self.characterMessageHeader.alpha = 0
+                
+            }) { _ in
+                UIView.animate(withDuration: 0.2, delay: 0, options: [.curveEaseOut], animations: {
+                    self.characterMessageHeader.text = self.viewModel.dataStore.user.currentCoach.setSessionStatements[indexPath.row][0].header
+                    self.characterMessageBody.text = self.viewModel.dataStore.user.currentCoach.setSessionStatements[indexPath.row][0].body
+                    self.characterMessageBody.alpha = 1
+                    self.characterMessageHeader.alpha = 1
+                }, completion: nil)
+                
+            }
         }
     }
 }

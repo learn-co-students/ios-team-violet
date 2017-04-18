@@ -82,9 +82,9 @@ final class ProductiveTimeViewModel {
     }
     
     func productivityTimerAction() {
-        print("productivity timer: \(productivityTimerCounter)")
 
         productivityTimerCounter -= 1
+        print("productivity timer: \(productivityTimerCounter)")
         
         if motionManager.accelerometerData!.acceleration.z > 0.0 {
             props += 1
@@ -140,16 +140,16 @@ final class ProductiveTimeViewModel {
         
         dataStore.user.currentSession?.sessionTimerCounter -= productivityTimerCounter
         
+        propsPenalty()
+    }
+    
+    func propsPenalty() {
         dataStore.user.totalProps += currentCyclePropsToScore
         dataStore.user.totalProps -= dataStore.user.currentCoach.difficulty.basePenaltyForLeavingProductivityScreen
         
         if dataStore.user.totalProps < 0 {
             dataStore.user.totalProps = 0
             dataStore.defaults.set(dataStore.user.totalProps, forKey: "totalProps")
-        }
-        
-        if dataStore.user.totalProps < 0 {
-            dataStore.user.totalProps = 0
         }
         
         dataStore.defaults.set(dataStore.user.totalProps, forKey: "totalProps")
