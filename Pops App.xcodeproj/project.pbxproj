@@ -46,6 +46,7 @@
 		98E6828C1E931EA900BAEFE8 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E6828B1E931EA900BAEFE8 /* Colors.swift */; };
 		98E6828E1E931EAF00BAEFE8 /* ProductiveTimeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E6828D1E931EAF00BAEFE8 /* ProductiveTimeViewController.swift */; };
 		98E682921E9322A300BAEFE8 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E682911E9322A300BAEFE8 /* Extensions.swift */; };
+		98ECD2861EA65FA900D69EB4 /* CustomCharacterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98ECD2851EA65FA900D69EB4 /* CustomCharacterView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -93,6 +94,7 @@
 		98E6828B1E931EA900BAEFE8 /* Colors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		98E6828D1E931EAF00BAEFE8 /* ProductiveTimeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductiveTimeViewController.swift; sourceTree = "<group>"; };
 		98E682911E9322A300BAEFE8 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		98ECD2851EA65FA900D69EB4 /* CustomCharacterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomCharacterView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -234,6 +236,7 @@
 				98E682801E931E4F00BAEFE8 /* LaunchScreen.storyboard */,
 				98E6828B1E931EA900BAEFE8 /* Colors.swift */,
 				98E682911E9322A300BAEFE8 /* Extensions.swift */,
+				98ECD2851EA65FA900D69EB4 /* CustomCharacterView.swift */,
 			);
 			name = "View Resources";
 			sourceTree = "<group>";
@@ -338,6 +341,7 @@
 				1F7C44811E9409050067ECCF /* ScoreboardViewController.swift in Sources */,
 				98E682921E9322A300BAEFE8 /* Extensions.swift in Sources */,
 				1F7C44A71E9439250067ECCF /* SessionEndedViewController.swift in Sources */,
+				98ECD2861EA65FA900D69EB4 /* CustomCharacterView.swift in Sources */,
 				98E6828E1E931EAF00BAEFE8 /* ProductiveTimeViewController.swift in Sources */,
 				1F7C44901E940AA70067ECCF /* ScoreboardViewModel.swift in Sources */,
 				1FBEEC811E9591250099F413 /* User.swift in Sources */,

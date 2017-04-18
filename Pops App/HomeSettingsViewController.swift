@@ -21,64 +21,65 @@ class HomeSettingsViewController: UIViewController {
     var progressBarWidth = NSLayoutConstraint()
     
     var settingsStackView = UIStackView()
-    let popsCharacterView = UIView()
-    let chadCharacterView = UIView()
-    let babaCharacterView = UIView()
     
-    let checkIcon = UIImageView()
+    let headerView = UIView()
+    let dismissIcon = UIButton()
     
-    var currentlySelectedCharacter: UIView!
+    var pops: CustomCharacterView!
+    var chad: CustomCharacterView!
+    var baba: CustomCharacterView!
+    
+    var usersCurrentCoach: String {
+        return viewModel.dataStore.user.currentCoach.name
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.white
+        setupHeaderView()
+        setupCancelSettingsButton()
+        
         setupPropsHoursView()
         setupStackView()
         setupCharacterViews()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        checkForSelectedCharacter()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        pops.circleBackgroundView.backgroundColor = Palette.lightGrey.color
+        pops.checkMarkIcon.alpha = 0.0
         
-        let usersCurrentCoach = viewModel.dataStore.user.currentCoach.name
+        chad.circleBackgroundView.backgroundColor = Palette.lightGrey.color
+        chad.checkMarkIcon.alpha = 0.0
         
+        baba.circleBackgroundView.backgroundColor = Palette.lightGrey.color
+        baba.checkMarkIcon.alpha = 0.0
+    }
+    
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
+    
+    func checkForSelectedCharacter() {
         switch usersCurrentCoach {
         case "Pops":
-            popsCharacterView.backgroundColor = Palette.salmon.color
-            checkIcon.image = UIImage(named: "IC_CheckMark")
-            
-            view.addSubview(checkIcon)
-            checkIcon.translatesAutoresizingMaskIntoConstraints = false
-            checkIcon.widthAnchor.constraint(equalToConstant: viewWidth * (25/375)).isActive = true
-            checkIcon.heightAnchor.constraint(equalToConstant: viewHeight * (25/667)).isActive = true
-            checkIcon.trailingAnchor.constraint(equalTo: popsCharacterView.trailingAnchor).isActive = true
-            checkIcon.topAnchor.constraint(equalTo: popsCharacterView.topAnchor).isActive = true
-            
-            currentlySelectedCharacter = popsCharacterView
-            
-        case "chad":
-            chadCharacterView.backgroundColor = Palette.salmon.color
-            
-            currentlySelectedCharacter = chadCharacterView
+            pops.circleBackgroundView.backgroundColor = Palette.salmon.color
+            pops.checkMarkIcon.alpha = 1.0
+        case "Chad":
+            chad.circleBackgroundView.backgroundColor = Palette.salmon.color
+            chad.checkMarkIcon.alpha = 1.0
         case "Baba":
-            babaCharacterView.backgroundColor = Palette.salmon.color
-            
-            currentlySelectedCharacter = babaCharacterView
+            baba.circleBackgroundView.backgroundColor = Palette.salmon.color
+            baba.checkMarkIcon.alpha = 1.0
         default:
-            popsCharacterView.backgroundColor = Palette.lightGrey.color
-            chadCharacterView.backgroundColor = Palette.lightGrey.color
-            babaCharacterView.backgroundColor = Palette.lightGrey.color
-        }
-    }
-    
-    func shareBttnPressed() {
-        let activityViewController = UIActivityViewController(
-            activityItems: ["Check out this beer I liked using Beer Tracker."],
-            applicationActivities: nil)
-        present(activityViewController, animated: true, completion: nil)
-    }
-    
-    func contactUsBttnPressed() {
-        let mailURL = NSURL(string: "mailto:makepopsproud@gmail.com")!
-        
-        if UIApplication.shared.canOpenURL(mailURL as URL) {
-            UIApplication.shared.open(mailURL as URL)
+            pops.circleBackgroundView.backgroundColor = Palette.lightGrey.color
+            chad.circleBackgroundView.backgroundColor = Palette.lightGrey.color
+            baba.circleBackgroundView.backgroundColor = Palette.lightGrey.color
         }
     }
     
@@ -152,84 +153,110 @@ class HomeSettingsViewController: UIViewController {
         settingsStackView.translatesAutoresizingMaskIntoConstraints = false
         settingsStackView.widthAnchor.constraint(equalToConstant: viewWidth * (300 / 375)).isActive = true
         settingsStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        settingsStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        settingsStackView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: startButtonBottomConstraint()).isActive = true
     }
     
     func setupCharacterViews() {
-     
-        //let popsGesture = UITapGestureRecognizer(target: self, action: #selector(self.openMessagesApp))
-        //popsCharacterView.addGestureRecognizer(popsGesture)
-        popsCharacterView.backgroundColor = Palette.lightGrey.color
-        
-        let popsImageView = UIImageView()
-        popsImageView.image = UIImage(named: "IC_POPS")
-        popsCharacterView.addSubview(popsImageView)
-        popsImageView.translatesAutoresizingMaskIntoConstraints = false
-        
-        popsImageView.widthAnchor.constraint(equalToConstant: viewWidth * (52/375)).isActive = true
-        popsImageView.heightAnchor.constraint(equalToConstant: viewHeight * (80/667)).isActive = true
-        popsImageView.bottomAnchor.constraint(equalTo: popsCharacterView.bottomAnchor, constant: 10).isActive = true
-        popsImageView.centerXAnchor.constraint(equalTo: popsCharacterView.centerXAnchor).isActive = true
-        
-        
+ 
+        pops = CustomCharacterView(image: UIImage(named: "IC_POPS")!)
+        let popsGesture = UITapGestureRecognizer(target: self, action: #selector(self.didSelectPopsCharacter))
+        pops.addGestureRecognizer(popsGesture)
+
+        chad = CustomCharacterView(image: UIImage(named: "IC_CHAD")!)
         let chadGesture = UITapGestureRecognizer(target: self, action: #selector(self.didSelectChadCharacter))
-        chadCharacterView.addGestureRecognizer(chadGesture)
-        chadCharacterView.backgroundColor = Palette.lightGrey.color
+        chad.addGestureRecognizer(chadGesture)
+
+        baba = CustomCharacterView(image: UIImage(named: "IC_BABA")!)
+        let babaGesture = UITapGestureRecognizer(target: self, action: #selector(self.didSelectBabaCharacter))
+        baba.addGestureRecognizer(babaGesture)
         
-//        let emailIconView = UIImageView()
-//        emailIconView.image = UIImage(named: "IC_emailApp")
-//        emailApp.addSubview(emailIconView)
-//        emailIconView.translatesAutoresizingMaskIntoConstraints = false
-//        emailIconView.widthAnchor.constraint(equalToConstant: viewWidth * (23/375)).isActive = true
-//        emailIconView.heightAnchor.constraint(equalToConstant: viewWidth * (20/375)).isActive = true
-//        emailIconView.centerYAnchor.constraint(equalTo: emailApp.centerYAnchor).isActive = true
-//        emailIconView.centerXAnchor.constraint(equalTo: emailApp.centerXAnchor).isActive = true
+        let chars = [pops, chad, baba]
         
-        
-//        let facebookGesture = UITapGestureRecognizer(target: self, action: #selector(self.openFacebookApp))
-//        facebookApp.addGestureRecognizer(facebookGesture)
-//        facebookApp.tag = 3
-        babaCharacterView.backgroundColor = Palette.lightGrey.color
-        
-//        let facebookIconView = UIImageView()
-//        facebookIconView.image = UIImage(named: "IC_facebookApp")
-//        facebookApp.addSubview(facebookIconView)
-//        facebookIconView.translatesAutoresizingMaskIntoConstraints = false
-//        facebookIconView.widthAnchor.constraint(equalToConstant: viewWidth * (13/375)).isActive = true
-//        facebookIconView.heightAnchor.constraint(equalToConstant: viewWidth * (21/375)).isActive = true
-//        facebookIconView.centerYAnchor.constraint(equalTo: facebookApp.centerYAnchor).isActive = true
-//        facebookIconView.centerXAnchor.constraint(equalTo: facebookApp.centerXAnchor).isActive = true
-        
-        let apps = [popsCharacterView, chadCharacterView, babaCharacterView]
-        
-        apps.forEach { (app) in
-            app.translatesAutoresizingMaskIntoConstraints = false
-            app.heightAnchor.constraint(equalToConstant: viewWidth * (86/375)).isActive = true
-            app.widthAnchor.constraint(equalToConstant: viewWidth * (86/375)).isActive = true
-            app.layer.cornerRadius = (viewWidth * (86/375)) / 2
-            app.layer.masksToBounds = true
+        chars.forEach { (view) in
+            view?.translatesAutoresizingMaskIntoConstraints = false
+            view?.heightAnchor.constraint(equalToConstant: viewWidth * (86/375)).isActive = true
+            view?.widthAnchor.constraint(equalToConstant: viewWidth * (86/375)).isActive = true
         }
         
-        let stackView = UIStackView(arrangedSubviews: apps)
+        let stackView = UIStackView(arrangedSubviews: chars as! [UIView])
         stackView.axis = .horizontal
         stackView.distribution = .fillEqually
         stackView.alignment = .fill
-        stackView.spacing = 20
+        stackView.spacing = viewWidth * (20/375)
         
         view.addSubview(stackView)
+        
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.bottomAnchor.constraint(equalTo: settingsStackView.topAnchor, constant: -20).isActive = true
         stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        stackView.widthAnchor.constraint(equalToConstant: viewWidth * (300 / 375)).isActive = true
     }
     
     func didSelectChadCharacter() {
-        
         let detailVC = CharacterDetailViewController()
         let chad = viewModel.dataStore.generateChadDetailView()
         detailVC.coach = chad
-        present(detailVC, animated: true, completion: {
-            self.view.removeFromSuperview()
-        })
+        present(detailVC, animated: true, completion: nil)
     }
     
+    func didSelectPopsCharacter() {
+        let detailVC = CharacterDetailViewController()
+        let pops = viewModel.dataStore.generatePopsDetailView()
+        detailVC.coach = pops
+        present(detailVC, animated: true, completion: nil)
+    }
+    
+    func didSelectBabaCharacter() {
+        let detailVC = CharacterDetailViewController()
+        let baba = viewModel.dataStore.generateBabaDetailView()
+        detailVC.coach = baba
+        present(detailVC, animated: true, completion: nil)
+    }
+    
+}
+
+extension HomeSettingsViewController {
+    
+    func setupHeaderView() {
+        headerView.backgroundColor = Palette.salmon.color
+        
+        view.addSubview(headerView)
+        headerView.translatesAutoresizingMaskIntoConstraints = false
+        headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        headerView.heightAnchor.constraint(equalToConstant: viewHeight * (5/viewHeight)).isActive = true
+        headerView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+    }
+    
+    func setupCancelSettingsButton() {
+        self.dismissIcon.setBackgroundImage(#imageLiteral(resourceName: "IC_Quit"), for: .normal)
+        self.dismissIcon.alpha = 1
+        self.view.addSubview(self.dismissIcon)
+        self.dismissIcon.translatesAutoresizingMaskIntoConstraints = false
+        self.dismissIcon.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 22).isActive = true
+        self.dismissIcon.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -26).isActive = true
+        self.dismissIcon.widthAnchor.constraint(equalToConstant: 15).isActive = true
+        self.dismissIcon.heightAnchor.constraint(equalToConstant: 15).isActive = true
+        self.dismissIcon.addTarget(self, action: #selector(self.dismissSettingVC), for: .touchUpInside)
+    }
+    
+    func dismissSettingVC() {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    
+    func shareBttnPressed() {
+        let activityViewController = UIActivityViewController(
+            activityItems: ["Check out this beer I liked using Beer Tracker."],
+            applicationActivities: nil)
+        present(activityViewController, animated: true, completion: nil)
+    }
+    
+    func contactUsBttnPressed() {
+        let mailURL = NSURL(string: "mailto:makepopsproud@gmail.com")!
+        
+        if UIApplication.shared.canOpenURL(mailURL as URL) {
+            UIApplication.shared.open(mailURL as URL)
+        }
+    }
 }

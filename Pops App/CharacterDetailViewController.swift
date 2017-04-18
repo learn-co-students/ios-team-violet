@@ -13,16 +13,21 @@ class CharacterDetailViewController: UIViewController {
     lazy var viewWidth: CGFloat = self.view.frame.width  //375
     lazy var viewHeight: CGFloat = self.view.frame.height  //667
     
-    let characterView = UIView()
     var viewModel = SettingsViewModel()
     
     let headerView = UIView()
+    let characterView = UIView()
+    var characterBottomAnchorConstraint: NSLayoutConstraint!
+    
+    let characterImageView = UIImageView()
     let characterNameLabel = UILabel()
     
     let selectButton = UIButton()
     let lineDividerView = UIView()
     let characterBio = UILabel()
     let difficultySetting = UILabel()
+    
+    let dismissIcon = UIButton()
     
     var usersCurrentCoach: String = ""
     
@@ -34,6 +39,7 @@ class CharacterDetailViewController: UIViewController {
         usersCurrentCoach = viewModel.dataStore.user.currentCoach.name
         
         if let coach = coach {
+            characterImageView.image = coach.icon
             characterBio.text = coach.bio
             difficultySetting.text = coach.difficulty
             characterNameLabel.text = coach.name.uppercased()
@@ -41,15 +47,26 @@ class CharacterDetailViewController: UIViewController {
         
         setupHeaderView()
         setupCharacterView()
+        setupCharacterImageView()
         setupCharacterNameLabel()
 
         setupStartButton()
         setupLineDividerView()
         setupCharacterBio()
         setupDifficultyLabel()
+        
+        setupCancelSettingsButton()
     }
     
-
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        animateCoachPopup()
+    }
+    
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
+    
     func setupHeaderView() {
         headerView.backgroundColor = Palette.darkHeader.color
         headerView.translatesAutoresizingMaskIntoConstraints = false
@@ -71,6 +88,24 @@ class CharacterDetailViewController: UIViewController {
         characterView.widthAnchor.constraint(equalToConstant: viewWidth * (100/375)).isActive = true
         characterView.layer.cornerRadius = (viewWidth * (50/375))
         characterView.layer.masksToBounds = true
+    }
+    
+    func setupCharacterImageView() {
+        characterView.addSubview(characterImageView)
+        characterImageView.translatesAutoresizingMaskIntoConstraints = false
+        characterImageView.contentMode = .scaleAspectFill
+        
+        characterBottomAnchorConstraint = characterImageView.bottomAnchor.constraint(equalTo: characterView.bottomAnchor, constant: 100)
+        characterBottomAnchorConstraint.isActive = true
+        characterImageView.centerXAnchor.constraint(equalTo: characterView.centerXAnchor).isActive = true
+    }
+    
+    func animateCoachPopup() {
+        self.view.layoutIfNeeded()
+        UIView.animate(withDuration: 1) {
+            self.characterBottomAnchorConstraint.constant = 10
+            self.view.layoutIfNeeded()
+        }
     }
     
     func setupCharacterNameLabel() {
@@ -109,11 +144,12 @@ class CharacterDetailViewController: UIViewController {
         selectButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         selectButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 269/viewWidth).isActive = true
         selectButton.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 45/viewHeight).isActive = true
-        selectButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: startButtonBottomConstraint()).isActive = true
+        selectButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: startButtonBottomConstraint() + 10).isActive = true
     }
     
     func didSelectCharacter() {
         let coachName = coach?.name
+        print("coach name \(String(describing: coachName))")
         viewModel.dataStore.defaults.set(coachName, forKey: "coachName")
         viewModel.dataStore.user.currentCoach = viewModel.dataStore.getCurrentCoach()
         selectButton.backgroundColor = Palette.darkHeader.color
@@ -160,6 +196,21 @@ class CharacterDetailViewController: UIViewController {
         difficultySetting.leadingAnchor.constraint(equalTo: characterBio.leadingAnchor).isActive = true
         difficultySetting.trailingAnchor.constraint(equalTo: characterBio.trailingAnchor).isActive = true
     }
-
+    
+    func setupCancelSettingsButton() {
+        self.dismissIcon.setBackgroundImage(#imageLiteral(resourceName: "IC_QuitWhite"), for: .normal)
+        self.dismissIcon.alpha = 1
+        self.view.addSubview(self.dismissIcon)
+        self.dismissIcon.translatesAutoresizingMaskIntoConstraints = false
+        self.dismissIcon.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 24).isActive = true
+        self.dismissIcon.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -26).isActive = true
+        self.dismissIcon.widthAnchor.constraint(equalToConstant: 15).isActive = true
+        self.dismissIcon.heightAnchor.constraint(equalToConstant: 15).isActive = true
+        self.dismissIcon.addTarget(self, action: #selector(self.dismissDetailVC), for: .touchUpInside)
+    }
+    
+    func dismissDetailVC() {
+        dismiss(animated: true, completion: nil)
+    }
 
 }

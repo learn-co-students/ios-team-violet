@@ -244,18 +244,16 @@ extension ProductiveTimeViewController {
     
     func setupCoachIcon() {
         coachIcon.image = viewModel.dataStore.user.currentCoach.icon
-        coachIcon.contentMode = .scaleAspectFit
+        coachIcon.contentMode = .scaleAspectFill
         
         coachWindowView.addSubview(coachIcon)
         coachIcon.translatesAutoresizingMaskIntoConstraints = false
-        coachIcon.backgroundColor = UIColor.clear
         
         coachBottomAnchorConstraint = coachIcon.bottomAnchor.constraint(equalTo: coachWindowView.bottomAnchor, constant: 100)
         coachBottomAnchorConstraint.isActive = true
         coachIcon.centerXAnchor.constraint(equalTo: coachWindowView.centerXAnchor, constant: 0).isActive = true
         coachIcon.heightAnchor.constraint(equalToConstant: 80).isActive = true
         coachIcon.widthAnchor.constraint(equalToConstant: 52).isActive = true
-        coachIcon.layer.masksToBounds = true
     }
     
     func animateCoachPopup() {
@@ -323,7 +321,7 @@ extension ProductiveTimeViewController {
         
         center.add(request, withCompletionHandler: { (error) in
             
-            self.toggleTorch(on: true)
+            //self.toggleTorch(on: true)
            
             self.vibrateUserDevice()
             
