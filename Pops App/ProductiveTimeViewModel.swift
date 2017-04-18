@@ -82,9 +82,9 @@ final class ProductiveTimeViewModel {
     }
     
     func productivityTimerAction() {
-        print("productivity timer: \(productivityTimerCounter)")
 
         productivityTimerCounter -= 1
+        print("productivity timer: \(productivityTimerCounter)")
         
         if motionManager.accelerometerData!.acceleration.z > 0.0 {
             props += 1

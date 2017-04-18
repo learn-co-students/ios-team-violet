@@ -47,13 +47,37 @@ final class PopsBreakViewModel {
         return currentVideoIndex
     }
     
-    func userLikedVideo() {
-        userDisliked = false
-        userLiked = true
+    func userLikedVideo(completion: @escaping (Bool) -> ()) {
+        if userLiked == true {
+            return
+        }
+        
+        var verified = false
+        manager.verifyiCloudUser(completion: { (isVerified) in
+            if isVerified {
+                self.userDisliked = false
+                self.userLiked = true
+                self.manager.postLikeToCloudKit()
+                verified = true
+            }
+            completion(verified)
+        })
     }
     
-    func userDislikedVideo() {
-        userLiked = false
-        userDisliked = true
+    func userDislikedVideo(completion: @escaping (Bool) -> ()) {
+        if userDisliked == true {
+            return
+        }
+        
+        var verified = false
+        manager.verifyiCloudUser(completion: { (isVerified) in
+            if isVerified {
+                self.userLiked = false
+                self.userDisliked = true
+                self.manager.postDislikeToCloudKit()
+                verified = true
+            }
+            completion(verified)
+        })
     }
 }

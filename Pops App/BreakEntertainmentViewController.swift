@@ -10,6 +10,7 @@ class BreakEntertainmentViewController: UIViewController, BreakTimeViewModelDele
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        NotificationCenter.default.addObserver(self, selector: #selector(presentiCloudAlert), name: NSNotification.Name(rawValue: "iCloudError"), object: nil)
         
         self.view.addSubview(breakView)
         breakView.center = self.view.center
@@ -46,5 +47,12 @@ class BreakEntertainmentViewController: UIViewController, BreakTimeViewModelDele
     func dismissCoachBreakView() {
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "coachBreakViewIsBeingDismissed"), object: self)
         self.dismiss(animated: true)
+    }
+    
+    func presentiCloudAlert() {
+        let iCloudAlert = UIAlertController(title: "You must be signed into iCloud to use this feature.", message: "Please enable iCloud in your Settings application before proceeding.", preferredStyle: .alert)
+        let iCloudAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        iCloudAlert.addAction(iCloudAction)
+        self.present(iCloudAlert, animated: true, completion: nil)
     }
 }

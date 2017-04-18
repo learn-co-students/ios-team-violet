@@ -1,9 +1,11 @@
 
 import Foundation
 import YouTubeiOSPlayerHelper
+import CloudKit
 
 final class PopsBreakManager {
     let defaults = UserDefaults.standard
+    let database = CKContainer.default().publicCloudDatabase
     
     let baseURL = "https://www.googleapis.com/youtube/v3/playlistItems?"
     let key = "key=AIzaSyB3MeDmXLwcZK6JQKoA3ffM7e16E3_9I2k"
@@ -47,6 +49,27 @@ final class PopsBreakManager {
         }
         task.resume()
     }
+    
+    func verifyiCloudUser(completion: @escaping (Bool) -> ()) {
+        var verified = false
+        CKContainer.default().accountStatus { (accountStat, error) in
+            if (accountStat == .available) {
+                print("iCloud is available")
+                verified = true
+            }
+            else {
+                print("iCloud is not available")
+            }
+            completion(verified)
+        }
+    }
+    
+    func postLikeToCloudKit() {
+    }
+    
+    func postDislikeToCloudKit() {
+    }
+
 }
 
 struct Video {
