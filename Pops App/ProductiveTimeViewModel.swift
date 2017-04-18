@@ -140,16 +140,16 @@ final class ProductiveTimeViewModel {
         
         dataStore.user.currentSession?.sessionTimerCounter -= productivityTimerCounter
         
+        propsPenalty()
+    }
+    
+    func propsPenalty() {
         dataStore.user.totalProps += currentCyclePropsToScore
         dataStore.user.totalProps -= dataStore.user.currentCoach.difficulty.basePenaltyForLeavingProductivityScreen
         
         if dataStore.user.totalProps < 0 {
             dataStore.user.totalProps = 0
             dataStore.defaults.set(dataStore.user.totalProps, forKey: "totalProps")
-        }
-        
-        if dataStore.user.totalProps < 0 {
-            dataStore.user.totalProps = 0
         }
         
         dataStore.defaults.set(dataStore.user.totalProps, forKey: "totalProps")
