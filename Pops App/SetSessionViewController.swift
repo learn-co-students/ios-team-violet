@@ -549,7 +549,6 @@ extension SetSessionViewController {
             print("pressed notify me")
             
             self.center.requestAuthorization(options: options) { (granted, error) in
-                
                 DispatchQueue.main.async {
                     if granted {
                         self.animateReadyButtons()
