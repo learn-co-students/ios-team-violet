@@ -147,13 +147,14 @@ extension BabaBreakView {
     
     func setupHeaderView() {
         self.addSubview(headerView)
-        headerView.backgroundColor = UIColor.white
+        headerView.backgroundColor = UIColor.black
+        headerView.alpha = 0.3
         
         headerView.translatesAutoresizingMaskIntoConstraints = false
         headerView.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
         headerView.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
         headerView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-        headerView.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        headerView.heightAnchor.constraint(equalToConstant: 59).isActive = true
         
     }
     
