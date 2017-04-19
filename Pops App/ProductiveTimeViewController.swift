@@ -1,6 +1,7 @@
 
 import UIKit
 import UserNotifications
+import AudioToolbox
 
 class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDelegate {
 
@@ -20,6 +21,7 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
     var coachBottomAnchorConstraint: NSLayoutConstraint!
     
     var vibrateTimer = Timer()
+    var flashlightTimer = Timer()
     
     let progressBar = UIView()
     var progressBarWidthAnchor: NSLayoutConstraint! {
@@ -58,6 +60,7 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
         propsLabel.isHidden = true
         
         animateCoachPopup()
+        productiveTimeEndedUserNotificationRequest()
     }
     
     func appEnteredForeground() {
@@ -75,6 +78,10 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
         if viewModel.dataStore.defaults.value(forKey: "sessionActive") as? Bool == false {
             viewModel.dataStore.defaults.set(true, forKey: "sessionActive")
         }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
     }
     
     func appEnteredBackground() {
@@ -111,6 +118,8 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
             self.view.layoutIfNeeded()
         }) { _ in self.present(BreakTimeViewController(), animated: true, completion: nil)
         }
+        
+        AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
     }
     
     func skipToBreak() {
@@ -245,18 +254,16 @@ extension ProductiveTimeViewController {
     
     func setupCoachIcon() {
         coachIcon.image = viewModel.dataStore.user.currentCoach.icon
-        coachIcon.contentMode = .scaleAspectFit
+        coachIcon.contentMode = .scaleAspectFill
         
         coachWindowView.addSubview(coachIcon)
         coachIcon.translatesAutoresizingMaskIntoConstraints = false
-        coachIcon.backgroundColor = UIColor.clear
         
         coachBottomAnchorConstraint = coachIcon.bottomAnchor.constraint(equalTo: coachWindowView.bottomAnchor, constant: 100)
         coachBottomAnchorConstraint.isActive = true
         coachIcon.centerXAnchor.constraint(equalTo: coachWindowView.centerXAnchor, constant: 0).isActive = true
         coachIcon.heightAnchor.constraint(equalToConstant: 80).isActive = true
         coachIcon.widthAnchor.constraint(equalToConstant: 52).isActive = true
-        coachIcon.layer.masksToBounds = true
     }
     
     func animateCoachPopup() {

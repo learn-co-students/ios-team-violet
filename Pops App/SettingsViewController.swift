@@ -64,8 +64,6 @@ class SettingsViewController: UIViewController, DisplayBreakTimerDelegate {
             breakTimerLabel.text = "\(formatTime(time: breakTimerCounter)) left"
         }
         
-        
-        
         breakTimerLabel.isHidden = false
         settingsTotalTimerLabel.isHidden = false
     }

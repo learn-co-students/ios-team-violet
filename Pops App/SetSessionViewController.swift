@@ -32,8 +32,6 @@ class SetSessionViewController: UIViewController {
     let settingsButton = UIButton()
     let leaderBoardButton = UIButton()
     let contentView = UIView()
-    let homeSettingsVC = HomeSettingsViewController()
-    let dismissIcon = UIButton()
     
     let coachTap = UITapGestureRecognizer()
     
@@ -77,7 +75,6 @@ class SetSessionViewController: UIViewController {
         setupHeaderView()
         setupSettingsButton()
         setupLeaderBoardButton()
-        setupCancelSettingsButton()
         setupGestureRecognizer()
         
         if viewModel.dataStore.defaults.value(forKey: "returningUser") == nil {
@@ -86,17 +83,17 @@ class SetSessionViewController: UIViewController {
         }
 
         animateCoachPopup()
-
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         let visibleCells = selectHourCollectionView.visibleCells as! [HourCollectionViewCell]
         visibleCells.forEach { $0.deselectCell() }
-        selectHourCollectionView.deselectItem(at: selectedIndexPath!, animated: false)
+        if let selectedIndexPath = selectedIndexPath {
+            selectHourCollectionView.deselectItem(at: selectedIndexPath, animated: false)
+        }
     }
     
-    
-    func startButtonTapped() {
+    func startButtonTapped()    {
         presentProductiveTimeVC()
         if let indexPath = selectHourCollectionView.indexPathsForSelectedItems?[0] {
             viewModel.startSessionOfLength((indexPath.row) + 1)
@@ -317,18 +314,14 @@ extension SetSessionViewController {
     
     func setupCoachIcon() {
         coachIcon.image = viewModel.dataStore.user.currentCoach.icon
-        coachIcon.contentMode = .scaleAspectFit
+        coachIcon.contentMode = .scaleAspectFill
     
         coachWindowView.addSubview(coachIcon)
         coachIcon.translatesAutoresizingMaskIntoConstraints = false
-        coachIcon.backgroundColor = UIColor.clear
         
         coachBottomAnchorConstraint = coachIcon.bottomAnchor.constraint(equalTo: coachWindowView.bottomAnchor, constant: 100)
         coachBottomAnchorConstraint.isActive = true
         coachIcon.centerXAnchor.constraint(equalTo: coachWindowView.centerXAnchor, constant: 0).isActive = true
-        coachIcon.heightAnchor.constraint(equalToConstant: 80).isActive = true
-        coachIcon.widthAnchor.constraint(equalToConstant: 52).isActive = true
-        coachIcon.layer.masksToBounds = true
     }
 
     func setupHeaderView() {
@@ -354,52 +347,18 @@ extension SetSessionViewController {
         settingsButton.addTarget(self, action: #selector(presentHomeSettingsVC), for: .touchUpInside)
     }
     
-    
-    func setupCancelSettingsButton() {
-        self.dismissIcon.setBackgroundImage(#imageLiteral(resourceName: "IC_Quit"), for: .normal)
-        self.dismissIcon.alpha = 0
-        self.view.addSubview(self.dismissIcon)
-        self.dismissIcon.translatesAutoresizingMaskIntoConstraints = false
-        self.dismissIcon.centerYAnchor.constraint(equalTo: self.settingsButton.centerYAnchor).isActive = true
-        self.dismissIcon.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -26).isActive = true
-        self.dismissIcon.widthAnchor.constraint(equalToConstant: 15).isActive = true
-        self.dismissIcon.heightAnchor.constraint(equalToConstant: 15).isActive = true
-        self.dismissIcon.addTarget(self, action: #selector(self.dismissSettingVC), for: .touchUpInside)
-    }
-    
     func presentHomeSettingsVC() {
-        print("settings tapped")
-        view.insertSubview(self.contentView, aboveSubview: coachIcon)
-        self.contentView.backgroundColor = UIColor.red
-        
-        self.contentView.translatesAutoresizingMaskIntoConstraints = false
-        self.contentView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
-        // moe: changed constant below from 20 to 0, bug resolved.
-        self.contentView.topAnchor.constraint(equalTo: settingsButton.bottomAnchor, constant: 0).isActive = true
-        self.contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        self.contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        
-        UIView.animate(withDuration: 0.2, animations: {
-            self.settingsButton.alpha = 0
-            self.dismissIcon.alpha = 1
-            
-            self.addChildViewController(self.homeSettingsVC)
-            self.homeSettingsVC.view.frame = self.contentView.bounds
-            self.contentView.addSubview(self.homeSettingsVC.view)
-            self.homeSettingsVC.didMove(toParentViewController: self)
-        })
-        
-    }
     
-    func dismissSettingVC() {
-        self.contentView.removeFromSuperview()
-        UIView.animate(withDuration: 0.2, animations: {
-            self.dismissIcon.alpha = 0
-            self.settingsButton.alpha = 1
+        UIView.animate(withDuration: 0.7, animations: {
+            self.coachBottomAnchorConstraint.constant = 100
+            self.view.layoutIfNeeded()
+            
         })
+
+        let homeSettingsVC = HomeSettingsViewController()
+        self.present(homeSettingsVC, animated: true, completion: nil)
     }
 
-    
     func setupLeaderBoardButton() {
         leaderBoardButton.setBackgroundImage(#imageLiteral(resourceName: "IC_Leaderboard"), for: .normal)
         
@@ -626,11 +585,10 @@ extension SetSessionViewController {
         
     }
 
-
 }
 
 //Device Specific Constraints
-extension SetSessionViewController {
+extension UIViewController {
     
     func screenHeight() -> CGFloat {
         return UIScreen.main.bounds.height

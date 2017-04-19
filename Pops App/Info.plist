@@ -6,6 +6,8 @@
 	<string></string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Baba Needs Your Location Poopsikß</string>
 	<key>CFBundleDisplayName</key>
 	<string>Pops</string>
 	<key>CFBundleExecutable</key>
