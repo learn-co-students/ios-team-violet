@@ -247,7 +247,7 @@ extension HomeSettingsViewController {
     
     func shareBttnPressed() {
         let activityViewController = UIActivityViewController(
-            activityItems: ["Check out this beer I liked using Beer Tracker."],
+            activityItems: ["Checkout this new dope app called 'Pops'. It helps you get stuff done."],
             applicationActivities: nil)
         present(activityViewController, animated: true, completion: nil)
     }
