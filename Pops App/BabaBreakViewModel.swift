@@ -9,23 +9,7 @@ final class BabaBreakViewModel {
     
     let manager = BabaBreakManager()
     
-    var displayedData: [Location] = [] {
-        didSet {
-            for loc in displayedData {
-                print(loc.name)
-                
-            }
-        }
-    }
-    
-    
 }
-
-
-/*
- todo:
- connect the viewmodel with the view. using delegates.
- */
 
 //API handling extension
 extension BabaBreakViewModel {
@@ -47,9 +31,6 @@ extension BabaBreakViewModel {
             }
         }
     }
-    
-    
-    
     
     //search function
     func search(searchTerm: String, latitude: Double, longitude: Double, completion: @escaping ([String: Any]) -> Void ) {
@@ -84,14 +65,19 @@ struct Location {
     let distance: Double
     let name: String
     let imageURL: String
+    let address: String
     
     init(businessDictionary: [String : Any]) {
         let distanceFromSubject = businessDictionary["distance"] as? Double ?? 0.0
         let nameFromObj = businessDictionary["name"] as? String ?? "no name found"
         let imageURL = businessDictionary["image_url"] as? String ?? "no url found"
+        let businessLocation = businessDictionary["location"] as? [String: Any] ?? [:]
+        let addressArr = businessLocation["display_address"] as? [String] ?? []
+        let addressFinal = addressArr.first ?? "none"
         self.distance = distanceFromSubject
         self.name = nameFromObj
         self.imageURL = imageURL
+        self.address = addressFinal
     }
     
     
