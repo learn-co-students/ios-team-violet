@@ -1,7 +1,6 @@
 
 import UIKit
 import UserNotifications
-import AudioToolbox
 
 class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDelegate {
 
@@ -59,7 +58,6 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
         propsLabel.isHidden = true
         
         animateCoachPopup()
-        productiveTimeEndedUserNotificationRequest()
     }
     
     func appEnteredForeground() {
@@ -71,6 +69,7 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)        
         
+        productiveTimeEndedUserNotificationRequest()
         viewModel.startTimer()
         
         if viewModel.dataStore.defaults.value(forKey: "sessionActive") as? Bool == false {
@@ -297,28 +296,10 @@ extension ProductiveTimeViewController {
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: TimeInterval(productivityTimerLength), repeats: false)
         
         let identifier = "UYLLocalNotification"
-        let request = UNNotificationRequest(identifier: identifier,
-                                            content: content, trigger: trigger)
-        
+        let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+
         center.add(request, withCompletionHandler: { (error) in
-            
-            self.vibrateUserDevice()
-            
             if let error = error {
-                print(error)
-            }
-        })
+                print(error) }})
     }
-    
-    func vibrateUserDevice() {
-        var timerCounter = 0
-        vibrateTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { (timer) in
-            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
-            timerCounter += 1
-            if timerCounter == 3 {
-                timer.invalidate()
-            }
-        })
-    }
-    
 }

@@ -78,8 +78,8 @@ class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate, Bre
     
     override func viewDidAppear(_ animated: Bool) {
         if viewModel.breakIsOn == false {
-            viewModel.startTimer()
             breakTimeEndedUserNotificationRequest()
+            viewModel.startTimer()
         }
     }
     
@@ -469,11 +469,8 @@ extension BreakTimeViewController {
         let content = UNMutableNotificationContent()
         content.title = viewModel.dataStore.user.currentCoach.breakNotificationStatements[0].header
         content.body = viewModel.dataStore.user.currentCoach.breakNotificationStatements[0].body
-        
         content.sound = UNNotificationSound.default()
-        
         let breakTimerLength = (viewModel.dataStore.user.currentCoach.difficulty.baseBreakLength)
-        
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: TimeInterval(breakTimerLength), repeats: false)
         
         let identifier = "UYLLocalNotification"
@@ -484,28 +481,5 @@ extension BreakTimeViewController {
                 print(error)
             }
         })
-    }
-    
-    func userDidNotComeBackNotification() {
-       
-        let content = UNMutableNotificationContent()
-        content.title = "Come back now."
-        content.body = "Pops is getting impatient. He sees you still have not come back to the app yet."
-        
-        content.sound = UNNotificationSound.default()
-        
-        let breakTimerLength = (viewModel.dataStore.user.currentCoach.difficulty.baseBreakLength + 30)
-        
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: TimeInterval(breakTimerLength), repeats: false)
-        
-        let identifier = "UYLLocalNotification2"
-        let request = UNNotificationRequest(identifier: identifier,
-                                            content: content, trigger: trigger)
-        center.add(request, withCompletionHandler: { (error) in
-            if let error = error {
-                print(error)
-            }
-        })
-        
     }
 }
