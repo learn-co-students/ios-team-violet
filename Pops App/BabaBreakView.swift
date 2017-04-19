@@ -58,7 +58,6 @@ class BabaBreakView: UIView, CLLocationManagerDelegate {
         self.backgroundColor = .white
         setupHeaderView()
         setupNextEmailBttn()
-        //setupBackButton()
         topDividerViewSetup()
         setupBabaIconWindow()
         setupBabaIconView()
@@ -158,19 +157,6 @@ extension BabaBreakView {
         
     }
     
-    func setupBackButton() {
-        headerView.addSubview(backButton)
-        backButton.titleLabel?.text = "back"
-        
-        backButton.translatesAutoresizingMaskIntoConstraints = false
-        backButton.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        backButton.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        backButton.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 10).isActive = true
-        backButton.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 20).isActive = true
-        
-    }
-    
-    
     func topDividerViewSetup() {
         self.addSubview(topDividerView)
         topDividerView.backgroundColor = UIColor.lightGray
@@ -267,6 +253,10 @@ extension BabaBreakView {
     
     func setupNextEmailBttn() {
         self.addSubview(nextEmailBttn)
+        
+        //TODO: Add next email feature
+        nextEmailBttn.isHidden = true
+        
         nextEmailBttn.backgroundColor = Palette.green.color
         nextEmailBttn.titleLabel?.font = UIFont(name: "Avenir-Black", size: 18)
         nextEmailBttn.addTarget(self, action: #selector(nextEmailBttnPrssd), for: .touchUpInside)

@@ -283,7 +283,7 @@ extension ProductiveTimeViewController {
         self.cancelSessionButton.titleLabel?.textColor = Palette.lightGrey.color
         
         self.cancelSessionButton.removeTarget(self, action: #selector(self.cancelSession), for: .touchUpInside)
-        //Uncomment for production
+        //TODO: Uncomment for production
         //self.cancelSessionButton.addTarget(self, action: #selector(self.cancelSessionWithPenalty), for: .touchUpInside)
         self.cancelSessionButton.addTarget(self, action: #selector(self.skipToBreak), for: .touchUpInside)
     }

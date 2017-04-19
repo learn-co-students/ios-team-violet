@@ -143,7 +143,7 @@ private extension DataStore {
             productivityReprimands: productivityReprimands,
             productivityNotificationStatements: productivityNotificationStatements,
             breakStatements: breakStatements,
-            breakButtonText: "check email",
+            breakButtonText: "email from baba",
             breakNotificationStatements: breakNotificationStatements,
             endSessionStatements: endSessionStatements,
             breakView: BabaBreakView())
