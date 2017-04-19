@@ -3,10 +3,6 @@ import UIKit
 import CoreLocation
 import MapKit
 
-enum ShrinkStatus {
-    case shrinked
-    case expanded
-}
 
 class Place: NSObject, MKAnnotation {
     var title: String?
@@ -29,6 +25,10 @@ class BabaBreakView: UIView, CLLocationManagerDelegate {
     
     let viewModel = BabaBreakViewModel()
     
+    //Data Property
+    var babaLocations: [Location] = []
+    var myCoordinates = CLLocation()
+    var terms = ["dessert", "coffee", "food", "parks"]
     //UI Properties
     let headerView = UIView()
     let topDividerView = UIView()
@@ -44,7 +44,6 @@ class BabaBreakView: UIView, CLLocationManagerDelegate {
     let nextEmailBttn = UIButton()
     let location = CLLocationCoordinate2D()
     let locationManager = CLLocationManager()
-    var mapShrinkStatus: ShrinkStatus = .shrinked
     
     init() {
         super.init(frame: UIScreen.main.bounds)
@@ -70,8 +69,10 @@ class BabaBreakView: UIView, CLLocationManagerDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(viewIsBeingDismissed), name: NSNotification.Name(rawValue: "coachBreakViewIsBeingDismissed"), object: nil)
     }
     
+    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let myCoord = locations[locations.count - 1]
+        self.myCoordinates = myCoord
         
         // get lat and long 
         let myLat = myCoord.coordinate.latitude
@@ -92,6 +93,7 @@ class BabaBreakView: UIView, CLLocationManagerDelegate {
         
         //do an mklocalsearch using the region
         searchRegion(region: myRegion)
+        searchYelpRegion()//this searches the local region on yelp
         
     }
     
@@ -114,10 +116,6 @@ class BabaBreakView: UIView, CLLocationManagerDelegate {
         searchResults.start { (response, error) in
             if let mapItems = response?.mapItems {
                 for item in mapItems {
-//                    let mapItem = MKMapItem(placemark: item.placemark)
-//                    mapView.add
-//                    mapView.add(placemark: item.placemark)
-                    
                     //get address
                     guard let address = item.placemark.title else { continue }
                     //get title
@@ -139,6 +137,18 @@ class BabaBreakView: UIView, CLLocationManagerDelegate {
     
     func viewIsBeingDismissed() {
     }
+    
+    func searchYelpRegion() {
+        for term in terms {
+            print("searching \(term)")
+            viewModel.search(searchTerm: term, latitude: myCoordinates.coordinate.latitude, longitude: myCoordinates.coordinate.longitude) { (json) in
+                self.viewModel.createObjects(json: json, completion: { (locations) in
+                    self.babaLocations.append(contentsOf: locations)
+                })
+            }
+        }
+    }
+    
 }
 
 //UI Setup Extension
