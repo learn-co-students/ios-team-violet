@@ -26,7 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillEnterForeground(_ application: UIApplication) {
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "appEnteredForeground"), object: self)
-    }
+            }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
     }
