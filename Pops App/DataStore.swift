@@ -106,8 +106,8 @@ private extension DataStore {
         ]
         let setSessionStatements = [
             [("A whole hour!", "Remember, poopsik.  All that matters is that you try hard.")],
-            [("Two hours!!", "Your Baba is so proud of you already!")],
-            [("Three hours!", "Poopsik, you are really ambitious today.")],
+            [("Two hours!!", "Your Baba is so proud of you already, no matter what!")],
+            [("Three hours!", "Poopsik, you are really ambitious today.  Do your best!")],
             [("Baba's so proud!!", "You can be anything you want if you put your mind to it!")],
             [("My Poopsik!", "You're really going for it today!  Your Baba is so happy!")],
             [("You are incredible!", "I'll make sure to give you plenty of breaks.")],

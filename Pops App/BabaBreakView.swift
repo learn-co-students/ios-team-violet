@@ -92,9 +92,9 @@ class BabaBreakView: UIView, CLLocationManagerDelegate {
         mapView.setRegion(myRegion, animated: true)
         
         //do an mklocalsearch using the region
-        searchRegion(region: myRegion)
+        //searchRegion(region: myRegion)
         searchYelpRegion()//this searches the local region on yelp
-        
+        locationManager.stopUpdatingLocation()
     }
     
     func localSearch(coord2D: CLLocationCoordinate2D, queryKeyword: String) {
