@@ -284,8 +284,8 @@ extension ProductiveTimeViewController {
         
         self.cancelSessionButton.removeTarget(self, action: #selector(self.cancelSession), for: .touchUpInside)
         //TODO: Uncomment for production
-        self.cancelSessionButton.addTarget(self, action: #selector(self.cancelSessionWithPenalty), for: .touchUpInside)
-        //self.cancelSessionButton.addTarget(self, action: #selector(self.skipToBreak), for: .touchUpInside)
+        //self.cancelSessionButton.addTarget(self, action: #selector(self.cancelSessionWithPenalty), for: .touchUpInside)
+        self.cancelSessionButton.addTarget(self, action: #selector(self.skipToBreak), for: .touchUpInside)
     }
 }
 

@@ -159,7 +159,7 @@ private extension DataStore {
             ("Yo, bro!", "If you value your health you'd better stop that right now.")
         ]
         let introStatements = [
-            ("Chad here.", "No chance in heck a wimp like you could impress me")
+            ("Chad here.", "No chance in heck a wimp like you could impress me.")
         ]
         let setSessionStatements = [
             [("LOL", "Why even bother!?  Your gains will be mad weak, bro.")],
