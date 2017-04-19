@@ -29,6 +29,10 @@ class BabaBreakView: UIView, CLLocationManagerDelegate {
     
     let viewModel = BabaBreakViewModel()
     
+    //Data Property
+    var babaLocations: [Location] = []
+    var myCoordinates = CLLocation()
+    var terms = ["dessert", "coffee", "food", "parks"]
     //UI Properties
     let headerView = UIView()
     let topDividerView = UIView()
@@ -71,8 +75,10 @@ class BabaBreakView: UIView, CLLocationManagerDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(viewIsBeingDismissed), name: NSNotification.Name(rawValue: "coachBreakViewIsBeingDismissed"), object: nil)
     }
     
+    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let myCoord = locations[locations.count - 1]
+        self.myCoordinates = myCoord
         
         // get lat and long 
         let myLat = myCoord.coordinate.latitude
@@ -93,6 +99,7 @@ class BabaBreakView: UIView, CLLocationManagerDelegate {
         
         //do an mklocalsearch using the region
         searchRegion(region: myRegion)
+        searchYelpRegion()
         
     }
     
@@ -140,6 +147,18 @@ class BabaBreakView: UIView, CLLocationManagerDelegate {
     
     func viewIsBeingDismissed() {
     }
+    
+    func searchYelpRegion() {
+        for term in terms {
+            print("searching \(term)")
+            viewModel.search(searchTerm: term, latitude: myCoordinates.coordinate.latitude, longitude: myCoordinates.coordinate.longitude) { (json) in
+                self.viewModel.createObjects(json: json, completion: { (locations) in
+                    self.babaLocations.append(contentsOf: locations)
+                })
+            }
+        }
+    }
+    
 }
 
 //UI Setup Extension
