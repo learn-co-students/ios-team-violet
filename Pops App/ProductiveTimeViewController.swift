@@ -2,7 +2,6 @@
 import UIKit
 import UserNotifications
 import AudioToolbox
-import AVFoundation
 
 class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDelegate {
 
@@ -62,7 +61,6 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
         
         animateCoachPopup()
         productiveTimeEndedUserNotificationRequest()
-        productiveTimeReminderUserNotificationRequest()
     }
     
     func appEnteredForeground() {
@@ -74,6 +72,7 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)        
         
+        productiveTimeEndedUserNotificationRequest()
         viewModel.startTimer()
         
         if viewModel.dataStore.defaults.value(forKey: "sessionActive") as? Bool == false {
@@ -83,7 +82,6 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
     }
     
     func appEnteredBackground() {
@@ -120,6 +118,8 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
             self.view.layoutIfNeeded()
         }) { _ in self.present(BreakTimeViewController(), animated: true, completion: nil)
         }
+        
+        AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
     }
     
     func skipToBreak() {
@@ -283,7 +283,7 @@ extension ProductiveTimeViewController {
         self.cancelSessionButton.titleLabel?.textColor = Palette.lightGrey.color
         
         self.cancelSessionButton.removeTarget(self, action: #selector(self.cancelSession), for: .touchUpInside)
-        //Uncomment for production
+        //TODO: Uncomment for production
         //self.cancelSessionButton.addTarget(self, action: #selector(self.cancelSessionWithPenalty), for: .touchUpInside)
         self.cancelSessionButton.addTarget(self, action: #selector(self.skipToBreak), for: .touchUpInside)
     }
@@ -303,78 +303,10 @@ extension ProductiveTimeViewController {
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: TimeInterval(productivityTimerLength), repeats: false)
         
         let identifier = "UYLLocalNotification"
-        let request = UNNotificationRequest(identifier: identifier,
-                                            content: content, trigger: trigger)
-        
-        center.add(request, withCompletionHandler: { (error) in
-            
-            self.vibrateUserDevice()
-            
-            if let error = error {
-                print(error)
-            }
-        })
-    }
-    
-    func productiveTimeReminderUserNotificationRequest() {
-        
-        let content = UNMutableNotificationContent()
-        content.title = "Don't open your phone until I notify you!"
-        content.body = "Other apps may try to lure you away from being productive. Don't give in! Wait until I notify you for break time."
-        
-        let productivityTimerLength = 180
-        
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: TimeInterval(productivityTimerLength), repeats: false)
-        
-        let identifier = "UYLLocalNotificationReminder"
-        let request = UNNotificationRequest(identifier: identifier,
-                                            content: content, trigger: trigger)
-        
-        center.add(request, withCompletionHandler: { (error) in
-            
-            //self.toggleTorch(on: true)
-           
-            self.vibrateUserDevice()
-            
-            if let error = error {
-                print(error)
-            }
-        })
-    }
-    
-    func toggleTorch(on: Bool) {
-        guard let device = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo) else { return }
-        
-        if device.hasTorch {
-            do {
-                try device.lockForConfiguration()
-                
-                if on == true {
-                    device.torchMode = .on
-                    device.torchMode = .off
-                } else {
-                    device.torchMode = .off
-                }
-                
-                device.unlockForConfiguration()
-            } catch {
-                print("Torch could not be used")
-            }
-        } else {
-            print("Torch is not available")
-        }
-    }
+        let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
 
-    
-    func vibrateUserDevice() {
-        var timerCounter = 0
-        vibrateTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { (timer) in
-            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
-            timerCounter += 1
-            if timerCounter == 3 {
-                timer.invalidate()
-            }
-        })
+        center.add(request, withCompletionHandler: { (error) in
+            if let error = error {
+                print(error) }})
     }
-    
 }

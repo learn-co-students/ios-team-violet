@@ -3,10 +3,6 @@ import UIKit
 import CoreLocation
 import MapKit
 
-enum ShrinkStatus {
-    case shrinked
-    case expanded
-}
 
 class Place: NSObject, MKAnnotation {
     var title: String?
@@ -29,6 +25,10 @@ class BabaBreakView: UIView, CLLocationManagerDelegate {
     
     let viewModel = BabaBreakViewModel()
     
+    //Data Property
+    var babaLocations: [Location] = []
+    var myCoordinates = CLLocation()
+    var terms = ["dessert", "coffee", "food", "parks"]
     //UI Properties
     let headerView = UIView()
     let topDividerView = UIView()
@@ -44,7 +44,6 @@ class BabaBreakView: UIView, CLLocationManagerDelegate {
     let nextEmailBttn = UIButton()
     let location = CLLocationCoordinate2D()
     let locationManager = CLLocationManager()
-    var mapShrinkStatus: ShrinkStatus = .shrinked
     
     init() {
         super.init(frame: UIScreen.main.bounds)
@@ -57,7 +56,6 @@ class BabaBreakView: UIView, CLLocationManagerDelegate {
         self.backgroundColor = .white
         setupHeaderView()
         setupNextEmailBttn()
-        //setupBackButton()
         topDividerViewSetup()
         setupBabaIconWindow()
         setupBabaIconView()
@@ -70,8 +68,10 @@ class BabaBreakView: UIView, CLLocationManagerDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(viewIsBeingDismissed), name: NSNotification.Name(rawValue: "coachBreakViewIsBeingDismissed"), object: nil)
     }
     
+    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let myCoord = locations[locations.count - 1]
+        self.myCoordinates = myCoord
         
         // get lat and long 
         let myLat = myCoord.coordinate.latitude
@@ -91,8 +91,9 @@ class BabaBreakView: UIView, CLLocationManagerDelegate {
         mapView.setRegion(myRegion, animated: true)
         
         //do an mklocalsearch using the region
-        searchRegion(region: myRegion)
-        
+        //searchRegion(region: myRegion)
+        searchYelpRegion()//this searches the local region on yelp
+        locationManager.stopUpdatingLocation()
     }
     
     func localSearch(coord2D: CLLocationCoordinate2D, queryKeyword: String) {
@@ -114,10 +115,6 @@ class BabaBreakView: UIView, CLLocationManagerDelegate {
         searchResults.start { (response, error) in
             if let mapItems = response?.mapItems {
                 for item in mapItems {
-//                    let mapItem = MKMapItem(placemark: item.placemark)
-//                    mapView.add
-//                    mapView.add(placemark: item.placemark)
-                    
                     //get address
                     guard let address = item.placemark.title else { continue }
                     //get title
@@ -139,6 +136,18 @@ class BabaBreakView: UIView, CLLocationManagerDelegate {
     
     func viewIsBeingDismissed() {
     }
+    
+    func searchYelpRegion() {
+        for term in terms {
+            print("searching \(term)")
+            viewModel.search(searchTerm: term, latitude: myCoordinates.coordinate.latitude, longitude: myCoordinates.coordinate.longitude) { (json) in
+                self.viewModel.createObjects(json: json, completion: { (locations) in
+                    self.babaLocations.append(contentsOf: locations)
+                })
+            }
+        }
+    }
+    
 }
 
 //UI Setup Extension
@@ -146,28 +155,16 @@ extension BabaBreakView {
     
     func setupHeaderView() {
         self.addSubview(headerView)
-        headerView.backgroundColor = UIColor.white
+        headerView.backgroundColor = UIColor.black
+        headerView.alpha = 0.3
         
         headerView.translatesAutoresizingMaskIntoConstraints = false
         headerView.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
         headerView.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
         headerView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-        headerView.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        headerView.heightAnchor.constraint(equalToConstant: 59).isActive = true
         
     }
-    
-    func setupBackButton() {
-        headerView.addSubview(backButton)
-        backButton.titleLabel?.text = "back"
-        
-        backButton.translatesAutoresizingMaskIntoConstraints = false
-        backButton.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        backButton.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        backButton.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 10).isActive = true
-        backButton.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 20).isActive = true
-        
-    }
-    
     
     func topDividerViewSetup() {
         self.addSubview(topDividerView)
@@ -264,6 +261,10 @@ extension BabaBreakView {
     
     func setupNextEmailBttn() {
         self.addSubview(nextEmailBttn)
+        
+        //TODO: Add next email feature
+        nextEmailBttn.isHidden = true
+        
         nextEmailBttn.backgroundColor = Palette.green.color
         nextEmailBttn.titleLabel?.font = UIFont(name: "Avenir-Black", size: 18)
         nextEmailBttn.addTarget(self, action: #selector(nextEmailBttnPrssd), for: .touchUpInside)

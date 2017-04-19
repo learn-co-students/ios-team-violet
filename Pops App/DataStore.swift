@@ -106,8 +106,8 @@ private extension DataStore {
         ]
         let setSessionStatements = [
             [("A whole hour!", "Remember, poopsik.  All that matters is that you try hard.")],
-            [("Two hours!!", "Your Baba is so proud of you already!")],
-            [("Three hours!", "Poopsik, you are really ambitious today.")],
+            [("Two hours!!", "Your Baba is so proud of you already, no matter what!")],
+            [("Three hours!", "Poopsik, you are really ambitious today.  Do your best!")],
             [("Baba's so proud!!", "You can be anything you want if you put your mind to it!")],
             [("My Poopsik!", "You're really going for it today!  Your Baba is so happy!")],
             [("You are incredible!", "I'll make sure to give you plenty of breaks.")],
@@ -127,7 +127,7 @@ private extension DataStore {
             ("How are you, Poopsik?", "I tried sending you some emails while you were working, let me know if you get them.")
         ]
         let breakNotificationStatements = [
-            ("Oh, I guess it's time to get back to work", "Baba can find you some cookies if you'd like.")
+            ("Oh, it's time to get to work", "Make sure you don't push yourself too hard.")
         ]
         let endSessionStatements = [
             ("Baba's so proud of her Poopsik!", "If you did another hour we could spend even more time together...")
@@ -143,7 +143,7 @@ private extension DataStore {
             productivityReprimands: productivityReprimands,
             productivityNotificationStatements: productivityNotificationStatements,
             breakStatements: breakStatements,
-            breakButtonText: "open email",
+            breakButtonText: "email from baba",
             breakNotificationStatements: breakNotificationStatements,
             endSessionStatements: endSessionStatements,
             breakView: BabaBreakViewNew())
@@ -159,7 +159,7 @@ private extension DataStore {
             ("Yo, bro!", "If you value your health you'd better stop that right now.")
         ]
         let introStatements = [
-            ("Chad here.", "No chance in heck a wimp like you could impress me")
+            ("Chad here.", "No chance in heck a wimp like you could impress me.")
         ]
         let setSessionStatements = [
             [("LOL", "Why even bother!?  Your gains will be mad weak, bro.")],

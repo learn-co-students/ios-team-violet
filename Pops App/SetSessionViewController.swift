@@ -525,7 +525,7 @@ extension SetSessionViewController {
         }) { _ in
             
             UIView.animate(withDuration: 0.6, delay: 0, options: [.curveEaseOut], animations: { 
-                self.characterMessageBody.text = "Just press start back whenever you are ready to start being productive."
+                self.characterMessageBody.text = "Just press start whenever you are ready to begin being productive."
                 self.characterMessageHeader.text = "No worries!"
                 self.characterMessageBody.alpha = 1
                 self.characterMessageHeader.alpha = 1
@@ -549,7 +549,6 @@ extension SetSessionViewController {
             print("pressed notify me")
             
             self.center.requestAuthorization(options: options) { (granted, error) in
-                
                 DispatchQueue.main.async {
                     if granted {
                         self.animateReadyButtons()
