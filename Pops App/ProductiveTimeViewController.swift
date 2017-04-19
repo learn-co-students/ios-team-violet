@@ -81,6 +81,11 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
         }
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
+    }
+    
     func appEnteredBackground() {
         viewModel.dataStore.defaults.set(viewModel.dataStore.user.totalProps, forKey: "totalProps")
         viewModel.currentCyclePropsScored += viewModel.currentCyclePropsToScore
