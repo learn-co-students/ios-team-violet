@@ -148,6 +148,7 @@ final class ProductiveTimeViewModel {
         dataStore.user.totalProps -= dataStore.user.currentCoach.difficulty.basePenaltyForLeavingProductivityScreen
         
         if dataStore.user.totalProps < 0 {
+            props = 0
             dataStore.user.totalProps = 0
             dataStore.defaults.set(dataStore.user.totalProps, forKey: "totalProps")
         }

@@ -68,25 +68,6 @@ class BabaBreakViewNew: UIView, UITableViewDataSource, UITableViewDelegate, CLLo
         let myCoord = locations[locations.count - 1]
         self.myCoordinates = myCoord
         
-        // get lat and long
-        let myLat = myCoord.coordinate.latitude
-        let myLong = myCoord.coordinate.longitude
-        let myCoord2D = CLLocationCoordinate2D(latitude: myLat, longitude: myLong)
-        
-        
-        //set span
-        let myLatDelta = 0.05
-        let myLongDelta = 0.05
-        let mySpan = MKCoordinateSpan(latitudeDelta: myLatDelta, longitudeDelta: myLongDelta)
-        
-        //set region
-        let myRegion = MKCoordinateRegion(center: myCoord2D, span: mySpan)
-        
-        //center map at this region
-        //mapView.setRegion(myRegion, animated: true)
-        
-        //do an mklocalsearch using the region
-        //searchRegion(region: myRegion)
         searchYelpRegion()//this searches the local region on yelp
         locationManager.stopUpdatingLocation()
     }

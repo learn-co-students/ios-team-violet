@@ -1,4 +1,5 @@
 import Foundation
+import SystemConfiguration
 import UIKit
 
 final class DataStore {
@@ -34,6 +35,27 @@ final class DataStore {
             return generatePops()
         }
     }
+    
+    func isInternetAvailable() -> Bool
+    {
+        var zeroAddress = sockaddr_in()
+        zeroAddress.sin_len = UInt8(MemoryLayout.size(ofValue: zeroAddress))
+        zeroAddress.sin_family = sa_family_t(AF_INET)
+        
+        let defaultRouteReachability = withUnsafePointer(to: &zeroAddress) {
+            $0.withMemoryRebound(to: sockaddr.self, capacity: 1) {zeroSockAddress in
+                SCNetworkReachabilityCreateWithAddress(nil, zeroSockAddress)
+            }
+        }
+        
+        var flags = SCNetworkReachabilityFlags()
+        if !SCNetworkReachabilityGetFlags(defaultRouteReachability!, &flags) {
+            return false
+        }
+        let isReachable = (flags.rawValue & UInt32(kSCNetworkFlagsReachable)) != 0
+        let needsConnection = (flags.rawValue & UInt32(kSCNetworkFlagsConnectionRequired)) != 0
+        return (isReachable && !needsConnection)
+    }
 }
 
 private extension DataStore {
@@ -45,7 +67,7 @@ private extension DataStore {
             ("Hey!", "Get your sweaty finger off of me or you'll be sorry!")
         ]
         let introStatements = [
-            ("Make me proud today, sonny.", "How long are you looking to stay productive for?")
+            ("Make me proud today, kiddo.", "How long are you looking to stay productive for?")
         ]
         let setSessionStatements = [
             [("Only an hour?", "Seems like you could do better.  That's really not a lot.")],
@@ -67,14 +89,14 @@ private extension DataStore {
             ("Time for a quick break!", "Wrap up your final thoughts and take a 5 minute 'phone break' when ready.")
         ]
         let breakStatements = [
-            ("Take a breather", "If you're interested I dug up some of my favorite YouTube vids."),
+            ("Take a breather.", "If you're interested I dug up some of my favorite YouTube vids."),
             ("Think about it...", "Success in almost any field depends more on energy and drive than it does on intelligence. This explains why we have so many stupid leaders.")
         ]
         let breakNotificationStatements = [
             ("Break time is over!", "Head back to the app and get to work. Pops will start deducting props if you aren't back in 30 seconds.")
         ]
         let endSessionStatements = [
-            ("You reached the end, sonny.", "If you want to make me REALLY proud you should put in just one more hour...")
+            ("You reached the end, kiddo.", "If you want to make me REALLY proud you should put in just one more hour...")
         ]
         let pops = Coach(
             name: name,
@@ -124,7 +146,7 @@ private extension DataStore {
             ("It's time for a break!", "Your Baba would be really happy if you spent some time with her.")
         ]
         let breakStatements = [
-            ("How are you, Poopsik?", "I tried sending you some emails while you were working, let me know if you get them.")
+            ("How are you, Poopsik?", "I found some nice places for you to check out.  Go get a snack, you're too skinny!")
         ]
         let breakNotificationStatements = [
             ("Oh, it's time to get to work", "Make sure you don't push yourself too hard.")
@@ -143,7 +165,7 @@ private extension DataStore {
             productivityReprimands: productivityReprimands,
             productivityNotificationStatements: productivityNotificationStatements,
             breakStatements: breakStatements,
-            breakButtonText: "email from baba",
+            breakButtonText: "check babas guide",
             breakNotificationStatements: breakNotificationStatements,
             endSessionStatements: endSessionStatements,
             breakView: BabaBreakViewNew())

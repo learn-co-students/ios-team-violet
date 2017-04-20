@@ -4,7 +4,7 @@ import UIKit
 
 class BreakEntertainmentViewController: UIViewController, BreakTimeViewModelDelegate {
     
-    var viewModel = BabaBreakViewModel()
+    var dataStore = DataStore.singleton
     
     var breakView = UIView()
     var backButton = UIButton()
@@ -18,14 +18,20 @@ class BreakEntertainmentViewController: UIViewController, BreakTimeViewModelDele
         
         setUpBackButton()
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        if dataStore.isInternetAvailable() != true {
+            presentInternetAlert()
+        }
+    }
 
     override var prefersStatusBarHidden: Bool {
         return true
     }
     
     func setUpBackButton(){
-        print("name \(viewModel.dataStore.user.currentCoach.name)")
-        if viewModel.dataStore.user.currentCoach.name == "Baba" {
+        print("name \(dataStore.user.currentCoach.name)")
+        if dataStore.user.currentCoach.name == "Baba" {
             backButton.setBackgroundImage(#imageLiteral(resourceName: "IC_Back Arrow Black"), for: .normal)
         } else {
             backButton.setBackgroundImage(#imageLiteral(resourceName: "IC_BackButton"), for: .normal)
@@ -61,5 +67,14 @@ class BreakEntertainmentViewController: UIViewController, BreakTimeViewModelDele
         let iCloudAction = UIAlertAction(title: "OK", style: .default, handler: nil)
         iCloudAlert.addAction(iCloudAction)
         self.present(iCloudAlert, animated: true, completion: nil)
+    }
+    
+    func presentInternetAlert() {
+        let internetAlert = UIAlertController(title: "Pops was unable to connect to the internet.", message: "Please check your internet settings and relaunch Pops.", preferredStyle: .alert)
+        let internetAction = UIAlertAction(title: "OK", style: .default) { (_) in
+            self.dismiss(animated: true, completion: nil)
+        }
+            internetAlert.addAction(internetAction)
+        self.present(internetAlert, animated: true, completion: nil )
     }
 }
