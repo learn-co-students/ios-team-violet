@@ -9,6 +9,8 @@ final class BabaBreakViewModel {
     
     let manager = BabaBreakManager()
     
+    var locations = [Location]()
+    
 }
 
 //API handling extension
@@ -20,16 +22,26 @@ extension BabaBreakViewModel {
     
     
     func createObjects(json: [String:Any], completion: ([Location])->()) {
-        var locations = [Location]()
+        
         
         let arrayOfLocations = json["businesses"] as? [[String:Any]] ?? [[:]]
+        
         for loc in arrayOfLocations {
+            
             let newLocation = Location(businessDictionary: loc)
+            
+            print("nameLocation: \(newLocation.name)")
+            
             locations.append(newLocation)
-            if locations.count == arrayOfLocations.count {
-                completion(locations)
-            }
+            
+            print("number: \(locations.count)")
+        
         }
+        
+        if !locations.isEmpty {
+            completion(locations)
+        }
+      
     }
     
     //search function
@@ -61,15 +73,17 @@ extension BabaBreakViewModel {
 }
 
 
-struct Location {
+class Location {
     let distance: Double
     let name: String
     let imageURL: String
     let address: String
     
     init(businessDictionary: [String : Any]) {
+        print("LOCATION INIT GETS CALLED")
         let distanceFromSubject = businessDictionary["distance"] as? Double ?? 0.0
         let nameFromObj = businessDictionary["name"] as? String ?? "no name found"
+        print("NAME FROM LOCATION: \(nameFromObj)")
         let imageURL = businessDictionary["image_url"] as? String ?? "no url found"
         let businessLocation = businessDictionary["location"] as? [String: Any] ?? [:]
         let addressArr = businessLocation["display_address"] as? [String] ?? []
@@ -79,8 +93,7 @@ struct Location {
         self.imageURL = imageURL
         self.address = addressFinal
     }
-    
-    
+
 }
 
 

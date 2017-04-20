@@ -146,7 +146,7 @@ private extension DataStore {
             breakButtonText: "email from baba",
             breakNotificationStatements: breakNotificationStatements,
             endSessionStatements: endSessionStatements,
-            breakView: BabaBreakView())
+            breakView: BabaBreakViewNew())
         return baba
     }
     

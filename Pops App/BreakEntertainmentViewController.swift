@@ -4,7 +4,8 @@ import UIKit
 
 class BreakEntertainmentViewController: UIViewController, BreakTimeViewModelDelegate {
     
-   
+    var viewModel = BabaBreakViewModel()
+    
     var breakView = UIView()
     var backButton = UIButton()
     
@@ -23,7 +24,13 @@ class BreakEntertainmentViewController: UIViewController, BreakTimeViewModelDele
     }
     
     func setUpBackButton(){
-        backButton.setBackgroundImage(#imageLiteral(resourceName: "IC_BackButton"), for: .normal)
+        print("name \(viewModel.dataStore.user.currentCoach.name)")
+        if viewModel.dataStore.user.currentCoach.name == "Baba" {
+            backButton.setBackgroundImage(#imageLiteral(resourceName: "IC_Back Arrow Black"), for: .normal)
+        } else {
+            backButton.setBackgroundImage(#imageLiteral(resourceName: "IC_BackButton"), for: .normal)
+        }
+   
         backButton.addTarget(self, action: #selector(dismissCoachBreakView), for: .touchUpInside)
         
         breakView.addSubview(backButton)

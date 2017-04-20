@@ -42,6 +42,7 @@ class BabaBreakView: UIView, CLLocationManagerDelegate {
     let backButton = UIButton()
     let mapView = MKMapView()
     let nextEmailBttn = UIButton()
+    
     let location = CLLocationCoordinate2D()
     let locationManager = CLLocationManager()
     
@@ -52,7 +53,6 @@ class BabaBreakView: UIView, CLLocationManagerDelegate {
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
         locationManager.delegate = self
-        
         
         self.backgroundColor = .white
         setupHeaderView()
@@ -257,7 +257,6 @@ extension BabaBreakView {
         mapView.topAnchor.constraint(equalTo: bodyTextLabel.bottomAnchor, constant: 20).isActive = true
         mapView.bottomAnchor.constraint(equalTo: nextEmailBttn.topAnchor, constant: -10).isActive = true
         mapView.centerCoordinate = CLLocationCoordinate2D(latitude: 40.7, longitude: -74)
-        
     }
     
     
