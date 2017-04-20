@@ -38,7 +38,10 @@ class BabaBreakViewNew: UIView, UITableViewDataSource, UITableViewDelegate, CLLo
         setupCoachIcon()
         setupMainLabel()
         setupTableView()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(viewIsBeingDismissed), name: NSNotification.Name(rawValue: "coachBreakViewIsBeingDismissed"), object: nil)
     }
+    
     
     func searchYelpRegion() {
         
@@ -62,11 +65,18 @@ class BabaBreakViewNew: UIView, UITableViewDataSource, UITableViewDelegate, CLLo
         
     }
     
+    
+    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let myCoord = locations[locations.count - 1]
         self.myCoordinates = myCoord
         searchYelpRegion()//this searches the local region on yelp
         locationManager.stopUpdatingLocation()
+    }
+    
+    func viewIsBeingDismissed() {
+        babaLocations = babaLocations.shuffled()
+        tableView.reloadData()
     }
 
     
@@ -94,6 +104,8 @@ class BabaBreakViewNew: UIView, UITableViewDataSource, UITableViewDelegate, CLLo
         let selectedCell = tableView.cellForRow(at: indexPath) as! BabaEntertainmentCell
             
         let yelpyURL = selectedCell.location.yelpUrl
+        //these two lines of code randomizes the array after the user selects a place.
+        babaLocations = babaLocations.shuffled()
         
         let appURL = URL(string: yelpyURL)
         let webURL = URL(string: yelpyURL)
@@ -161,4 +173,29 @@ extension BabaBreakViewNew {
         tableView.topAnchor.constraint(equalTo: mainLabel.bottomAnchor, constant: viewWidth * (50/375)).isActive = true
     }
     
+}
+
+//array extension to shuffle the collection of locations.
+extension MutableCollection where Indices.Iterator.Element == Index {
+    /// Shuffles the contents of this collection.
+    mutating func shuffle() {
+        let c = count
+        guard c > 1 else { return }
+        
+        for (firstUnshuffled , unshuffledCount) in zip(indices, stride(from: c, to: 1, by: -1)) {
+            let d: IndexDistance = numericCast(arc4random_uniform(numericCast(unshuffledCount)))
+            guard d != 0 else { continue }
+            let i = index(firstUnshuffled, offsetBy: d)
+            swap(&self[firstUnshuffled], &self[i])
+        }
+    }
+}
+
+extension Sequence {
+    /// Returns an array with the contents of this sequence, shuffled.
+    func shuffled() -> [Iterator.Element] {
+        var result = Array(self)
+        result.shuffle()
+        return result
+    }
 }
