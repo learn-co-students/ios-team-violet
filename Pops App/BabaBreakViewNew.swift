@@ -41,9 +41,10 @@ class BabaBreakViewNew: UIView, UITableViewDataSource, UITableViewDelegate, CLLo
     }
     
     func searchYelpRegion() {
+        
         for term in terms {
-            print("searching \(term)")
-            viewModel.search(searchTerm: term, latitude: myCoordinates.coordinate.latitude, longitude: myCoordinates.coordinate.longitude) { (json) in
+
+            BabaBreakManager.search(searchTerm: term, latitude: myCoordinates.coordinate.latitude, longitude: myCoordinates.coordinate.longitude) { (json) in
                 
                 self.viewModel.createObjects(json: json, completion: { locations in
                    
@@ -52,6 +53,7 @@ class BabaBreakViewNew: UIView, UITableViewDataSource, UITableViewDelegate, CLLo
                             self.babaLocations.append(location)
                         }
                     }
+                    
                     print("baba Loc: \(self.babaLocations.count)")
                     print("name: \(self.babaLocations[0].name)")
                 })

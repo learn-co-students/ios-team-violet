@@ -19,6 +19,7 @@ class BabaEntertainmentCell: UITableViewCell {
     
     var location: Location! {
         didSet {
+            loadImage()
             print("\(location.name)")
             titleLabel.text = location.name
             addressLabel.text = location.address
@@ -42,9 +43,20 @@ class BabaEntertainmentCell: UITableViewCell {
         setupAddressLabel()
         setupDistanceLabel()
         setupCircleImageViewContainer()
+        setupYelpImageView()
         setupLabelStackView()
     }
     
+    func loadImage() {
+        
+        self.location.loadLocationImage { (didDownloadImage) in
+            if didDownloadImage {
+                self.yelpImageView.image = self.location.image
+            }
+        }
+        
+    }
+
     func setupLineDividerView() {
         lineDividerView.backgroundColor = Palette.lightGrey.color
         lineDividerView.layer.cornerRadius = 2.0
@@ -89,6 +101,17 @@ class BabaEntertainmentCell: UITableViewCell {
         circleContainerView.widthAnchor.constraint(equalToConstant: 70).isActive = true
         circleContainerView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
         circleContainerView.leadingAnchor.constraint(equalTo: lineDividerView.leadingAnchor).isActive = true
+    }
+    
+    func setupYelpImageView() {
+        circleContainerView.addSubview(yelpImageView)
+        yelpImageView.contentMode = .scaleAspectFill
+        
+        yelpImageView.translatesAutoresizingMaskIntoConstraints = false
+        yelpImageView.centerYAnchor.constraint(equalTo: circleContainerView.centerYAnchor).isActive = true
+        yelpImageView.centerXAnchor.constraint(equalTo: circleContainerView.centerXAnchor).isActive = true
+        yelpImageView.heightAnchor.constraint(equalTo: circleContainerView.heightAnchor).isActive = true
+        yelpImageView.widthAnchor.constraint(equalTo: circleContainerView.widthAnchor).isActive = true
     }
     
     func setupLabelStackView() {
