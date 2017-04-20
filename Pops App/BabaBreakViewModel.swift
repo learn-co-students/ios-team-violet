@@ -57,6 +57,7 @@ class Location {
     let imageURL: String
     var image: UIImage?
     let address: String
+    let yelpUrl: String
     
     init?(businessDictionary: [String : Any]) {
         print("LOCATION INIT GETS CALLED")
@@ -65,13 +66,14 @@ class Location {
         print("NAME FROM LOCATION: \(nameFromObj)")
         let imageURL = businessDictionary["image_url"] as? String ?? "no url found"
         let businessLocation = businessDictionary["location"] as? [String: Any] ?? [:]
+        let yelpUrl = businessDictionary["url"] as? String ?? "no yelp url found"
         let addressArr = businessLocation["display_address"] as? [String] ?? []
         let addressFinal = addressArr.first ?? "none"
         
         let miles = distanceFromSubject * 0.000189394
         let milesString = String(format: "%.1f", miles)
         
-        
+        self.yelpUrl = yelpUrl
         self.distance = "\(milesString) miles"
         self.name = nameFromObj
         self.imageURL = imageURL
