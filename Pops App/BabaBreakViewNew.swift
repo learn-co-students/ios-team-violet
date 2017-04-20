@@ -1,10 +1,3 @@
-//
-//  BabaBreakViewNew.swift
-//  Pops App
-//
-//  Created by Robert Rozenvasser on 4/19/17.
-//  Copyright © 2017 Robert Rozenvasser. All rights reserved.
-//
 
 import Foundation
 import UIKit
@@ -52,10 +45,13 @@ class BabaBreakViewNew: UIView, UITableViewDataSource, UITableViewDelegate, CLLo
             print("searching \(term)")
             viewModel.search(searchTerm: term, latitude: myCoordinates.coordinate.latitude, longitude: myCoordinates.coordinate.longitude) { (json) in
                 
-                self.viewModel.createObjects(json: json, completion: { (locations) in
+                self.viewModel.createObjects(json: json, completion: { locations in
                    
-                    self.babaLocations.append(contentsOf: locations)
-                    
+                    for location in locations {
+                        if !self.babaLocations.contains(location) {
+                            self.babaLocations.append(location)
+                        }
+                    }
                     print("baba Loc: \(self.babaLocations.count)")
                     print("name: \(self.babaLocations[0].name)")
                 })
@@ -67,7 +63,6 @@ class BabaBreakViewNew: UIView, UITableViewDataSource, UITableViewDelegate, CLLo
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let myCoord = locations[locations.count - 1]
         self.myCoordinates = myCoord
-        
         searchYelpRegion()//this searches the local region on yelp
         locationManager.stopUpdatingLocation()
     }
@@ -83,7 +78,7 @@ class BabaBreakViewNew: UIView, UITableViewDataSource, UITableViewDelegate, CLLo
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "babaCell", for: indexPath) as! BabaEntertainmentCell
-        cell.location = babaLocations[6]
+        cell.location = babaLocations[indexPath.row]
         return cell
     }
     

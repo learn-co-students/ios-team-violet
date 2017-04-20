@@ -29,10 +29,13 @@ extension BabaBreakViewModel {
         for loc in arrayOfLocations {
             
             let newLocation = Location(businessDictionary: loc)
-            
-            print("nameLocation: \(newLocation.name)")
-            
-            locations.append(newLocation)
+                        
+            if let newLocation = newLocation {
+                if !locations.contains(newLocation) {
+                    print(newLocation, "is getting appended")
+                    locations.append(newLocation)
+                }
+            }
             
             print("number: \(locations.count)")
         
@@ -74,27 +77,47 @@ extension BabaBreakViewModel {
 
 
 class Location {
-    let distance: Double
+    let distance: String
     let name: String
     let imageURL: String
     let address: String
     
-    init(businessDictionary: [String : Any]) {
+    init?(businessDictionary: [String : Any]) {
         print("LOCATION INIT GETS CALLED")
         let distanceFromSubject = businessDictionary["distance"] as? Double ?? 0.0
         let nameFromObj = businessDictionary["name"] as? String ?? "no name found"
         print("NAME FROM LOCATION: \(nameFromObj)")
+        guard nameFromObj != "no name found" else { return nil }
         let imageURL = businessDictionary["image_url"] as? String ?? "no url found"
         let businessLocation = businessDictionary["location"] as? [String: Any] ?? [:]
         let addressArr = businessLocation["display_address"] as? [String] ?? []
         let addressFinal = addressArr.first ?? "none"
-        self.distance = distanceFromSubject
+        
+        let miles = distanceFromSubject * 0.000189394
+        let milesString = String(format: "%.1f", miles)
+        
+        
+        self.distance = "\(milesString) miles"
         self.name = nameFromObj
         self.imageURL = imageURL
         self.address = addressFinal
     }
+    
+    func convertFeetToMiles(feet: Double) -> String {
+        let miles = feet * 0.000189394
+        let milesString = String(format: "%.1f", miles)
+        return milesString
+    }
 
 }
+
+extension Location: Equatable {
+    static func == (lhs: Location, rhs: Location) -> Bool {
+        return
+            lhs.name == rhs.name
+    }
+}
+
 
 
 
