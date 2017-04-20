@@ -141,7 +141,7 @@ class BabaBreakView: UIView, CLLocationManagerDelegate {
     func searchYelpRegion() {
         for term in terms {
             print("searching \(term)")
-            
+
             BabaBreakManager.search(searchTerm: term, latitude: myCoordinates.coordinate.latitude, longitude: myCoordinates.coordinate.longitude) { (json) in
                 self.viewModel.createObjects(json: json, completion: { (locations) in
                     self.babaLocations.append(contentsOf: locations)

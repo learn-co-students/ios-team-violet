@@ -80,12 +80,32 @@ class BabaBreakViewNew: UIView, UITableViewDataSource, UITableViewDelegate, CLLo
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "babaCell", for: indexPath) as! BabaEntertainmentCell
+        cell.selectionStyle = .none
         cell.location = babaLocations[indexPath.row]
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 108.0
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        let selectedCell = tableView.cellForRow(at: indexPath) as! BabaEntertainmentCell
+            
+        let yelpyURL = selectedCell.location.yelpUrl
+        
+        let appURL = URL(string: yelpyURL)
+        let webURL = URL(string: yelpyURL)
+        
+        let app = UIApplication.shared
+        
+        if app.canOpenURL(appURL!) {
+            app.open(appURL!)
+        } else {
+            app.open(webURL!)
+        }
+        
     }
     
 }
@@ -135,10 +155,10 @@ extension BabaBreakViewNew {
 
         self.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 18).isActive = true
-        tableView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -18).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -80).isActive = true
-        tableView.topAnchor.constraint(equalTo: mainLabel.bottomAnchor, constant: 50).isActive = true
+        tableView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: viewWidth * (18/375)).isActive = true
+        tableView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -viewWidth * (18/375)).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -viewWidth * (80/375)).isActive = true
+        tableView.topAnchor.constraint(equalTo: mainLabel.bottomAnchor, constant: viewWidth * (50/375)).isActive = true
     }
     
 }

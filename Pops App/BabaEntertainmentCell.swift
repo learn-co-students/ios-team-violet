@@ -10,6 +10,9 @@ import UIKit
 
 class BabaEntertainmentCell: UITableViewCell {
     
+    lazy var viewWidth: CGFloat = UIScreen.main.bounds.width //375
+    lazy var viewHeight: CGFloat = UIScreen.main.bounds.height  //667
+    
     let lineDividerView = UIView()
     let titleLabel = UILabel()
     let addressLabel = UILabel()
@@ -65,8 +68,8 @@ class BabaEntertainmentCell: UITableViewCell {
         contentView.addSubview(lineDividerView)
         lineDividerView.translatesAutoresizingMaskIntoConstraints = false
         lineDividerView.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
-        lineDividerView.widthAnchor.constraint(equalToConstant: 300).isActive = true
-        lineDividerView.heightAnchor.constraint(equalToConstant: 3).isActive = true
+        lineDividerView.widthAnchor.constraint(equalToConstant: viewWidth * (300/375)).isActive = true
+        lineDividerView.heightAnchor.constraint(equalToConstant: viewHeight * (3/667)).isActive = true
         lineDividerView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
     }
 
@@ -97,8 +100,8 @@ class BabaEntertainmentCell: UITableViewCell {
         
         contentView.addSubview(circleContainerView)
         circleContainerView.translatesAutoresizingMaskIntoConstraints = false
-        circleContainerView.heightAnchor.constraint(equalToConstant: 70).isActive = true
-        circleContainerView.widthAnchor.constraint(equalToConstant: 70).isActive = true
+        circleContainerView.heightAnchor.constraint(equalToConstant: viewWidth * (70/375)).isActive = true
+        circleContainerView.widthAnchor.constraint(equalToConstant: viewWidth * (70/375)).isActive = true
         circleContainerView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
         circleContainerView.leadingAnchor.constraint(equalTo: lineDividerView.leadingAnchor).isActive = true
     }
@@ -121,14 +124,14 @@ class BabaEntertainmentCell: UITableViewCell {
         stackView.axis = .vertical
         stackView.distribution = .equalSpacing
         stackView.alignment = .leading
-        stackView.spacing = 8.0
+        stackView.spacing = viewWidth * (8/375)
         
         contentView.addSubview(stackView)
         
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.widthAnchor.constraint(equalToConstant: 215).isActive = true
+        stackView.widthAnchor.constraint(equalToConstant: viewWidth * (215/375)).isActive = true
         stackView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
-        stackView.leadingAnchor.constraint(equalTo: circleContainerView.trailingAnchor, constant: 10).isActive = true
+        stackView.leadingAnchor.constraint(equalTo: circleContainerView.trailingAnchor, constant: viewWidth * (10/375)).isActive = true
     }
 
 }
