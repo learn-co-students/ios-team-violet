@@ -17,7 +17,14 @@ class BabaEntertainmentCell: UITableViewCell {
     let circleContainerView = UIView()
     let yelpImageView = UIImageView()
     
-  
+    var location: Location! {
+        didSet {
+            print("\(location.name)")
+            titleLabel.text = location.name
+            addressLabel.text = location.address
+            distanceLabel.text = String(location.distance)
+        }
+    }
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)

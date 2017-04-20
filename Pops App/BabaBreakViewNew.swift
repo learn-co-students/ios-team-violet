@@ -8,8 +8,10 @@
 
 import Foundation
 import UIKit
+import CoreLocation
+import MapKit
 
-class BabaBreakViewNew: UIView, UITableViewDataSource, UITableViewDelegate  {
+class BabaBreakViewNew: UIView, UITableViewDataSource, UITableViewDelegate, CLLocationManagerDelegate  {
     
     lazy var viewWidth: CGFloat = UIScreen.main.bounds.width //375
     lazy var viewHeight: CGFloat = UIScreen.main.bounds.height  //667
@@ -21,14 +23,74 @@ class BabaBreakViewNew: UIView, UITableViewDataSource, UITableViewDelegate  {
     let coachIcon = UIImageView()
     var coachBottomAnchorConstraint: NSLayoutConstraint!
     
+    let viewModel = BabaBreakViewModel()
+    var babaLocations: [Location] = []
+    var myCoordinates = CLLocation()
+    var terms = ["dessert", "coffee", "food", "parks"]
+    
+    let location = CLLocationCoordinate2D()
+    let locationManager = CLLocationManager()
+    
     init(){
         super.init(frame: UIScreen.main.bounds)
         self.backgroundColor = .white
+        
+        locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.startUpdatingLocation()
+        locationManager.delegate = self
+        
+        searchYelpRegion()
         setupCoachWindow()
         setupCoachIcon()
         setupMainLabel()
         setupTableView()
     }
+    
+    func searchYelpRegion() {
+        for term in terms {
+            print("searching \(term)")
+            viewModel.search(searchTerm: term, latitude: myCoordinates.coordinate.latitude, longitude: myCoordinates.coordinate.longitude) { (json) in
+                
+                self.viewModel.createObjects(json: json, completion: { (locations) in
+                   
+                    self.babaLocations.append(contentsOf: locations)
+                    
+                    print("baba Loc: \(self.babaLocations.count)")
+                    print("name: \(self.babaLocations[0].name)")
+                })
+            }
+        }
+        
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        let myCoord = locations[locations.count - 1]
+        self.myCoordinates = myCoord
+        
+        // get lat and long
+        let myLat = myCoord.coordinate.latitude
+        let myLong = myCoord.coordinate.longitude
+        let myCoord2D = CLLocationCoordinate2D(latitude: myLat, longitude: myLong)
+        
+        
+        //set span
+        let myLatDelta = 0.05
+        let myLongDelta = 0.05
+        let mySpan = MKCoordinateSpan(latitudeDelta: myLatDelta, longitudeDelta: myLongDelta)
+        
+        //set region
+        let myRegion = MKCoordinateRegion(center: myCoord2D, span: mySpan)
+        
+        //center map at this region
+        //mapView.setRegion(myRegion, animated: true)
+        
+        //do an mklocalsearch using the region
+        //searchRegion(region: myRegion)
+        searchYelpRegion()//this searches the local region on yelp
+        locationManager.stopUpdatingLocation()
+    }
+
     
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -40,9 +102,7 @@ class BabaBreakViewNew: UIView, UITableViewDataSource, UITableViewDelegate  {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "babaCell", for: indexPath) as! BabaEntertainmentCell
-        cell.titleLabel.text = "Insomnia Cookies"
-        cell.addressLabel.text = "670 WALL ST., NEW YORK, NY"
-        cell.distanceLabel.text = "0.2 miles away"
+        cell.location = babaLocations[6]
         return cell
     }
     
