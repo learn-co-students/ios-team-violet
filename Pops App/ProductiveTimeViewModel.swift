@@ -54,6 +54,7 @@ final class ProductiveTimeViewModel {
         self.props = 0
         
         motionManager.accelerometerUpdateInterval = 0.5
+        motionManager.startAccelerometerUpdates()
     }
     
     func startTimer() {
@@ -156,7 +157,8 @@ final class ProductiveTimeViewModel {
         dataStore.defaults.set(dataStore.user.totalProps, forKey: "totalProps")
     }
     
-    func updateTimers() {        
+    func updateTimers() {
+        
         let timeTimerStarted = dataStore.defaults.value(forKey: "productivityTimerStartedAt") as! Date
         let timeSinceTimerStarted = Date().timeIntervalSince(timeTimerStarted)
         
@@ -167,13 +169,19 @@ final class ProductiveTimeViewModel {
         }
         
         if productivityTimerCounter > 1 && motionManager.accelerometerData!.acceleration.z < 0.0 {
-            delegate.characterMessageHeader.text = dataStore.user.currentCoach.productivityReprimands[0].header
-            delegate.characterMessageBody.text = dataStore.user.currentCoach.productivityReprimands[0].body
-            props -= dataStore.user.currentCoach.difficulty.basePenaltyForLeavingProductivityScreen
-            dataStore.user.totalProps -= dataStore.user.currentCoach.difficulty.basePenaltyForLeavingProductivityScreen
-            dataStore.defaults.set(dataStore.user.totalProps, forKey: "totalProps")
+            
+            if !(dataStore.user.currentSession?.mightCancelSession)! {
+                delegate.characterMessageHeader.text = dataStore.user.currentCoach.productivityReprimands[0].header
+                delegate.characterMessageBody.text = dataStore.user.currentCoach.productivityReprimands[0].body
+                
+                props -= dataStore.user.currentCoach.difficulty.basePenaltyForLeavingProductivityScreen
+                dataStore.user.totalProps -= dataStore.user.currentCoach.difficulty.basePenaltyForLeavingProductivityScreen
+                dataStore.defaults.set(dataStore.user.totalProps, forKey: "totalProps")
+            }
+            
         }
         
+        sessionTimeRemaining = dataStore.user.currentSession!.sessionTimerCounter
         dataStore.user.currentSession?.sessionTimerCounter = sessionTimeRemaining - Int(timeSinceTimerStarted)
         
         currentCyclePropsToScore = Int(timeSinceTimerStarted) - currentCyclePropsScored

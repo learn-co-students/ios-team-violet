@@ -6,6 +6,7 @@ import UIKit
 final class Session {
     let sessionHours: Int
     let sessionDifficulty: DifficultySetting
+    var mightCancelSession = false
     
     var cycles: Int {
         switch sessionDifficulty {

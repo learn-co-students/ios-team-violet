@@ -57,6 +57,7 @@ final class BreakTimeViewModel {
         }
     
     func breakTimerAction() {
+        
         if dataStore.user.currentSession!.sessionTimerCounter <= 1 {
             breakIsOn = false
             breakTimer.invalidate()

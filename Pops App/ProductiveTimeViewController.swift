@@ -23,6 +23,8 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
     var vibrateTimer = Timer()
     var flashlightTimer = Timer()
     
+    var userMightCancel = false
+    
     let progressBar = UIView()
     var progressBarWidthAnchor: NSLayoutConstraint! {
         didSet {
@@ -65,6 +67,7 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
     
     func appEnteredForeground() {
         if viewModel.dataStore.user.currentSession != nil {
+            print("updating timers")
             viewModel.updateTimers()
         }
     }
@@ -73,7 +76,13 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
         super.viewDidAppear(animated)        
         
         productiveTimeEndedUserNotificationRequest()
-        viewModel.startTimer()
+        
+        if (viewModel.dataStore.user.currentSession?.mightCancelSession)! {
+            appEnteredForeground()
+            viewModel.dataStore.user.currentSession?.mightCancelSession = false
+        } else {
+            viewModel.startTimer()
+        }
         
         if viewModel.dataStore.defaults.value(forKey: "sessionActive") as? Bool == false {
             viewModel.dataStore.defaults.set(true, forKey: "sessionActive")
@@ -82,6 +91,10 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        
+        if (viewModel.dataStore.user.currentSession?.mightCancelSession)! {
+            appEnteredBackground()
+        }
     }
     
     func appEnteredBackground() {
@@ -92,19 +105,28 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
     
     func cancelSession() {
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
-
-        viewModel.productivityTimer.invalidate()
-        viewModel.dataStore.user.currentSession?.sessionTimer.invalidate()
+        
+        if !(viewModel.dataStore.user.currentSession?.mightCancelSession)! {
+            viewModel.productivityTimer.invalidate()
+            viewModel.dataStore.user.currentSession?.sessionTimer.invalidate()
+        }
+        
         viewModel.dataStore.defaults.set(false, forKey: "sessionActive")
         
-        UIView.animate(withDuration: 0.7, animations: {
-            self.coachBottomAnchorConstraint.constant = 100
-            self.view.layoutIfNeeded()
-        }) { _ in self.present(SetSessionViewController(), animated: true, completion: nil)
+        if (viewModel.dataStore.user.currentSession?.mightCancelSession)! {
+            UIView.animate(withDuration: 0.7, animations: {
+                self.coachBottomAnchorConstraint.constant = 100
+                self.view.layoutIfNeeded()
+                
+            }) { _ in self.present(SessionEndedViewController(), animated: true, completion: nil)
+            }
+        } else {
+            dismiss(animated: true, completion: nil)
         }
     }
     
     func cancelSessionWithPenalty() {
+        viewModel.dataStore.user.currentSession?.mightCancelSession = true
         cancelSession()
         viewModel.propsPenalty()
     }
@@ -169,12 +191,18 @@ extension ProductiveTimeViewController {
     
     func setupCancelSessionButton() {
         view.addSubview(cancelSessionButton)
-        cancelSessionButton.setTitle("cancel session", for: .normal)
-        cancelSessionButton.titleLabel?.text = "cancel session"
+        
+        if viewModel.dataStore.defaults.value(forKey: "sessionActive") as? Bool == false {
+            cancelSessionButton.setTitle("cancel session", for: .normal)
+            cancelSessionButton.addTarget(self, action: #selector(cancelSession), for: .touchUpInside)
+        } else {
+            cancelSessionButton.setTitle("im weak", for: .normal)
+            cancelSessionButton.addTarget(self, action: #selector(cancelSessionWithPenalty), for: .touchUpInside)
+        }
+    
         cancelSessionButton.titleLabel?.textColor = Palette.white.color
         cancelSessionButton.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 13.0)
-        cancelSessionButton.addTarget(self, action: #selector(cancelSession), for: .touchUpInside)
-        
+      
         cancelSessionButton.translatesAutoresizingMaskIntoConstraints = false
         cancelSessionButton.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0).isActive = true
         cancelSessionButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -40).isActive = true

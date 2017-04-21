@@ -30,6 +30,7 @@ class SessionEndedViewController: UIViewController {
         setupLineDividerView()
         setupCharacterMessageBody()
         setupCharacterMessageHeader()
+        selectSessionEndedState()
         setupCoachWindow()
         setupCoachIcon()
         setupHeaderView()
@@ -40,28 +41,37 @@ class SessionEndedViewController: UIViewController {
         super.viewWillAppear(animated)
         animateCoachPopup()
         
-        if viewModel.dataStore.user.currentSession != nil {
-            viewModel.dataStore.user.currentSession?.sessionTimer.invalidate()
-            let totalHours = viewModel.dataStore.defaults.value(forKey: "totalHours") as? Int ?? 0
-            let sessionHours = viewModel.dataStore.user.currentSession!.sessionHours
-            let newTotal = totalHours + sessionHours
-            viewModel.dataStore.defaults.set(newTotal, forKey: "totalHours")
-            viewModel.dataStore.user.currentSession = nil
+        if !(viewModel.dataStore.user.currentSession?.mightCancelSession)! {
+            
+            if viewModel.dataStore.user.currentSession != nil {
+                viewModel.dataStore.user.currentSession?.sessionTimer.invalidate()
+                let totalHours = viewModel.dataStore.defaults.value(forKey: "totalHours") as? Int ?? 0
+                let sessionHours = viewModel.dataStore.user.currentSession!.sessionHours
+                let newTotal = totalHours + sessionHours
+                viewModel.dataStore.defaults.set(newTotal, forKey: "totalHours")
+                viewModel.dataStore.user.currentSession = nil
+            }
+            
         }
     }
     
     func presentSetSessionVC() {
         viewModel.dataStore.defaults.set(false, forKey: "sessionActive")
+        viewModel.dataStore.defaults.set(true, forKey: "returningUser")
         
         let setSessionVC = SetSessionViewController()
         present(setSessionVC, animated: true, completion: nil)
     }
     
     func presentProductiveTimeVC() {
-        viewModel.dataStore.defaults.set(false, forKey: "sessionActive")
-        let productiveTimeVC = ProductiveTimeViewController()
-        viewModel.startSessionOfLength(1)
-        present(productiveTimeVC, animated: true, completion: nil)
+        if viewModel.dataStore.user.currentSession?.mightCancelSession == true {
+            dismiss(animated: true, completion: nil)
+        } else {
+            viewModel.dataStore.defaults.set(false, forKey: "sessionActive")
+            viewModel.startSessionOfLength(1)
+            let productiveTimeVC = ProductiveTimeViewController()
+            present(productiveTimeVC, animated: true, completion: nil)
+        }
     }
     
     override var prefersStatusBarHidden: Bool {
@@ -72,6 +82,20 @@ class SessionEndedViewController: UIViewController {
 
 extension SessionEndedViewController {
     
+    func selectSessionEndedState() {
+        if viewModel.dataStore.user.currentSession?.mightCancelSession == true {
+            doneButton.setTitle("cancel session", for: .normal)
+            extendHourButton.setTitle("continue", for: .normal)
+            characterMessageBody.text = "If you cancel this session early you will lose 100 props. Are you sure you want to give up now?"
+            characterMessageHeader.text = "Cancel session?"
+        } else {
+            doneButton.setTitle("let me go", for: .normal)
+            extendHourButton.setTitle("extend for an hour", for: .normal)
+            characterMessageBody.text = viewModel.dataStore.user.currentCoach.endSessionStatements[0].body
+            characterMessageHeader.text = viewModel.dataStore.user.currentCoach.endSessionStatements[0].header
+        }
+    }
+    
     func setupDoneButton() {
         doneButton.backgroundColor = Palette.lightGrey.color
         doneButton.setTitleColor(.black, for: .normal)
@@ -79,7 +103,6 @@ extension SessionEndedViewController {
         doneButton.isEnabled = true
         doneButton.layer.cornerRadius = 2.0
         doneButton.layer.masksToBounds = true
-        doneButton.setTitle("let me go", for: .normal)
         doneButton.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 14.0)
         doneButton.setTitleColor(Palette.darkText.color, for: .normal)
         doneButton.addTarget(self, action: #selector(presentSetSessionVC), for: .touchUpInside)
@@ -96,7 +119,7 @@ extension SessionEndedViewController {
         extendHourButton.backgroundColor = Palette.lightBlue.color
         extendHourButton.layer.cornerRadius = 2.0
         extendHourButton.layer.masksToBounds = true
-        extendHourButton.setTitle("extend for an hour", for: .normal)
+   
         extendHourButton.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 14.0)
         extendHourButton.addTarget(self, action: #selector(presentProductiveTimeVC), for: .touchUpInside)
         
@@ -126,7 +149,7 @@ extension SessionEndedViewController {
         characterMessageBody.textColor = Palette.grey.color
         characterMessageBody.textAlignment = .left
         characterMessageBody.font = UIFont(name: "Avenir-Heavy", size: 14.0)
-        characterMessageBody.text = viewModel.dataStore.user.currentCoach.endSessionStatements[0].body
+       
         
         view.addSubview(characterMessageBody)
         characterMessageBody.translatesAutoresizingMaskIntoConstraints = false
@@ -140,7 +163,7 @@ extension SessionEndedViewController {
         characterMessageHeader.textColor = UIColor.black
         characterMessageHeader.textAlignment = .left
         characterMessageHeader.font = UIFont(name: "Avenir-Black", size: 14.0)
-        characterMessageHeader.text = viewModel.dataStore.user.currentCoach.endSessionStatements[0].header
+        
         
         view.addSubview(characterMessageHeader)
         characterMessageHeader.translatesAutoresizingMaskIntoConstraints = false
