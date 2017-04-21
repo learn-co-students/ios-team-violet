@@ -121,7 +121,7 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
             }) { _ in self.present(SessionEndedViewController(), animated: true, completion: nil)
             }
         } else {
-            dismiss(animated: true, completion: nil)
+            present(SetSessionViewController(), animated: true, completion: nil)
         }
     }
     
