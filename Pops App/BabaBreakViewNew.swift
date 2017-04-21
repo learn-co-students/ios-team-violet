@@ -65,8 +65,6 @@ class BabaBreakViewNew: UIView, UITableViewDataSource, UITableViewDelegate, CLLo
         
     }
     
-    
-    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let myCoord = locations[locations.count - 1]
         self.myCoordinates = myCoord
@@ -78,7 +76,6 @@ class BabaBreakViewNew: UIView, UITableViewDataSource, UITableViewDelegate, CLLo
         babaLocations = babaLocations.shuffled()
         tableView.reloadData()
     }
-
     
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
