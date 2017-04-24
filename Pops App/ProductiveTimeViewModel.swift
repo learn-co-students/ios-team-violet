@@ -2,6 +2,7 @@
 import Foundation
 import UIKit
 import CoreMotion
+import AudioToolbox
 
 protocol ProductiveTimeViewModelDelegate: class {
     var productiveTimeLabel: UILabel {get set}
@@ -21,7 +22,6 @@ final class ProductiveTimeViewModel {
     let dataStore = DataStore.singleton
     let motionManager = CMMotionManager()
     
-
     //timers and counters
     var sessionTimeRemaining: Int = 0
     var productivityTimer: Timer
@@ -114,7 +114,6 @@ final class ProductiveTimeViewModel {
             motionManager.stopAccelerometerUpdates()
             delegate.moveToBreak()
         }
-        
     }
     
     func formatTime(time: Int) -> String {
@@ -138,9 +137,7 @@ final class ProductiveTimeViewModel {
         
     func skipToBreak() {
         productivityTimer.invalidate()
-        
         dataStore.user.currentSession?.sessionTimerCounter -= productivityTimerCounter
-        
         propsPenalty()
     }
     
@@ -151,10 +148,7 @@ final class ProductiveTimeViewModel {
         if dataStore.user.totalProps < 0 {
             props = 0
             dataStore.user.totalProps = 0
-            dataStore.defaults.set(dataStore.user.totalProps, forKey: "totalProps")
         }
-        
-        dataStore.defaults.set(dataStore.user.totalProps, forKey: "totalProps")
     }
     
     func updateTimers() {
@@ -176,21 +170,22 @@ final class ProductiveTimeViewModel {
                 
                 props -= dataStore.user.currentCoach.difficulty.basePenaltyForLeavingProductivityScreen
                 dataStore.user.totalProps -= dataStore.user.currentCoach.difficulty.basePenaltyForLeavingProductivityScreen
-                dataStore.defaults.set(dataStore.user.totalProps, forKey: "totalProps")
             }
             
         }
         
-        sessionTimeRemaining = dataStore.user.currentSession!.sessionTimerCounter
         dataStore.user.currentSession?.sessionTimerCounter = sessionTimeRemaining - Int(timeSinceTimerStarted)
         
         currentCyclePropsToScore = Int(timeSinceTimerStarted) - currentCyclePropsScored
-        props = dataStore.user.totalProps + currentCyclePropsToScore
+        dataStore.user.totalProps += currentCyclePropsToScore
+        props = dataStore.user.totalProps
+        currentCyclePropsScored += currentCyclePropsToScore
+        currentCyclePropsToScore = 0
+        
         
         if props < 0 {
             props = 0
             dataStore.user.totalProps = 0
-            dataStore.defaults.set(dataStore.user.totalProps, forKey: "totalProps")
         }
         
         progressBarCounter = timeSinceTimerStarted / Double(dataStore.user.currentCoach.difficulty.baseProductivityLength)
