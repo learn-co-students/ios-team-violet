@@ -41,6 +41,7 @@
 		1FBEEC831E9692370099F413 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FBEEC821E9692370099F413 /* Session.swift */; };
 		980007191EA7F9A10063056A /* BabaBreakViewNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 980007181EA7F9A10063056A /* BabaBreakViewNew.swift */; };
 		9800071B1EA800600063056A /* BabaEntertainmentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9800071A1EA800600063056A /* BabaEntertainmentCell.swift */; };
+		980883411EAE7E5200FEA268 /* ChargerExplainationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 980883401EAE7E5200FEA268 /* ChargerExplainationView.swift */; };
 		98512E6C1EA547230051D123 /* CharacterDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98512E6B1EA547230051D123 /* CharacterDetailViewController.swift */; };
 		98E682781E931E4F00BAEFE8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E682771E931E4F00BAEFE8 /* AppDelegate.swift */; };
 		98E6827F1E931E4F00BAEFE8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 98E6827E1E931E4F00BAEFE8 /* Assets.xcassets */; };
@@ -89,6 +90,7 @@
 		1FBEEC821E9692370099F413 /* Session.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		980007181EA7F9A10063056A /* BabaBreakViewNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BabaBreakViewNew.swift; sourceTree = "<group>"; };
 		9800071A1EA800600063056A /* BabaEntertainmentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BabaEntertainmentCell.swift; sourceTree = "<group>"; };
+		980883401EAE7E5200FEA268 /* ChargerExplainationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChargerExplainationView.swift; sourceTree = "<group>"; };
 		98512E6B1EA547230051D123 /* CharacterDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CharacterDetailViewController.swift; sourceTree = "<group>"; };
 		98E05D301E9E7F630096BCE9 /* Pops App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Pops App.entitlements"; sourceTree = "<group>"; };
 		98E682741E931E4F00BAEFE8 /* Pops App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pops App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -247,6 +249,7 @@
 				98E6828B1E931EA900BAEFE8 /* Colors.swift */,
 				98E682911E9322A300BAEFE8 /* Extensions.swift */,
 				98ECD2851EA65FA900D69EB4 /* CustomCharacterView.swift */,
+				980883401EAE7E5200FEA268 /* ChargerExplainationView.swift */,
 			);
 			name = "View Resources";
 			sourceTree = "<group>";
@@ -371,6 +374,7 @@
 				1F7C44941E940AD10067ECCF /* PopsBreakViewModel.swift in Sources */,
 				1F7C448A1E9409BE0067ECCF /* ChadBreakView.swift in Sources */,
 				1F7C44831E9409700067ECCF /* BreakTimeViewController.swift in Sources */,
+				980883411EAE7E5200FEA268 /* ChargerExplainationView.swift in Sources */,
 				1F7C44861E9409900067ECCF /* PopsBreakView.swift in Sources */,
 				1F7C449E1E940B670067ECCF /* PopsBreakManager.swift in Sources */,
 				1FBEEC7D1E9588130099F413 /* BreakEntertainmentViewController.swift in Sources */,

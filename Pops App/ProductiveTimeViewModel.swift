@@ -2,6 +2,8 @@
 import Foundation
 import UIKit
 import CoreMotion
+import AudioToolbox
+import AVFoundation
 
 protocol ProductiveTimeViewModelDelegate: class {
     var productiveTimeLabel: UILabel {get set}
@@ -93,21 +95,40 @@ final class ProductiveTimeViewModel {
             currentCyclePropsToScore += 1
             delegate.characterMessageHeader.text = dataStore.user.currentCoach.productivityStatements[0].header
             delegate.characterMessageBody.text = dataStore.user.currentCoach.productivityStatements[0].body
-            UIScreen.main.brightness = 0.01
+            //UIScreen.main.brightness = 0.01
         }
         
-        if motionManager.accelerometerData!.acceleration.z < 0.0 {
-            UIScreen.main.brightness = 0.75
+        if motionManager.accelerometerData!.acceleration.z < 0.0 && productivityTimerCounter > 65 {
+            delegate.characterMessageHeader.text = dataStore.user.currentCoach.productivityReprimands[0].header
+            delegate.characterMessageBody.text = dataStore.user.currentCoach.productivityReprimands[0].body
+            
+            props -= dataStore.user.currentCoach.difficulty.basePenaltyForLeavingProductivityScreen
+            dataStore.user.totalProps -= dataStore.user.currentCoach.difficulty.basePenaltyForLeavingProductivityScreen
+            //UIScreen.main.brightness = 0.75
         }
         
         if cancelCountdown > 0 {
             cancelCountdown -= 1
         }
+        
         if cancelCountdown <= 25 {
             delegate.animateCancelToWeak()
         }
         
         progressBarCounter += 1.0 / Double(dataStore.user.currentCoach.difficulty.baseProductivityLength)
+        
+        if (60...65).contains(productivityTimerCounter) {
+            AudioServicesPlayAlertSound(kSystemSoundID_Vibrate)
+            toggleTorch(on: true)
+            toggleTorch(on: false)
+            toggleTorch(on: true)
+            toggleTorch(on: false)
+        }
+        
+        if productivityTimerCounter <= 65 {
+            delegate.characterMessageHeader.text = "It's almost break time!"
+            delegate.characterMessageBody.text = "Wrap up your final thoughts, your break will start in less than 1 minute."
+        }
         
         if productivityTimerCounter <= 0 {
             productivityTimer.invalidate()
@@ -115,6 +136,29 @@ final class ProductiveTimeViewModel {
             delegate.moveToBreak()
         }
         
+    }
+    
+    func toggleTorch(on: Bool) {
+        
+        guard let device = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo) else { return }
+        
+        if device.hasTorch {
+            do {
+                try device.lockForConfiguration()
+                
+                if on == true {
+                    device.torchMode = .on
+                } else {
+                    device.torchMode = .off
+                }
+                
+                device.unlockForConfiguration()
+            } catch {
+                print("Torch could not be used")
+            }
+        } else {
+            print("Torch is not available")
+        }
     }
     
     func formatTime(time: Int) -> String {

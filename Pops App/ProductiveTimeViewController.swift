@@ -20,6 +20,9 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
     var propsLabel = UILabel()
     var coachBottomAnchorConstraint: NSLayoutConstraint!
     
+    var chargerLabel = UILabel()
+    var chargerImage = UIImageView()
+    
     var vibrateTimer = Timer()
     var flashlightTimer = Timer()
     
@@ -50,6 +53,9 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
         setupCharacterMessageHeader()
         setupCoachWindow()
         setupCoachIcon()
+        
+        setupChargerLabel()
+        setupChargerImage()
         
         NotificationCenter.default.addObserver(self, selector: #selector(appEnteredForeground), name: NSNotification.Name(rawValue: "appEnteredForeground"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appEnteredBackground), name: NSNotification.Name(rawValue: "appEnteredBackground"), object: nil)
@@ -230,7 +236,7 @@ extension ProductiveTimeViewController {
         characterMessageBody.font = UIFont(name: "Avenir-Heavy", size: 14.0)
         
         if viewModel.dataStore.defaults.value(forKey: "returningUser") == nil {
-            characterMessageBody.text = "When the timer hits 0, your phone will vibrate. You will only earn props while your phone is face down."
+            characterMessageBody.text = "You won’t earn props unless it’s face down. When the timer hits 0, your camera will flash signaling that it’s time for a break."
         } else {
             let introStatments = viewModel.dataStore.user.currentCoach.introStatements
             let randomIndex = Int(arc4random_uniform(UInt32(introStatments.count)))
@@ -251,14 +257,12 @@ extension ProductiveTimeViewController {
         characterMessageHeader.font = UIFont(name: "Avenir-Black", size: 14.0)
         
         if viewModel.dataStore.defaults.value(forKey: "returningUser") == nil {
-            characterMessageHeader.text = "Place your phone FACE DOWN on a FLAT SURFACE (like a table)."
+            characterMessageHeader.text = "Plug your phone into a charger and flip it face down. Then get to work!"
         } else {
             let introStatments = viewModel.dataStore.user.currentCoach.introStatements
             let randomIndex = Int(arc4random_uniform(UInt32(introStatments.count)))
             characterMessageHeader.text = viewModel.dataStore.user.currentCoach.productivityStatements[randomIndex].header
         }
-        
-        characterMessageHeader.text = viewModel.dataStore.user.currentCoach.productivityStatements[0].header
         
         view.addSubview(characterMessageHeader)
         characterMessageHeader.translatesAutoresizingMaskIntoConstraints = false
@@ -292,6 +296,31 @@ extension ProductiveTimeViewController {
         coachIcon.centerXAnchor.constraint(equalTo: coachWindowView.centerXAnchor, constant: 0).isActive = true
         coachIcon.heightAnchor.constraint(equalToConstant: 80).isActive = true
         coachIcon.widthAnchor.constraint(equalToConstant: 52).isActive = true
+    }
+    
+    func setupChargerLabel() {
+        chargerLabel.numberOfLines = 0
+        chargerLabel.textAlignment = .center
+        chargerLabel.textColor = UIColor.white
+        chargerLabel.font = UIFont(name: "Avenir-Medium", size: 13)
+        chargerLabel.text = "*for the best experience, plug your phone into charger"
+        
+        view.addSubview(chargerLabel)
+        chargerLabel.translatesAutoresizingMaskIntoConstraints = false
+        chargerLabel.widthAnchor.constraint(equalToConstant: viewWidth * (200/375)).isActive = true
+        chargerLabel.bottomAnchor.constraint(equalTo: coachWindowView.topAnchor, constant: -viewHeight * (64/667)).isActive = true
+        chargerLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+    }
+    
+    func setupChargerImage() {
+        chargerImage.image = #imageLiteral(resourceName: "IC_charger")
+        chargerImage.contentMode = .scaleAspectFit
+        view.addSubview(chargerImage)
+        chargerImage.translatesAutoresizingMaskIntoConstraints = false
+        chargerImage.centerXAnchor.constraint(equalTo: chargerLabel.centerXAnchor).isActive = true
+        chargerImage.bottomAnchor.constraint(equalTo: chargerLabel.topAnchor, constant: -viewHeight * (2/667)).isActive = true
+        chargerImage.heightAnchor.constraint(equalToConstant: viewHeight * (23/667)).isActive = true
+        chargerImage.widthAnchor.constraint(equalToConstant: viewHeight * (23/667)).isActive = true
     }
     
     func animateCoachPopup() {
