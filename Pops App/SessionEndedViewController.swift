@@ -56,6 +56,11 @@ class SessionEndedViewController: UIViewController {
     }
     
     func presentSetSessionVC() {
+        if viewModel.dataStore.user.currentSession?.mightCancelSession == true {
+            viewModel.dataStore.user.totalProps -= viewModel.dataStore.user.currentCoach.difficulty.basePenaltyForLeavingProductivityScreen
+            viewModel.dataStore.user.currentSession = nil
+        }
+        
         viewModel.dataStore.defaults.set(false, forKey: "sessionActive")
         viewModel.dataStore.defaults.set(true, forKey: "returningUser")
         
@@ -86,7 +91,7 @@ extension SessionEndedViewController {
         if viewModel.dataStore.user.currentSession?.mightCancelSession == true {
             doneButton.setTitle("cancel session", for: .normal)
             extendHourButton.setTitle("continue", for: .normal)
-            characterMessageBody.text = "If you cancel this session early you will lose 100 props. Are you sure you want to give up now?"
+            characterMessageBody.text = "If you cancel this session early you will lose \(viewModel.dataStore.user.currentCoach.difficulty.basePenaltyForLeavingProductivityScreen) props. Are you sure you want to give up now?"
             characterMessageHeader.text = "Cancel session?"
         } else {
             doneButton.setTitle("let me go", for: .normal)

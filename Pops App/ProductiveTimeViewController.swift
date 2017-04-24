@@ -104,7 +104,6 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
     }
     
     func appEnteredBackground() {
-        viewModel.dataStore.defaults.set(viewModel.dataStore.user.totalProps, forKey: "totalProps")
         viewModel.currentCyclePropsScored += viewModel.currentCyclePropsToScore
         viewModel.currentCyclePropsToScore = 0
     }
@@ -134,13 +133,9 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
     func cancelSessionWithPenalty() {
         viewModel.dataStore.user.currentSession?.mightCancelSession = true
         cancelSession()
-        viewModel.propsPenalty()
     }
     
-    func moveToBreak() {
-        viewModel.dataStore.user.totalProps += viewModel.currentCyclePropsToScore
-        viewModel.dataStore.defaults.set(viewModel.dataStore.user.totalProps, forKey: "totalProps")
-        
+    func moveToBreak() {        
         UIView.animate(withDuration: 0.7, animations: {
             self.coachBottomAnchorConstraint.constant = 100
             self.view.layoutIfNeeded()

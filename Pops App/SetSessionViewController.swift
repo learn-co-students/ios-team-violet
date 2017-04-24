@@ -557,9 +557,7 @@ extension SetSessionViewController {
                         //what happens if user doesn't allow notifications
                     }
                 }
-                
             }
-
     }
     
     func animateReadyButtons() {
