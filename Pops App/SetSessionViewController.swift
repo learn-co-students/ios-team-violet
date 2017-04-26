@@ -491,7 +491,7 @@ extension SetSessionViewController {
     func animateAllowNotifications() {
         self.view.layoutIfNeeded()
         
-        UIView.animate(withDuration: 0.8, animations: {
+        UIView.animate(withDuration: 0.6, animations: {
             self.startButtonCenterXAnchor.constant += self.viewWidth
             self.collectionViewLeadingAnchor.constant += self.viewWidth
             self.characterMessageBody.alpha = 0
@@ -516,7 +516,8 @@ extension SetSessionViewController {
    
     func animateBackToSetSession() {
         
-        UIView.animate(withDuration: 0.8, animations: {
+        UIView.animate(withDuration: 0.6, animations: {
+            self.viewModel.dataStore.defaults.set(true, forKey: "returningUser")
             self.readyButtonsStackViewTopAnchor.constant += self.stackViewContraint()
             self.characterMessageBody.alpha = 0
             self.characterMessageHeader.alpha = 0
@@ -562,7 +563,7 @@ extension SetSessionViewController {
     
     func animateReadyButtons() {
         
-        UIView.animate(withDuration: 1, animations: {
+        UIView.animate(withDuration: 0.6, animations: {
             self.allowNotificationButtonsStackViewXAnchor.constant += self.viewWidth
             self.characterMessageBody.alpha = 0
             self.characterMessageHeader.alpha = 0
@@ -570,7 +571,7 @@ extension SetSessionViewController {
             
         }) { _ in
             
-            UIView.animate(withDuration: 0.8, delay: 0, options: [.curveEaseOut], animations: {
+            UIView.animate(withDuration: 0.6, delay: 0, options: [.curveEaseOut], animations: {
                 self.characterMessageBody.text = "As long as you don’t touch your phone when you shouldn’t, I’ll give you props! Your goal is to collect as many of my props as possible."
                 self.characterMessageHeader.text = "Ready to be super productive?"
                 self.characterMessageBody.alpha = 1

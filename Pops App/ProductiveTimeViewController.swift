@@ -59,6 +59,7 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
         
         NotificationCenter.default.addObserver(self, selector: #selector(appEnteredForeground), name: NSNotification.Name(rawValue: "appEnteredForeground"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appEnteredBackground), name: NSNotification.Name(rawValue: "appEnteredBackground"), object: nil)
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {

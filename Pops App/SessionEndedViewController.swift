@@ -58,6 +58,11 @@ class SessionEndedViewController: UIViewController {
     func presentSetSessionVC() {
         if viewModel.dataStore.user.currentSession?.mightCancelSession == true {
             viewModel.dataStore.user.totalProps -= viewModel.dataStore.user.currentCoach.difficulty.basePenaltyForLeavingProductivityScreen
+            
+            if viewModel.dataStore.user.totalProps < 0 {
+                viewModel.dataStore.user.totalProps = 0
+            }
+            
             viewModel.dataStore.user.currentSession = nil
         }
         

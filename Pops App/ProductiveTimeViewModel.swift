@@ -104,6 +104,7 @@ final class ProductiveTimeViewModel {
             productivityTimerCounter > 65 &&
             productivityTimerCounter < (dataStore.user.currentCoach.difficulty.baseProductivityLength - 60) &&
             userWasPenalized == false {
+            
             delegate.characterMessageHeader.text = dataStore.user.currentCoach.productivityReprimands[0].header
             delegate.characterMessageBody.text = dataStore.user.currentCoach.productivityReprimands[0].body
             

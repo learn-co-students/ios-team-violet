@@ -227,10 +227,10 @@
 			isa = PBXGroup;
 			children = (
 				98E682891E931E9500BAEFE8 /* SetSessionViewController.swift */,
+				98E6828D1E931EAF00BAEFE8 /* ProductiveTimeViewController.swift */,
 				1F3231E11EA12C4600917F4A /* HomeSettingsViewController.swift */,
 				98512E6B1EA547230051D123 /* CharacterDetailViewController.swift */,
 				1FAC0F171E9D5EE000F9D0B6 /* HourCollectionViewCell.swift */,
-				98E6828D1E931EAF00BAEFE8 /* ProductiveTimeViewController.swift */,
 				1F7C44821E9409700067ECCF /* BreakTimeViewController.swift */,
 				1FBEEC7C1E9588130099F413 /* BreakEntertainmentViewController.swift */,
 				1F7C44A61E9439250067ECCF /* SessionEndedViewController.swift */,
@@ -287,11 +287,11 @@
 				TargetAttributes = {
 					98E682731E931E4F00BAEFE8 = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = KXY9EDFTF5;
+						DevelopmentTeam = 26Z24PM6F7;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
-								enabled = 1;
+								enabled = 0;
 							};
 							com.apple.Push = {
 								enabled = 0;
@@ -510,7 +510,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Pops App/Pops App.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Flatiron School, Inc (KXY9EDFTF5)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = KXY9EDFTF5;
+				DEVELOPMENT_TEAM = 26Z24PM6F7;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -518,11 +518,12 @@
 				INFOPLIST_FILE = "Pops App/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.clukapp.Pops-App";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.teamviolet.pops-app";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -533,7 +534,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Pops App/Pops App.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Flatiron School, Inc (KXY9EDFTF5)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = KXY9EDFTF5;
+				DEVELOPMENT_TEAM = 26Z24PM6F7;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -541,11 +542,12 @@
 				INFOPLIST_FILE = "Pops App/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.clukapp.Pops-App";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.teamviolet.pops-app";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
