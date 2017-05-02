@@ -54,8 +54,8 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
         setupCoachWindow()
         setupCoachIcon()
         
-        setupChargerLabel()
-        setupChargerImage()
+        //setupChargerLabel()
+        //setupChargerImage()
         
         NotificationCenter.default.addObserver(self, selector: #selector(appEnteredForeground), name: NSNotification.Name(rawValue: "appEnteredForeground"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appEnteredBackground), name: NSNotification.Name(rawValue: "appEnteredBackground"), object: nil)

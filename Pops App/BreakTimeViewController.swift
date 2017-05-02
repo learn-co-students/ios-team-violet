@@ -68,6 +68,7 @@ class BreakTimeViewController: UIViewController, BreakTimeViewModelDelegate, Bre
         viewModel.delegate = self
         animateCoachPopup()
         viewModel.dataStore.defaults.set(true, forKey: "returningUser")
+        UIScreen.main.brightness = 0.75
     }
     
     func appEnteredForeground() {

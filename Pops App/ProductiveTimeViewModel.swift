@@ -90,17 +90,21 @@ final class ProductiveTimeViewModel {
         productivityTimerCounter -= 1
         print("productivity timer: \(productivityTimerCounter)")
         
-        if motionManager.accelerometerData!.acceleration.z > 0.0 {
+        if motionManager.accelerometerData!.acceleration.z > 0.25 {
             props += 1
             dataStore.user.totalProps += 1
             currentCyclePropsToScore += 1
             delegate.characterMessageHeader.text = dataStore.user.currentCoach.productivityStatements[0].header
             delegate.characterMessageBody.text = dataStore.user.currentCoach.productivityStatements[0].body
             userWasPenalized = false
-            //UIScreen.main.brightness = 0.01
+            UIScreen.main.brightness = 0.01
         }
         
-        if motionManager.accelerometerData!.acceleration.z < 0.0 &&
+        if motionManager.accelerometerData!.acceleration.z < 0.25 {
+            UIScreen.main.brightness = 0.75
+        }
+        
+        if motionManager.accelerometerData!.acceleration.z < 0.25 &&
             productivityTimerCounter > 65 &&
             productivityTimerCounter < (dataStore.user.currentCoach.difficulty.baseProductivityLength - 60) &&
             userWasPenalized == false {
@@ -117,7 +121,6 @@ final class ProductiveTimeViewModel {
             }
             
             userWasPenalized = true
-            //UIScreen.main.brightness = 0.75
         }
         
         if cancelCountdown > 0 {
