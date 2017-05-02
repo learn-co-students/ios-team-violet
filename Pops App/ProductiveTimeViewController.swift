@@ -70,6 +70,7 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
         
         animateCoachPopup()
         productiveTimeEndedUserNotificationRequest()
+        UIApplication.shared.isIdleTimerDisabled = true
     }
     
     func appEnteredForeground() {
@@ -94,6 +95,7 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
         if viewModel.dataStore.defaults.value(forKey: "sessionActive") as? Bool == false {
             viewModel.dataStore.defaults.set(true, forKey: "sessionActive")
         }
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -102,6 +104,8 @@ class ProductiveTimeViewController: UIViewController, ProductiveTimeViewModelDel
         if (viewModel.dataStore.user.currentSession?.mightCancelSession)! {
             appEnteredBackground()
         }
+        
+        UIApplication.shared.isIdleTimerDisabled = false
     }
     
     func appEnteredBackground() {
@@ -337,8 +341,8 @@ extension ProductiveTimeViewController {
         
         self.cancelSessionButton.removeTarget(self, action: #selector(self.cancelSession), for: .touchUpInside)
         //TODO: Uncomment for production
-        self.cancelSessionButton.addTarget(self, action: #selector(self.cancelSessionWithPenalty), for: .touchUpInside)
-        //self.cancelSessionButton.addTarget(self, action: #selector(self.skipToBreak), for: .touchUpInside)
+        //self.cancelSessionButton.addTarget(self, action: #selector(self.cancelSessionWithPenalty), for: .touchUpInside)
+        self.cancelSessionButton.addTarget(self, action: #selector(self.skipToBreak), for: .touchUpInside)
     }
 }
 

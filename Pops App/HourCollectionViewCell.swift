@@ -6,6 +6,7 @@ class HourCollectionViewCell: UICollectionViewCell {
     
     let hourLabel = UILabel()
     
+    //Gets set 1st
     var time: Time! {
         didSet {
             hourLabel.text = time.text
